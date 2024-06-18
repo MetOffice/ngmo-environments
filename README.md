@@ -14,10 +14,10 @@ Next Generation Environments for Momentum
 
 Build an Apptainer/Singularity container
 
-See [](site/apptainer/README.md)
+See [site/apptainer/README.md](site/apptainer/README.md)
 
 ### AWS
 
 Build the environment on Amazon Linux
 
-See [](site/aws/README.md)
+See [site/aws/README.md](site/aws/README.md)
