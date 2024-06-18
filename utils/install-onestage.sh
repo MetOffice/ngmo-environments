@@ -17,27 +17,16 @@ mkdir -p "$ENVDIR"
 # Install conda enviornment
 if [[ -f "$ENVDEFS/conda.yaml" ]]; then
 	# Build any required packages
-	for PKGDIR in "$SCRIPT_DIR/../../packages/conda/"*; do
-		PKGNAME="$(basename $PKGDIR)"
+	source "$SCRIPT_DIR/../../utils/build-conda-packages.sh"
 
-		if ! grep "\<$PKGNAME\>" "$ENVDEFS/conda.yaml" > /dev/null; then
-			# Package not required
-			continue
-		fi
-
-		if [[ ! -f "$(conda build --output "$PKGDIR")" ]]; then
-			# Package needs to be built (will autobuild dependencies)
-			e conda build "$PKGDIR"
-		fi
-
-	done
-
+	# Build the environment
 	e conda env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
 fi
 
 # Install spack environment
 if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	if [[ ! -f "$ENVDIR/spack/spack.yaml" ]]; then
+		# Create the environment if it doesn't exist
 		e spack env create --dir "$ENVDIR/spack" "$ENVDEFS/spack.yaml"
 	else
 		# Environment exists, copy in def file
@@ -108,3 +97,15 @@ source "$ENVDIR/bin/activate"
 eval "\$@"
 EOF
 chmod +x "$ENVDIR/bin/envrun"
+
+cat <<EOF
+
+Environment installed at
+
+    $ENVDIR/
+
+Run commands in the enviornment with
+
+    $ENVDIR/bin/envrun $COMMAND
+
+EOF

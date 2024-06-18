@@ -21,3 +21,11 @@ See [site/apptainer/README.md](site/apptainer/README.md)
 Build the environment on Amazon Linux
 
 See [site/aws/README.md](site/aws/README.md)
+
+## Environments
+
+### LFRic
+
+Environment for running the Momentum LFRic model
+
+See [environments/lfric/README.md](environments/lfric/README.md)
