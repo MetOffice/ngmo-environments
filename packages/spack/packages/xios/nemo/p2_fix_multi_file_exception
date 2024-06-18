@@ -1,0 +1,20 @@
+commit eb60950f86d25a217bb6f62463f01100223e7cb8
+Author: Joerg Henrichs <henrichsjoerg@gmail.com>
+Date:   Thu Nov 2 23:20:09 2023 +1100
+
+    #2 Fix multi-file exception.
+
+diff --git a/src/io/nc4_data_output.cpp b/src/io/nc4_data_output.cpp
+index 1ba0706..30e4f93 100755
+--- a/src/io/nc4_data_output.cpp
++++ b/src/io/nc4_data_output.cpp
+@@ -75,9 +75,6 @@ namespace xios
+          if (domain->IsWritten(this->filename)) return;
+          domain->checkAttributes();
+ 
+-         if (domain->isEmpty())
+-           if (SuperClass::type==MULTI_FILE) return;
+-
+          std::vector<StdString> dim0, dim1;
+          StdString domid = domain->getDomainOutputName();
+          StdString appendDomid  = (singleDomain) ? "" : "_"+domid ;

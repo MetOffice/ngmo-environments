@@ -1,0 +1,28 @@
+commit efd95706c5baafd1507131650670fd16916710ef
+Author: Joerg Henrichs <henrichsjoerg@gmail.com>
+Date:   Thu Nov 2 18:00:24 2023 +1100
+
+    #1 If available, add the reference name to an automatically created ID.
+
+diff --git a/src/group_template_impl.hpp b/src/group_template_impl.hpp
+index a99a8d1..95dd636 100644
+--- a/src/group_template_impl.hpp
++++ b/src/group_template_impl.hpp
+@@ -608,7 +608,16 @@ namespace xios
+           else if (name.compare(U::GetName()) == 0)
+           {
+              if (attributes.end() == attributes.find("id"))
+-                CGroupFactory::CreateChild(group_ptr->getShared())->parse(node);
++             {
++                StdString ref_name = name + "_ref";
++                if (attributes.end() == attributes.find(ref_name))
++                   CGroupFactory::CreateChild(group_ptr->getShared())->parse(node);
++                else
++                {
++                   StdString undef_name = CObjectFactory::GenUId<U>()+"_ref="+attributes[ref_name];
++                   CGroupFactory::CreateChild(group_ptr->getShared(), undef_name)->parse(node);
++                }
++             }
+              else
+                 CGroupFactory::CreateChild(group_ptr->getShared(), attributes["id"])->parse(node);
+              return ;

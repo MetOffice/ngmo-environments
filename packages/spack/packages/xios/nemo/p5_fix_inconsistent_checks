@@ -1,0 +1,40 @@
+commit 9ec272eac1994bb95eeb68ea0d4a6ee64d2573f2
+Author: Joerg Henrichs <henrichsjoerg@gmail.com>
+Date:   Mon Nov 6 10:10:31 2023 +1100
+
+    #5 Fix inconsistent checks.
+
+diff --git a/src/node/domain.cpp b/src/node/domain.cpp
+index 05fcbf7..47737c6 100755
+--- a/src/node/domain.cpp
++++ b/src/node/domain.cpp
+@@ -1601,7 +1601,14 @@ namespace xios {
+    void CDomain::checkBounds(void)
+    TRY
+    {
+-     bool hasBoundValues = (0 != bounds_lonvalue.numElements()) || (0 != bounds_latvalue.numElements());
++     bool hasBoundValuesLocal = (0 != bounds_lonvalue.numElements()) || (0 != bounds_latvalue.numElements());
++     bool hasBoundValues;
++     // If any server has bounds, all processes must behave as if they have bounds, even if they have 0 actual data.
++     CContext* context = CContext::getCurrent() ;
++     CContextServer* server=context->server ;
++
++     MPI_Allreduce(&hasBoundValuesLocal,&hasBoundValues, 1, MPI_CXX_BOOL, MPI_LOR, server->intraComm);
++
+      if (!nvertex.isEmpty() && nvertex > 0 && !hasBoundValues)
+      {
+        if (!bounds_lon_1d.isEmpty() && !bounds_lon_2d.isEmpty())
+@@ -1696,8 +1703,11 @@ namespace xios {
+    void CDomain::checkArea(void)
+    TRY
+    {
+-     bool hasAreaValue = (!areavalue.isEmpty() && 0 != areavalue.numElements());
+-     hasArea = !area.isEmpty();
++     bool hasAreaValueLocal = (!areavalue.isEmpty() && 0 != areavalue.numElements());
++     CContext* context = CContext::getCurrent() ;
++     CContextServer* server=context->server ;
++     bool hasAreaValue;
++     MPI_Allreduce(&hasAreaValueLocal,&hasAreaValue, 1, MPI_CXX_BOOL, MPI_LOR, server->intraComm);
+      if (hasArea && !hasAreaValue)
+      {
+        if (area.extent(0) != ni || area.extent(1) != nj)

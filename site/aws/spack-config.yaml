@@ -1,0 +1,4 @@
+packages:
+  blitz:
+    package_attributes:
+      force_autoreconf: True

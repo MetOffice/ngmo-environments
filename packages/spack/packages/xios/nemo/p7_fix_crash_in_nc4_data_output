@@ -1,0 +1,28 @@
+commit ed62097369d37536321897502e2448e0a8954957
+Author: Joerg Henrichs <henrichsjoerg@gmail.com>
+Date:   Wed Dec 13 17:37:19 2023 +1100
+
+    #7 Fix crash when no data is available on some processes.
+
+diff --git a/src/io/nc4_data_output.cpp b/src/io/nc4_data_output.cpp
+index 30e4f93..db639b6 100755
+--- a/src/io/nc4_data_output.cpp
++++ b/src/io/nc4_data_output.cpp
+@@ -476,7 +476,7 @@ namespace xios
+                  {
+                    std::vector<StdSize> start(3);
+                    std::vector<StdSize> count(3);
+-                   if (domain->isEmpty())
++                   if (writtenBndsLon.isEmpty())
+                    {
+                      start[2] = start[1] = start[0] = 0;
+                      count[2] = count[1] = count[0] = 0;
+@@ -500,7 +500,7 @@ namespace xios
+                    std::vector<StdSize> start(2);
+                    std::vector<StdSize> count(2);
+ 
+-                   if (domain->isEmpty())
++                   if (writtenArea.isEmpty())
+                    {
+                      start[0] = 0; start[1] = 0;
+                      count[0] = 0; count[1] = 0;
