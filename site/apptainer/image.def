@@ -1,0 +1,40 @@
+Bootstrap: docker
+From: rockylinux:8-minimal
+
+%arguments
+	environment=unknown
+
+%post
+        microdnf install -y --nodocs \
+             bzip2 \
+             bzip2-devel \
+             curl \
+             diffutils \
+             file \
+             findutils \
+             gcc \
+             gcc-c++ \
+             gcc-gfortran \
+             git \
+             gzip \
+             libtool \
+             make \
+             openssl \
+             openssl-devel \
+             patch \
+             pinentry-curses \
+             subversion \
+             tar \
+             time \
+             unzip \
+             wget \
+             which \
+             xz \
+             xz-devel \
+             zstd
+
+        microdnf clean all
+
+%runscript
+	/ngmo/bin/entrypoint.sh "$@"
+		

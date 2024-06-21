@@ -48,9 +48,14 @@ svn info https://code.metoffice.gov.uk/svn/lfric
 Install an environment from the `environments/` directory with
 
 ```bash
+source ~/ngmo-envs/bin/activate
+
 # Configure the compiler and MPI to use
 export NGMOENVS_COMPILER=gcc
 export NGMOENVS_MPI=openmpi@4
+
+# The environment to install
+export ENV=lfric
 
 ./site/aws/install.sh $ENV
 ```
