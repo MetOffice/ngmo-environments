@@ -39,7 +39,13 @@ export SPACK_PYTHON="$NGMOENVS_BASEDIR/conda/bin/python"
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
 source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 
-export NGMOENVS_BASEDIR="$NGMOENVS_BASEDIR"
+: \${NGMOENVS_BASEDIR:="$NGMOENVS_BASEDIR"}
+: \${NGMOENVS_SPACK_MIRROR:="file://\$NGMOENVS_BASEDIR/spack-mirror"}
+: \${CONDA_BLD_PATH:="\$NGMOENVS_BASEDIR/conda-bld"}
+
+export NGMOENVS_BASEDIR
+export NGMOENVS_SPACK_MIRROR
+export CONDA_BLD_PATH
 
 export NGMOENVS_COMPILER="$(spack spec --format '{compiler.name}@{compiler.version}' mpi)"
 export NGMOENVS_MPI="$(spack spec --format '{name}@{version}' mpi)"
@@ -50,7 +56,7 @@ source "$NGMOENVS_BASEDIR/bin/activate"
 # Configure Spack
 e spack compiler find --scope site /usr/bin
 e spack external find --scope site --path /usr/bin --not-buildable gcc
-e spack repo add "$NGMODEFS/packages/spack" || true
+e spack repo add "$NGMOENVS_DEFS/spack" || true
 
 cat <<EOF
 Bootstrap complete

@@ -1,14 +1,6 @@
 # ngmo-environments
 Next Generation Environments for Momentum
 
-## Contents
-
-* `sites/`: Site specific build scripts
-* `environments/`: Environment definitions
-* `spack/`: Spack package definitions
-* `conda/`: Conda package definitions
-* `utils/`: Shared scripts
-
 ## Using NGMO Environments
 
 Using the Conda and Spack package managers equivalent environments can be
@@ -34,6 +26,14 @@ envrun lfric_apps/build/local_build.py --application $APP
 cd lfric_apps/applications/$APP/example
 envrun mpirun -n  1 ../bin/$APP configuration.nml
 ```
+
+## Contents
+
+* `sites/`: Site specific build scripts
+* `environments/`: Environment definitions
+* `spack/`: Spack package definitions
+* `conda/`: Conda package definitions
+* `utils/`: Shared scripts
 
 ## Sites
 

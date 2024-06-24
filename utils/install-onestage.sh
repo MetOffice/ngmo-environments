@@ -55,6 +55,11 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	# Add the local packages if they're not already available
 	e spack repo add "$NGMOENVS_DEFS/spack" || true
 
+	# Add package binary mirror
+	if [[ -n "${NGMOENVS_SPACK_MIRROR:-}" ]]; then
+		e spack mirror add --autopush --unsigned ngmo-spack-local "$NGMOENVS_SPACK_MIRROR"
+	fi
+
 	# Add site config
 	if [[ -f "$SCRIPT_DIR/spack-config.yaml" ]]; then
 		e spack config add --file "$SCRIPT_DIR/spack-config.yaml"

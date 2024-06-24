@@ -42,10 +42,10 @@ echo "APPTAINER=$APPTAINER"
 # Create the base image from our def file
 IMAGE="$ENVDIR/etc/apptainer.sif"
 mkdir -p "$(dirname "$IMAGE")"
-e $APPTAINER build \
-	--force \
-	"$IMAGE" \
-	"$SCRIPT_DIR/image.def"
+#e $APPTAINER build \
+#	--force \
+#	"$IMAGE" \
+#	"$SCRIPT_DIR/image.def"
 
 # Prepare to create the squashfs directory
 rm -rf "$LOCALSQUASHFS"
