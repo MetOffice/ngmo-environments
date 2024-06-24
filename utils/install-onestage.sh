@@ -53,7 +53,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	e spack env activate "$ENVDIR/spack"
 	
 	# Add the local packages if they're not already available
-	e spack repo add "$NGMOENVS_DEFS/packages/spack" || true
+	e spack repo add "$NGMOENVS_DEFS/spack" || true
 
 	# Add site config
 	if [[ -f "$SCRIPT_DIR/spack-config.yaml" ]]; then

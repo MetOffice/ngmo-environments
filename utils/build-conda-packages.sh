@@ -11,7 +11,7 @@ e() {
 
 # Builds conda packages required for an environment
 
-for PKGDIR in "$NGMOENVS_DEFS/packages/conda/"*; do
+for PKGDIR in "$NGMOENVS_DEFS/conda/"*; do
 	PKGNAME="$(basename $PKGDIR)"
 
 	if ! grep "\<$PKGNAME\>" "$ENVDEFS/conda.yaml" > /dev/null; then

@@ -5,7 +5,8 @@ Next Generation Environments for Momentum
 
 * `sites/`: Site specific build scripts
 * `environments/`: Environment definitions
-* `packages/`: Spack and Conda package definitions
+* `spack/`: Spack package definitions
+* `conda/`: Conda package definitions
 * `utils/`: Shared scripts
 
 ## Using NGMO Environments
@@ -17,6 +18,22 @@ versions of the environments can also be built.
 To simplify usage across sites, a wrapper command `envrun` is used that will
 load the environment and run a command inside it. This wrapper command can
 abstract container arguments, environment modules and other local features.
+
+E.g. for building and running LFRic in the NGMO LFRic environment:
+
+```bash
+export PATH=$NGMOENVS_BASEDIR/envs/lfric/bin:$PATH
+
+# App to build from lfric_apps/applications
+APP=gravity_wave
+
+# Build the app using `envrun`
+envrun lfric_apps/build/local_build.py --application $APP
+
+# Run the app example using `envrun`
+cd lfric_apps/applications/$APP/example
+envrun mpirun -n  1 ../bin/$APP configuration.nml
+```
 
 ## Sites
 
