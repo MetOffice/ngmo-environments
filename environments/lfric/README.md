@@ -16,6 +16,6 @@ APP=gravity_wave
 envrun lfric_apps/build/local_build.py --application $APP
 
 # Run the app example
-cd example
+cd lfric_apps/applications/$APP/example
 envrun mpirun -n  1 ../bin/$APP configuration.nml
 ```

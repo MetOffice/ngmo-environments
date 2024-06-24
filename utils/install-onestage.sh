@@ -74,33 +74,27 @@ fi
 
 mkdir -p "$ENVDIR/bin"
 
-# Post install steps
+# Post install steps - copy in etc and run post-install
 if [[ -d "$ENVDEFS/etc" ]]; then
 	e cp -r "$ENVDEFS/etc" "$ENVDIR"
+fi
+if [[ -f "$ENVDEFS/post-install.sh" ]]; then
+	e "$ENVDEFS/post-install.sh"
 fi
 
 # Activate script
 cat > "$ENVDIR/bin/activate" <<EOF
 #!/bin/bash
 
+export NGMOENVS_ENVIRONMENT="$ENVIRONMENT"
 export NGMOENVS_ENVDIR="$ENVDIR"
 
-eval "$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
 spack env activate "\$NGMOENVS_ENVDIR/spack"
+eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
 
 if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
 fi
-
-alias deactivate="source \$NGMOENVS_ENVDIR/bin/deactivate"
-EOF
-
-# Deactivate script
-cat > "$ENVDIR/bin/deactivate" <<EOF
-#!/bin/bash
-
-conda deactivate
-spack env deactivate
 EOF
 
 # Run script
