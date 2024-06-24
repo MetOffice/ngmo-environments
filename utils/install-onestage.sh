@@ -83,14 +83,16 @@ fi
 cat > "$ENVDIR/bin/activate" <<EOF
 #!/bin/bash
 
-conda activate "$ENVDIR/conda"
-spack env activate "$ENVDIR/spack"
+export NGMOENVS_ENVDIR="$ENVDIR"
 
-if [[ -f "$ENVDIR/etc/env.activate.sh" ]]; then
-	source "$ENVDIR/etc/env.activate.sh"
+eval "$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
+spack env activate "\$NGMOENVS_ENVDIR/spack"
+
+if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
+	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
 fi
 
-alias deactivate="source $ENVDIR/bin/deactivate"
+alias deactivate="source \$NGMOENVS_ENVDIR/bin/deactivate"
 EOF
 
 # Deactivate script

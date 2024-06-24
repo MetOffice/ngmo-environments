@@ -13,8 +13,7 @@ svn checkout https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk lfric_apps
 APP=gravity_wave
 
 # Build the app
-cd lfric_apps/applications/$APP
-envrun make
+envrun lfric_apps/build/local_build.py --application $APP
 
 # Run the app example
 cd example
