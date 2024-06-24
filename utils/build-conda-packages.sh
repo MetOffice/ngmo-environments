@@ -1,8 +1,17 @@
 #!/bin/bash
 
+set -eu
+set -o pipefail
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+
+e() {
+	echo "$@"
+	"$@"
+}
+
 # Builds conda packages required for an environment
 
-for PKGDIR in "$SCRIPT_DIR/../../packages/conda/"*; do
+for PKGDIR in "$NGMOENVS_DEFS/packages/conda/"*; do
 	PKGNAME="$(basename $PKGDIR)"
 
 	if ! grep "\<$PKGNAME\>" "$ENVDEFS/conda.yaml" > /dev/null; then
@@ -12,7 +21,7 @@ for PKGDIR in "$SCRIPT_DIR/../../packages/conda/"*; do
 
 	if [[ ! -f "$(conda build --output "$PKGDIR")" ]]; then
 		# Package needs to be built (will autobuild dependencies)
-		e conda build "$PKGDIR"
+		e $CONDA_EXE build "$PKGDIR"
 	fi
 
 done

@@ -20,7 +20,7 @@ source ~/ngmo-envs/bin/activate
 
 ## SVN Credentials
 
-Store SVN credentials by running
+Store SVN credentials in GPG agent by running
 
 ```bash
 conda env create -n svn subversion
@@ -60,4 +60,17 @@ export ENV=lfric
 ./site/aws/install.sh $ENV
 ```
 
+## Using environments
 
+Make sure the environment's `bin/` directory is on your `PATH`:
+
+```bash
+export PATH=${NGMOENVS_BASEDIR}/envs/lfric/bin:$PATH
+```
+
+Run commands inside the environment using the `envrun` script.
+
+```
+envrun make
+envrun mpirun -n 6 lfric
+```

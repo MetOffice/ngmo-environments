@@ -1,26 +1,42 @@
 #!/bin/bash
 
+set -eu
+set -o pipefail
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+
 e() {
 	echo "$@"
 	"$@"
 }
 
-ENVDEFS="${SCRIPT_DIR}/../../environments/${ENVIRONMENT}"
+# Path to install the environment to
+: ${NGMOENVS_ENVDIR:="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"}
+export NGMOENVS_ENVDIR
 
+# Path to base of this repo
+export NGMOENVS_DEFS=${SCRIPT_DIR}/..
+
+# Conda executable being used
+: ${CONDA_EXE:=conda}
+export CONDA_EXE
+
+# Path to environment definition
+export ENVDEFS="${NGMOENVS_DEFS}/environments/${ENVIRONMENT}"
 if [[ ! -d "$ENVDEFS" ]]; then
 	echo "Enviornment '$ENVIRONMENT' not found"
 	exit 1
 fi
 
+ENVDIR=$NGMOENVS_ENVDIR
 mkdir -p "$ENVDIR"
 
 # Install conda enviornment
 if [[ -f "$ENVDEFS/conda.yaml" ]]; then
 	# Build any required packages
-	source "$SCRIPT_DIR/../../utils/build-conda-packages.sh"
+	"$SCRIPT_DIR/build-conda-packages.sh"
 
 	# Build the environment
-	e conda env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
+	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
 fi
 
 # Install spack environment
@@ -37,7 +53,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	e spack env activate "$ENVDIR/spack"
 	
 	# Add the local packages if they're not already available
-	e spack repo add "$SCRIPT_DIR/../../packages/spack" || true
+	e spack repo add "$NGMOENVS_DEFS/packages/spack" || true
 
 	# Add site config
 	if [[ -f "$SCRIPT_DIR/spack-config.yaml" ]]; then
@@ -66,8 +82,6 @@ fi
 # Activate script
 cat > "$ENVDIR/bin/activate" <<EOF
 #!/bin/bash
-
-source "$NGMOENV_BASEDIR/etc/profile.d/conda.sh"
 
 conda activate "$ENVDIR/conda"
 spack env activate "$ENVDIR/spack"
@@ -104,8 +118,8 @@ Environment installed at
 
     $ENVDIR/
 
-Run commands in the enviornment with
+Run commands in the environment with
 
-    $ENVDIR/bin/envrun $COMMAND
+    $ENVDIR/bin/envrun \$COMMAND
 
 EOF

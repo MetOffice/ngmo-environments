@@ -12,6 +12,8 @@ conda create -n apptainer apptainer squashfuse
 
 ## Building containers
 
+A container can be built with
+
 ```bash
 # What is your apptainer command?
 export APPTAINER="conda run -n apptainer apptainer"
@@ -30,4 +32,22 @@ export NGMOENVS_MPI=openmpi@4
 export ENV=lfric
 
 ./site/apptainer/install.sh $ENV
+```
+
+Building a container may require passwordless access to MOSRS
+
+## Using container environments
+
+Make sure the container environment's `bin/` directory is on your `PATH`:
+
+```bash
+export PATH=${NGMOENVS_BASEDIR}/envs/lfric/bin:$PATH
+```
+
+Run commands inside the container using the `envrun` script. If you build an
+executable inside the container you must also run it inside the container.
+
+```
+envrun make
+envrun mpirun -n 6 lfric
 ```
