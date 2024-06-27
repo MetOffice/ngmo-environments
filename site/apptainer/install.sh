@@ -2,7 +2,7 @@
 
 set -eu
 set -o pipefail
-SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+export SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
 
 e() {
 	echo "$@"
@@ -34,7 +34,7 @@ CONTAINER_BASEDIR=/ngmo
 CONTAINER_ENVDIR=${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}
 
 # Path to base of this repo
-export NGMOENVS_DEFS=${SCRIPT_DIR}/../..
+export NGMOENVS_DEFS=${SITE_DIR}/../..
 
 # What apptainer command is being used?
 echo "APPTAINER=$APPTAINER"
@@ -45,10 +45,10 @@ mkdir -p "$(dirname "$IMAGE")"
 #e $APPTAINER build \
 #	--force \
 #	"$IMAGE" \
-#	"$SCRIPT_DIR/image.def"
+#	"$SITE_DIR/image.def"
 
 # Prepare to create the squashfs directory
-rm -rf "$LOCALSQUASHFS"
+#rm -rf "$LOCALSQUASHFS"
 mkdir -p "$LOCALSQUASHFS/$CONTAINER_BASEDIR"
 
 # Create the container entry point
@@ -57,6 +57,7 @@ mkdir -p "$(dirname "$ENTRYPOINT")"
 cat > "$ENTRYPOINT" << EOF
 #!/bin/bash
 source "$CONTAINER_BASEDIR/bin/activate"
+export PATH=$CONTAINER_BASEDIR/conda/bin:\$PATH
 exec "\$@"
 EOF
 chmod +x "$ENTRYPOINT"
@@ -66,12 +67,12 @@ MOUNT_ARGS="--bind $LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw"
 
 # Install conda and spack using the common bootstrap script
 export NGMOENVS_BASEDIR=${CONTAINER_BASEDIR}
-e $APPTAINER exec $MOUNT_ARGS "$IMAGE" /bin/bash ${SCRIPT_DIR}/../../utils/bootstrap.sh
+#e $APPTAINER exec $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/bootstrap.sh
 
 # Install the environment using the common onestage install script
 export NGMOENVS_ENVDIR=${CONTAINER_ENVDIR}
 export ENVIRONMENT
-e $APPTAINER run $MOUNT_ARGS "$IMAGE" /bin/bash ${SCRIPT_DIR}/../../utils/install-onestage.sh
+e $APPTAINER run $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/install-onestage.sh
 
 # Convert to squashfs
 

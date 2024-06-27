@@ -22,5 +22,7 @@ These variables can be used to control the installation for most sites
    `$NGMOENVS_BASEDIR/spack` and `$NGMOENVS_BASEDIR/conda` respectively.
  * `$NGMOENVS_ENVDIR`: Specific directory for installing an environment under if
    not using the default.
+ * `$NGMOENVS_COMPILER`: Compiler to use for Spack packages
+ * `$NGMOENVS_MPI`: MPI to use for Spack packages
  * `$NGMOENVS_SPACK_MIRROR`: Path for storing built spack packages, default `file://$NGMOENVS_BASEDIR/spack-mirror`.
  * `$CONDA_BLD_PATH`: Path for storing built conda packages, default `$NGMOENVS_BASEDIR/conda-bld`.

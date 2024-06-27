@@ -4,6 +4,10 @@ set -eu
 set -o pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
 
+env | grep SPACK
+echo PATH=$PATH
+which spack
+
 e() {
 	echo "$@"
 	"$@"
@@ -20,6 +24,9 @@ export NGMOENVS_DEFS=${SCRIPT_DIR}/..
 : ${CONDA_EXE:=conda}
 export CONDA_EXE
 
+echo NGMOENVS_COMPILER=${NGMOENVS_COMPILER}
+echo NGMOENVS_MPI=${NGMOENVS_MPI}
+
 # Path to environment definition
 export ENVDEFS="${NGMOENVS_DEFS}/environments/${ENVIRONMENT}"
 if [[ ! -d "$ENVDEFS" ]]; then
@@ -30,14 +37,14 @@ fi
 ENVDIR=$NGMOENVS_ENVDIR
 mkdir -p "$ENVDIR"
 
-# Install conda enviornment
-if [[ -f "$ENVDEFS/conda.yaml" ]]; then
-	# Build any required packages
-	"$SCRIPT_DIR/build-conda-packages.sh"
-
-	# Build the environment
-	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
-fi
+# # Install conda enviornment
+# if [[ -f "$ENVDEFS/conda.yaml" ]]; then
+# 	# Build any required packages
+# 	"$SCRIPT_DIR/build-conda-packages.sh"
+# 
+# 	# Build the environment
+# 	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
+# fi
 
 # Install spack environment
 if [[ -f "$ENVDEFS/spack.yaml" ]]; then
@@ -49,6 +56,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 		cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
 	fi
 
+	set -x
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
 	
@@ -61,14 +69,14 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	fi
 
 	# Add site config
-	if [[ -f "$SCRIPT_DIR/spack-config.yaml" ]]; then
-		e spack config add --file "$SCRIPT_DIR/spack-config.yaml"
+	if [[ -f "$SITE_DIR/spack-config.yaml" ]]; then
+		e spack config add --file "$SITE_DIR/spack-config.yaml"
 	fi
 
 	# Add compiler and mpi
 	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
 	spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
-	e spack add "${NGMOENVS_COMPILER}"
+	#e spack add "${NGMOENVS_COMPILER}"
 
 	# Solve dependencies
 	e spack concretize --force --fresh
