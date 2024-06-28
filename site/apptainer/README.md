@@ -2,12 +2,18 @@
 
 Containers for working with Apptainer or Singularity
 
-## Installing apptainer
+## Prerequisites
 
-On a VM apptainer can be installed with
+The container build requires apptainer and mksquashfs.
+
+If not centrally available apptainer and mksquashfs can be installed using
+conda, e.g.
 
 ```bash
 conda create -n apptainer apptainer squashfuse
+
+export APPTAINER="conda run -n apptainer apptainer"
+export MKSQUASHFS="conda run -n apptainer mksquashfs"
 ```
 
 ## Building containers
@@ -15,12 +21,6 @@ conda create -n apptainer apptainer squashfuse
 A container can be built with
 
 ```bash
-# What is your apptainer command?
-export APPTAINER="conda run -n apptainer apptainer"
-
-# Or with central installation
-# export APPTAINER=$(which apptainer || which singularity)
-
 # Configure where environments are installed
 export NGMOENVS_BASEDIR=~/ngmo-envs
 
@@ -28,13 +28,12 @@ export NGMOENVS_BASEDIR=~/ngmo-envs
 export NGMOENVS_COMPILER=gcc
 export NGMOENVS_MPI=openmpi@4
 
-# The environment to install
-export ENV=lfric
-
-./site/apptainer/install.sh $ENV
+# Install an environment
+./site/apptainer/install.sh lfric
 ```
 
-Building a container may require passwordless access to MOSRS
+Building some packages will require passwordless access to MOSRS which will need
+to be set up separately.
 
 ## Using container environments
 
@@ -51,3 +50,7 @@ executable inside the container you must also run it inside the container.
 envrun make
 envrun mpirun -n 6 lfric
 ```
+
+## Using Host MPI
+
+TODO

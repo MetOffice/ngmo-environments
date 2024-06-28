@@ -4,7 +4,8 @@ A directory for each site environments can be created on
 
 ## Example sites
 
- * aws: Installs an uncontainerised environment on an AWS instance
+ * aws: Installs an uncontainerised environment on an AWS instance, should be
+   adaptable to most VM types
  * apptainer: Installs a containerised environment
  * nci: Installs a containerised environment in two stages, one that requires
    network access and one that requires compute
@@ -14,7 +15,14 @@ installation scripts from `../utils/`.
 
 ## Common environment variables
 
-These variables can be used to control the installation for most sites
+These variables can be used to control the installation for most sites. Export the variables before running the install scripts, e.g.
+```
+export NGMOENVS_BASEDIR="/scratch/$PROJECT/ngmo-envs"
+export NGMOENVS_COMPILER="ifort"
+export NGMOENVS_MPI="openmpi@4"
+
+./site/apptainer/install.sh lfric
+```
 
  * `NGMOENVS_BASEDIR`: Base directory for installing environments under.
    Environments will be installed under `$NGMOENVS_BASEDIR/envs`. If using the
