@@ -76,7 +76,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	# Add compiler and mpi
 	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
 	spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
-	#e spack add "${NGMOENVS_COMPILER}"
+	e spack add "${NGMOENVS_COMPILER}"
 
 	# Solve dependencies
 	e spack concretize --force --fresh
