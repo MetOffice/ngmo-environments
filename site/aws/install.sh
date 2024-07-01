@@ -4,7 +4,7 @@
 
 set -eu
 set -o pipefail
-SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+export SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
 
 # Enviornment to install
 export ENVIRONMENT="$1"
@@ -14,7 +14,7 @@ export ENVIRONMENT="$1"
 export NGMOENVS_BASEDIR
 
 # Path to base of this repo
-export NGMOENVS_DEFS=${SCRIPT_DIR}/../..
+export NGMOENVS_DEFS=${SITE_DIR}/../..
 
 # Run the generic build script
 "$NGMOENVS_DEFS/utils/install-onestage.sh"

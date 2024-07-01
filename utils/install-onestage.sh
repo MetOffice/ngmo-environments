@@ -37,14 +37,14 @@ fi
 ENVDIR=$NGMOENVS_ENVDIR
 mkdir -p "$ENVDIR"
 
-# # Install conda enviornment
-# if [[ -f "$ENVDEFS/conda.yaml" ]]; then
-# 	# Build any required packages
-# 	"$SCRIPT_DIR/build-conda-packages.sh"
-# 
-# 	# Build the environment
-# 	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
-# fi
+# Install conda enviornment
+if [[ -f "$ENVDEFS/conda.yaml" ]]; then
+	# Build any required packages
+	"$SCRIPT_DIR/build-conda-packages.sh"
+
+	# Build the environment
+	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
+fi
 
 # Install spack environment
 if [[ -f "$ENVDEFS/spack.yaml" ]]; then

@@ -12,6 +12,7 @@ e() {
 }
 
 SPACK_VERSION=0.22.0
+export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
 pushd "$NGMOENVS_BASEDIR" > /dev/null
@@ -31,6 +32,11 @@ fi
 export SPACK_PYTHON="$NGMOENVS_BASEDIR/conda/bin/python"
 source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 
+# Configure Spack
+e spack compiler find --scope site /usr/bin
+e spack external find --scope site --path /usr/bin gcc
+
+# Create the activate script
 cat > bin/activate << EOF
 #!/bin/bash
 # Source this file to load the bootstrap conda and spack
@@ -39,6 +45,10 @@ export SPACK_PYTHON="$NGMOENVS_BASEDIR/conda/bin/python"
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
 source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 
+# Disable .spack and /etc/spack directories
+export SPACK_DISABLE_LOCAL_CONFIG=1
+
+# Set default paths
 : \${NGMOENVS_BASEDIR:="$NGMOENVS_BASEDIR"}
 : \${NGMOENVS_SPACK_MIRROR:="file://\$NGMOENVS_BASEDIR/spack-mirror"}
 : \${CONDA_BLD_PATH:="\$NGMOENVS_BASEDIR/conda-bld"}
@@ -50,15 +60,10 @@ export CONDA_BLD_PATH
 export NGMOENVS_COMPILER="$(spack spec --format '{compiler.name}@{compiler.version}' mpi)"
 export NGMOENVS_MPI="$(spack spec --format '{name}@{version}' mpi)"
 EOF
-
 source "$NGMOENVS_BASEDIR/bin/activate"
 
-# Configure Spack
-e spack compiler find --scope site /usr/bin
-e spack external find --scope site --path /usr/bin --not-buildable gcc
-e spack repo add "$NGMOENVS_DEFS/spack" || true
-
 cat <<EOF
+
 Bootstrap complete
 
 Load micromamba and spack with
