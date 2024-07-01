@@ -12,7 +12,8 @@ export NGMOENVS_BASEDIR=~/ngmo-envs
 ./site/aws/bootstrap.sh
 ```
 
-This will print out the path to an activate script which you should source before installing environments, e.g.
+This will print out the path to an activate script which you should source
+before installing or using environments, e.g.
 
 ```bash
 source ~/ngmo-envs/bin/activate

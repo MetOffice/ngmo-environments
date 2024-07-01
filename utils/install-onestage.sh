@@ -57,6 +57,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 		# Environment exists, copy in def file
 		cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
 	fi
+	rm -f "$ENVDEFS/spack.lock"
 
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
@@ -74,13 +75,14 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 		e spack config add --file "$SITE_DIR/spack-config.yaml"
 	fi
 
-	# Add compiler and mpi
+	${SCRIPT_DIR}/install-compiler.sh
+
+	# Add compiler and mpi requirements
 	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
 	spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
-	e spack add "${NGMOENVS_COMPILER}"
 
 	# Solve dependencies
-	e spack concretize --force --fresh
+	e spack concretize --fresh
 
 	# Install everything
 	e spack install
