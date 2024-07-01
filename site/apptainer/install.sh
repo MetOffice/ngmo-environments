@@ -48,13 +48,13 @@ echo "APPTAINER=$APPTAINER"
 # Create the base image from our def file
 IMAGE="$INSTALL_ENVDIR/etc/apptainer.sif"
 mkdir -p "$(dirname "$IMAGE")"
-#e $APPTAINER build \
-#	--force \
-#	"$IMAGE" \
-#	"$SITE_DIR/image.def"
+e $APPTAINER build \
+	--force \
+	"$IMAGE" \
+	"$SITE_DIR/image.def"
 
 # Prepare to create the squashfs directory
-#rm -rf "$LOCALSQUASHFS"
+rm -rf "$LOCALSQUASHFS"
 mkdir -p "$LOCALSQUASHFS/$CONTAINER_BASEDIR"
 
 # Create the container entry point
@@ -81,7 +81,7 @@ MOUNT_ARGS="--bind $LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw"
 
 # Install conda and spack using the common bootstrap script
 export NGMOENVS_BASEDIR=${CONTAINER_BASEDIR}
-#e $APPTAINER exec $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/bootstrap.sh
+e $APPTAINER exec $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/bootstrap.sh
 
 # Install the environment using the common onestage install script
 export NGMOENVS_ENVDIR=${CONTAINER_ENVDIR}
