@@ -50,15 +50,12 @@ export SPACK_DISABLE_LOCAL_CONFIG=1
 
 # Set default paths
 : \${NGMOENVS_BASEDIR:="$NGMOENVS_BASEDIR"}
-: \${NGMOENVS_SPACK_MIRROR:="file://\$NGMOENVS_BASEDIR/spack-mirror"}
-: \${CONDA_BLD_PATH:="\$NGMOENVS_BASEDIR/conda-bld"}
+: \${NGMOENVS_COMPILER:="$(spack spec --format '{compiler.name}@{compiler.version}' mpi)"}
+: \${NGMOENVS_MPI="$(spack spec --format '{name}@{version}' mpi)"}
 
 export NGMOENVS_BASEDIR
-export NGMOENVS_SPACK_MIRROR
-export CONDA_BLD_PATH
-
-export NGMOENVS_COMPILER="$(spack spec --format '{compiler.name}@{compiler.version}' mpi)"
-export NGMOENVS_MPI="$(spack spec --format '{name}@{version}' mpi)"
+export NGMOENVS_COMPILER
+export NGMOENVS_MPI
 EOF
 source "$NGMOENVS_BASEDIR/bin/activate"
 

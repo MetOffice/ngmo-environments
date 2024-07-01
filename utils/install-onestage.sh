@@ -20,6 +20,12 @@ export NGMOENVS_DEFS=${SCRIPT_DIR}/..
 : ${CONDA_EXE:=conda}
 export CONDA_EXE
 
+# Cache paths
+: ${NGMOENVS_SPACK_MIRROR:="file://$NGMOENVS_BASEDIR/spack-mirror"}
+: ${CONDA_BLD_PATH:="$NGMOENVS_BASEDIR/conda-bld"}
+export NGMOENVS_SPACK_MIRROR
+export CONDA_BLD_PATH
+
 echo NGMOENVS_COMPILER=${NGMOENVS_COMPILER}
 echo NGMOENVS_MPI=${NGMOENVS_MPI}
 
@@ -52,7 +58,6 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 		cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
 	fi
 
-	set -x
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
 	
@@ -94,9 +99,10 @@ fi
 # Activate script
 cat > "$ENVDIR/bin/activate" <<EOF
 #!/bin/bash
-
 export NGMOENVS_ENVIRONMENT="$ENVIRONMENT"
 export NGMOENVS_ENVDIR="$ENVDIR"
+export NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
+export NGMOENVS_MPI="$NGMOENVS_MPI"
 
 spack env activate "\$NGMOENVS_ENVDIR/spack"
 eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"

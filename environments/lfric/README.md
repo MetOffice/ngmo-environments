@@ -7,6 +7,10 @@ Contains all dependencies required to build and run LFRic
 Try a manual install and test run of LFRic
 
 ```bash
+# Make sure the environment is on your PATH
+export PATH=$NGMOENVS_BASEDIR/envs/lfric/bin:$PATH
+
+# Check out the LFRic source
 svn checkout https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk lfric_apps
 
 # App to build from lfric_apps/applications
