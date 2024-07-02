@@ -36,7 +36,7 @@ if [[ ! -d "$ENVDEFS" ]]; then
 	exit 1
 fi
 
-ENVDIR=$NGMOENVS_ENVDIR
+export ENVDIR=$NGMOENVS_ENVDIR
 mkdir -p "$ENVDIR"
 
 # Install conda enviornment
@@ -47,17 +47,23 @@ if [[ -f "$ENVDEFS/conda.yaml" ]]; then
 	# Build the environment
 	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
 fi
-
+set -x
 # Install spack environment
 if [[ -f "$ENVDEFS/spack.yaml" ]]; then
-	if [[ ! -f "$ENVDIR/spack/spack.yaml" ]]; then
+	if [[ ! -d "$ENVDIR/spack" ]]; then
 		# Create the environment if it doesn't exist
-		e spack env create --dir "$ENVDIR/spack" "$ENVDEFS/spack.yaml"
+		e spack env create --dir "$ENVDIR/spack"
 	else
-		# Environment exists, copy in def file
-		cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
+		# Environment exists, make a new def file
+		echo 'spack: {}' > "$ENVDIR/spack/spack.yaml"
 	fi
-	rm -f "$ENVDEFS/spack.lock"
+	rm -f "$ENVDIR/spack/spack.lock"
+
+	# Copy in the environment definitions
+	cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
+
+	# Install the compiler
+	${SCRIPT_DIR}/install-compiler.sh
 
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
@@ -74,8 +80,6 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	if [[ -f "$SITE_DIR/spack-config.yaml" ]]; then
 		e spack config add --file "$SITE_DIR/spack-config.yaml"
 	fi
-
-	${SCRIPT_DIR}/install-compiler.sh
 
 	# Add compiler and mpi requirements
 	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"

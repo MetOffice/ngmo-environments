@@ -22,7 +22,7 @@ if [[ ! -f "bin/micromamba" ]]; then
 fi
 
 export MAMBA_ROOT_PREFIX="$NGMOENVS_BASEDIR/conda"
-e "$NGMOENVS_BASEDIR/bin/micromamba" install -n base conda conda-build
+e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
 
 if [[ ! -d "spack" ]]; then
@@ -35,6 +35,9 @@ source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 # Configure Spack
 e spack compiler find --scope site /usr/bin
 e spack external find --scope site --path /usr/bin gcc
+
+echo "Default Compiler and MPI:"
+spack spec --format '{name}@{version}%{compiler.name}@{compiler.version}' mpi
 
 # Create the activate script
 cat > bin/activate << EOF

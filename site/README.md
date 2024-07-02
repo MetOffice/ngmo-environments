@@ -18,7 +18,7 @@ installation scripts from `../utils/`.
 These variables can be used to control the installation for most sites. Export the variables before running the install scripts, e.g.
 ```
 export NGMOENVS_BASEDIR="/scratch/$PROJECT/ngmo-envs"
-export NGMOENVS_COMPILER="intel"
+export NGMOENVS_COMPILER="intel@2021.10.0"
 export NGMOENVS_MPI="openmpi@4"
 
 ./site/apptainer/install.sh lfric

@@ -19,9 +19,9 @@ for PKGDIR in "$NGMOENVS_DEFS/conda/"*; do
 		continue
 	fi
 
-	if [[ ! -f "$(conda build --output "$PKGDIR")" ]]; then
+	if [[ ! -f "$(conda build -c conda-forge --output "$PKGDIR")" ]]; then
 		# Package needs to be built (will autobuild dependencies)
-		e $CONDA_EXE build "$PKGDIR"
+		e $CONDA_EXE build -c conda-forge "$PKGDIR"
 	fi
 
 done

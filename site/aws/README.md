@@ -2,6 +2,9 @@
 
 ## Bootstrapping
 
+You will need to manually install git with `sudo dnf install git` to check out
+this repository.
+
 If conda and spack are not already installed you can install them and their
 dependencies with
 
