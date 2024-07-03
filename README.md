@@ -1,4 +1,5 @@
 # ngmo-environments
+
 Next Generation Environments for Momentum
 
 ## Using NGMO Environments
@@ -29,11 +30,11 @@ envrun mpirun -n  1 ../bin/$APP configuration.nml
 
 ## Contents
 
-* `sites/`: Site specific build scripts
-* `environments/`: Environment definitions
-* `spack/`: Spack package definitions
-* `conda/`: Conda package definitions
-* `utils/`: Shared scripts
+- `sites/`: Site specific build scripts
+- `environments/`: Environment definitions
+- `spack/`: Spack package definitions
+- `conda/`: Conda package definitions
+- `utils/`: Shared scripts
 
 ## Sites
 

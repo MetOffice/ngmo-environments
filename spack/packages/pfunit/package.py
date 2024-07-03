@@ -17,21 +17,58 @@ class Pfunit(CMakePackage):
 
     maintainers = ["citibeth"]
 
-    version("4.1.14", sha256="bada2be8d7e69ca1f16209ba92293fa1c06748b78534d71b24b2c825450a495f")
-    version("4.1.13", sha256="f388e08c67c51cbfd9f3a3658baac912b5506d2fc651410cd34a21260c309630")
-    version("4.1.12", sha256="7d71b0fb996497fe9a20eb818d02d596cd0d3cded1033a89a9081fbd925c68f2")
-    version("4.1.11", sha256="16160bac223aaa3ed2b27e30287d25fdaec3cf6f2c570ebd8d61196e6aa6180f")
-    version("4.1.10", sha256="051c35ad9678002943f4a4f2ab532a6b44de86ca414751616f93e69f393f5373")
-    version("3.3.3", sha256="9f673b58d20ad23148040a100227b4f876458a9d9aee0f0d84a5f0eef209ced5")
-    version("3.3.2", sha256="b1cc2e109ba602ea71bccefaa3c4a06e7ab1330db9ce6c08db89cfde497b8ab8")
-    version("3.3.1", sha256="f8f4bea7de991a518a0371b4c70b19e492aa9a0d3e6715eff9437f420b0cdb45")
-    version("3.3.0", sha256="4036ab448b821b500fbe8be5e3d5ab3e419ebae8be82f7703bcf84ab1a0ff862")
-    version("3.2.10", sha256="b9debba6d0e31b682423ffa756531e9728c10acde08c4d8e1609b4554f552b1a")
-    version("3.2.9", sha256="403f9a150865700c8b4240fd033162b8d3e8aeefa265c50c5a6fe14c455fbabc")
+    version(
+        "4.1.14",
+        sha256="bada2be8d7e69ca1f16209ba92293fa1c06748b78534d71b24b2c825450a495f",
+    )
+    version(
+        "4.1.13",
+        sha256="f388e08c67c51cbfd9f3a3658baac912b5506d2fc651410cd34a21260c309630",
+    )
+    version(
+        "4.1.12",
+        sha256="7d71b0fb996497fe9a20eb818d02d596cd0d3cded1033a89a9081fbd925c68f2",
+    )
+    version(
+        "4.1.11",
+        sha256="16160bac223aaa3ed2b27e30287d25fdaec3cf6f2c570ebd8d61196e6aa6180f",
+    )
+    version(
+        "4.1.10",
+        sha256="051c35ad9678002943f4a4f2ab532a6b44de86ca414751616f93e69f393f5373",
+    )
+    version(
+        "3.3.3",
+        sha256="9f673b58d20ad23148040a100227b4f876458a9d9aee0f0d84a5f0eef209ced5",
+    )
+    version(
+        "3.3.2",
+        sha256="b1cc2e109ba602ea71bccefaa3c4a06e7ab1330db9ce6c08db89cfde497b8ab8",
+    )
+    version(
+        "3.3.1",
+        sha256="f8f4bea7de991a518a0371b4c70b19e492aa9a0d3e6715eff9437f420b0cdb45",
+    )
+    version(
+        "3.3.0",
+        sha256="4036ab448b821b500fbe8be5e3d5ab3e419ebae8be82f7703bcf84ab1a0ff862",
+    )
+    version(
+        "3.2.10",
+        sha256="b9debba6d0e31b682423ffa756531e9728c10acde08c4d8e1609b4554f552b1a",
+    )
+    version(
+        "3.2.9",
+        sha256="403f9a150865700c8b4240fd033162b8d3e8aeefa265c50c5a6fe14c455fbabc",
+    )
 
-    variant("shared", default=True, description="Build shared library in addition to static")
+    variant(
+        "shared", default=True, description="Build shared library in addition to static"
+    )
     variant("mpi", default=False, description="Enable MPI")
-    variant("use_comm_world", default=False, description="Enable MPI_COMM_WORLD for testing")
+    variant(
+        "use_comm_world", default=False, description="Enable MPI_COMM_WORLD for testing"
+    )
     variant("openmp", default=False, description="Enable OpenMP")
     variant("docs", default=False, description="Build docs")
 
@@ -98,7 +135,10 @@ class Pfunit(CMakePackage):
 
         if spec.satisfies("+mpi"):
             args.extend(
-                ["-DMPI_USE_MPIEXEC=YES", "-DCMAKE_Fortran_COMPILER=%s" % spec["mpi"].mpifc]
+                [
+                    "-DMPI_USE_MPIEXEC=YES",
+                    "-DCMAKE_Fortran_COMPILER=%s" % spec["mpi"].mpifc,
+                ]
             )
 
         return args

@@ -15,16 +15,28 @@ class Xios(Package):
     homepage = "https://forge.ipsl.fr/ioserver/wiki"
 
     version("develop", svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
-    version("3.0.b2611", revision=2611, svn="http://forge.ipsl.fr/ioserver/svn/XIOS3/branches/xios-3.0-beta")
-    version("2.5.2252", revision=2252, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
     version(
-        "2.5", revision=1860, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.5"
+        "3.0.b2611",
+        revision=2611,
+        svn="http://forge.ipsl.fr/ioserver/svn/XIOS3/branches/xios-3.0-beta",
     )
     version(
-        "2.0", revision=1627, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.0"
+        "2.5.2252", revision=2252, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk"
     )
     version(
-        "1.0", revision=910, svn="http://forge.ipsl.fr/ioserver/svn/XIOS/branchs/xios-1.0"
+        "2.5",
+        revision=1860,
+        svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.5",
+    )
+    version(
+        "2.0",
+        revision=1627,
+        svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.0",
+    )
+    version(
+        "1.0",
+        revision=910,
+        svn="http://forge.ipsl.fr/ioserver/svn/XIOS/branchs/xios-1.0",
     )
 
     variant(
@@ -92,7 +104,9 @@ class Xios(Package):
                 filter_file(r"([^:/])shared_ptr<", r"\1boost::shared_ptr<", filepath)
                 # Use type long for position in output stream:
                 filter_file(
-                    r"oss.tellp\(\) *- *startPos", r"(long)oss.tellp() - startPos", filepath
+                    r"oss.tellp\(\) *- *startPos",
+                    r"(long)oss.tellp() - startPos",
+                    filepath,
                 )
 
     def xios_env(self):
@@ -145,12 +159,17 @@ OASIS_LIB=""
         else:
             param["LIBCXX"] = "-lstdc++"
 
-        if spec.satisfies('%gcc'):
-            param['BACKTRACE'] = '-fbacktrace'
+        if spec.satisfies("%gcc"):
+            param["BACKTRACE"] = "-fbacktrace"
         else:
-            param['BACKTRACE'] = '-traceback'
+            param["BACKTRACE"] = "-traceback"
 
-        if any(map(spec.satisfies, ("%gcc", "%intel", "%apple-clang", "%clang", "%fj", "%oneapi"))):
+        if any(
+            map(
+                spec.satisfies,
+                ("%gcc", "%intel", "%apple-clang", "%clang", "%fj", "%oneapi"),
+            )
+        ):
             text = r"""
 %CCOMPILER      {MPICXX}
 %FCOMPILER      {MPIFC}
@@ -174,9 +193,7 @@ OASIS_LIB=""
 %CPP            {CC} -E
 %FPP            {CC} -E -P -x c
 %MAKE           gmake
-""".format(
-                **param
-            )
+""".format(**param)
         elif spec.satisfies("%cce"):
             # In the CC compiler prior to cce/8.3.7,
             # optimisation must be reduced to avoid a bug,
@@ -208,12 +225,10 @@ OASIS_LIB=""
 %CPP            cpp
 %FPP            cpp -P -CC
 %MAKE           gmake
-""".format(
-                **param
-            )
+""".format(**param)
         else:
             raise InstallError("Unsupported compiler.")
-        
+
         with open(file, "w") as f:
             f.write(text)
 
