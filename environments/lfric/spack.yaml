@@ -1,0 +1,8 @@
+spack:
+  specs:
+    - xios@2.5.2252 +lfric
+    - yaxt@0.9.0 idxtype=long
+    - pfunit@3 max_array_rank=6 +mpi +openmp
+    - fcm
+    - rsync
+    - hdf5

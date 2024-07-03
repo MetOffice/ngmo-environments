@@ -1,0 +1,9 @@
+--- a/extern/remap/src/meshutil.cpp	(revision 2397)
++++ b/extern/remap/src/meshutil.cpp	(revision 2398)
+@@ -5,4 +5,5 @@
+ #include "earcut.hpp"
+ #include <vector>
++#include <array>
+ 
+ namespace sphereRemap {
+

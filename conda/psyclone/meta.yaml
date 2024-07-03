@@ -1,0 +1,73 @@
+{% set name = "psyclone" %}
+{% set version = "2.5.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: https://github.com/stfc/PSyclone/archive/refs/tags/{{version}}.tar.gz
+  sha256: 00f5d4bed877293bd6327e1e545532a01ef288687f2e88b4f53799191bb819c3
+
+build:
+  number: 0
+  noarch: python
+  script: "{{ PYTHON }} -m pip install . -vv --no-deps"
+
+requirements:
+  host:
+    - configparser
+    - fparser
+    - jsonschema
+    - pip
+    - pyparsing
+    - python
+    - six
+    - sympy
+  run:
+    - configparser
+    - fparser
+    - jsonschema
+    - pyparsing
+    - python
+    - six
+    - sympy
+
+test:
+  imports:
+    - psyclone
+    - psyclone.core
+    - psyclone.domain
+    - psyclone.domain.common
+    - psyclone.domain.common.algorithm
+    - psyclone.domain.common.psylayer
+    - psyclone.domain.common.transformations
+    - psyclone.domain.gocean
+    - psyclone.domain.gocean.transformations
+    - psyclone.domain.lfric
+    - psyclone.domain.lfric.algorithm
+    - psyclone.domain.lfric.transformations
+    - psyclone.domain.nemo
+    - psyclone.domain.nemo.transformations
+    - psyclone.parse
+    - psyclone.psyad
+    - psyclone.psyad.transformations
+    - psyclone.psyir
+    - psyclone.psyir.backend
+    - psyclone.psyir.frontend
+    - psyclone.psyir.nodes
+    - psyclone.psyir.symbols
+    - psyclone.psyir.tools
+    - psyclone.psyir.transformations
+    - psyclone.psyir.transformations.intrinsics
+
+about:
+  home: "https://github.com/stfc/psyclone"
+  license: "OSI Approved :: BSD 3-Clause"
+  license_family: BSD
+  license_file: 
+  summary: "PSyclone - a compiler for Finite Element/Volume/Difference DSLs in Fortran"
+  doc_url: 
+  dev_url: 
+
+

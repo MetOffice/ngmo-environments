@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - local
+dependencies:
+  - python
+  - psyclone
+  - lfric-gpl-utils=2
+  - jinja2
+  - sci-fab
