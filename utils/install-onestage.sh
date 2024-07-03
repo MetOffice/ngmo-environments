@@ -47,7 +47,7 @@ if [[ -f "$ENVDEFS/conda.yaml" ]]; then
 	# Build the environment
 	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
 fi
-set -x
+
 # Install spack environment
 if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	if [[ ! -d "$ENVDIR/spack" ]]; then
@@ -117,6 +117,9 @@ if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
 fi
 EOF
+
+# Set compiler variables
+cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
 
 # Run script
 cat > "$ENVDIR/bin/envrun" <<EOF

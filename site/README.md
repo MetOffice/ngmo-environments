@@ -7,8 +7,6 @@ A directory for each site environments can be created on
  * aws: Installs an uncontainerised environment on an AWS instance, should be
    adaptable to most VM types
  * apptainer: Installs a containerised environment
- * nci: Installs a containerised environment in two stages, one that requires
-   network access and one that requires compute
 
 For the most part sites do some site-specific setup and then call the generic
 installation scripts from `../utils/`.

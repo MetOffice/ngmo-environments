@@ -27,10 +27,17 @@ e spack install --add $COMPILER_PACKAGE
 COMPILER_HASH=$(spack find --format '{name}/{hash}' $COMPILER_PACKAGE)
 COMPILER_PATH=$(spack find --format '{prefix}' $COMPILER_PACKAGE)
 
+spack load $COMPILER_HASH
+cat > "$ENVDIR/etc/compiler.sh" <<EOF
+export CC=$CC
+export FC=$FC
+export CXX=$CXX
+EOF
+
 ## Swap to hashed version
-#e spack remove $COMPILER_PACKAGE
-#e spack add $COMPILER_PACKAGE$COMPILER_HASH
 echo COMPILER_PATH=$COMPILER_PATH
+
+COMPILER_DEPS=$(spack find --deps --format "packages:{name}:require:'@{version}%{compiler.name}@{compiler.version}'" $COMPILER_PACKAGE)
 
 e spack env activate "$ENVDIR/spack"
 
@@ -40,7 +47,5 @@ e spack config add "packages:intel-oneapi-compilers-classic:require:'%gcc'"
 e spack config add "packages:gcc-runtime:require:'%gcc'"
 e spack config add "packages:diffutils:require:'%gcc'"
 e spack config add "packages:gettext:require:'%gcc'"
-
-e spack add $COMPILER_HASH
 
 e spack compiler find "$COMPILER_PATH"
