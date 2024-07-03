@@ -2,7 +2,8 @@
 
 set -eu
 set -o pipefail
-export SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
+export SITE_DIR
 
 e() {
 	echo "$@"
@@ -20,27 +21,27 @@ e() {
 ENVIRONMENT="$1"
 
 # Commands
-: ${APPTAINER:=$(which apptainer || which singularity)}
-: ${MKSQUASHFS:=$(which mksquashfs)}
+: "${APPTAINER:=$(which apptainer || which singularity)}"
+: "${MKSQUASHFS:=$(which mksquashfs)}"
 
-: ${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}
+: "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
 
 # Base directory for environments
-: ${NGMOENVS_BASEDIR:="$HOME/ngmo-envs"}
+: "${NGMOENVS_BASEDIR:="$HOME/ngmo-envs"}"
 
 # Path to install the environment to on the host
 ENVDIR="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"
 INSTALL_ENVDIR="$ENVDIR"
 
 # Host filesystem path for building squashfs
-LOCALSQUASHFS=$NGMOENVS_TMPDIR/squashfs
+LOCALSQUASHFS="$NGMOENVS_TMPDIR/squashfs"
 
 # Where to install the environment in the container
 CONTAINER_BASEDIR=/ngmo
-CONTAINER_ENVDIR=${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}
+CONTAINER_ENVDIR="${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}"
 
 # Path to base of this repo
-export NGMOENVS_DEFS=${SITE_DIR}/../..
+export NGMOENVS_DEFS="${SITE_DIR}/../.."
 
 # What apptainer command is being used?
 echo "APPTAINER=$APPTAINER"
@@ -77,16 +78,16 @@ EOF
 chmod +x "$ENTRYPOINT"
 
 # Arguments to mount the squashfs directory inside the container
-MOUNT_ARGS="--bind $LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw"
+MOUNT_ARGS=("--bind" "$LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw")
 
 # Install conda and spack using the common bootstrap script
-export NGMOENVS_BASEDIR=${CONTAINER_BASEDIR}
-e $APPTAINER exec $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/bootstrap.sh
+export NGMOENVS_BASEDIR="${CONTAINER_BASEDIR}"
+e $APPTAINER exec "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "${SITE_DIR}/../../utils/bootstrap.sh"
 
 # Install the environment using the common onestage install script
-export NGMOENVS_ENVDIR=${CONTAINER_ENVDIR}
+export NGMOENVS_ENVDIR="${CONTAINER_ENVDIR}"
 export ENVIRONMENT
-e $APPTAINER run $MOUNT_ARGS "$IMAGE" /bin/bash ${SITE_DIR}/../../utils/install-onestage.sh
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "${SITE_DIR}/../../utils/install-onestage.sh"
 
 # Convert to squashfs
 SQUASHFS="$NGMOENVS_TMPDIR/$ENVIRONMENT.squashfs"
@@ -103,11 +104,11 @@ e $APPTAINER sif add \
 	"$SQUASHFS"
 
 # Install the environment
-mkdir -p $INSTALL_ENVDIR/bin
-cat > $INSTALL_ENVDIR/bin/envrun << EOF
+mkdir -p "$INSTALL_ENVDIR/bin"
+cat > "$INSTALL_ENVDIR/bin/envrun" << EOF
 #!/bin/bash
-ENV_DIR=\$( cd -- "\$( dirname -- "\$(readlink -f \${BASH_SOURCE[0]})" )" &> /dev/null && pwd )/..
+ENV_DIR=\$( cd -- "\$( dirname -- "\$(readlink -f "\${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )/..
 
 \${APPTAINER:-${APPTAINER}} run "\$ENV_DIR/etc/apptainer.sif" "\$@"
 EOF
-chmod +x $INSTALL_ENVDIR/bin/envrun
+chmod +x "$INSTALL_ENVDIR/bin/envrun"

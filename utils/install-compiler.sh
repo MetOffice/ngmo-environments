@@ -10,24 +10,24 @@ e() {
 	"$@"
 }
 
-echo NGMOENVS_COMPILER=$NGMOENVS_COMPILER
+echo NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 
-COMPILER_NAME=${NGMOENVS_COMPILER%@*}
-COMPILER_VERSION=${NGMOENVS_COMPILER/#${COMPILER_NAME}/}
+COMPILER_NAME="${NGMOENVS_COMPILER%@*}"
+COMPILER_VERSION="${NGMOENVS_COMPILER/#${COMPILER_NAME}/}"
 
 if [[ $COMPILER_NAME == "intel" ]]; then
-	COMPILER_PACKAGE=intel-oneapi-compilers-classic$COMPILER_VERSION
+	COMPILER_PACKAGE="intel-oneapi-compilers-classic$COMPILER_VERSION"
 elif [[ $COMPILER_NAME == "oneapi" ]]; then
-	COMPILER_PACKAGE=intel-oneapi-compilers$COMPILER_VERSION
+	COMPILER_PACKAGE="intel-oneapi-compilers$COMPILER_VERSION"
 else
-	COMPILER_PACKAGE=$NGMOENVS_COMPILER
+	COMPILER_PACKAGE="$NGMOENVS_COMPILER"
 fi
 
-e spack install --add $COMPILER_PACKAGE
-COMPILER_HASH=$(spack find --format '{name}/{hash}' $COMPILER_PACKAGE)
-COMPILER_PATH=$(spack find --format '{prefix}' $COMPILER_PACKAGE)
+e spack install --add "$COMPILER_PACKAGE"
+COMPILER_HASH="$(spack find --format '{name}/{hash}' "$COMPILER_PACKAGE")"
+COMPILER_PATH="$(spack find --format '{prefix}' "$COMPILER_PACKAGE")"
 
-spack load $COMPILER_HASH
+spack load "$COMPILER_HASH"
 cat > "$ENVDIR/etc/compiler.sh" <<EOF
 export CC=$CC
 export FC=$FC
@@ -35,9 +35,7 @@ export CXX=$CXX
 EOF
 
 ## Swap to hashed version
-echo COMPILER_PATH=$COMPILER_PATH
-
-COMPILER_DEPS=$(spack find --deps --format "packages:{name}:require:'@{version}%{compiler.name}@{compiler.version}'" $COMPILER_PACKAGE)
+echo COMPILER_PATH="$COMPILER_PATH"
 
 e spack env activate "$ENVDIR/spack"
 

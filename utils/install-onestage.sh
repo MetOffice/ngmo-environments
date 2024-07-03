@@ -2,7 +2,7 @@
 
 set -eu
 set -o pipefail
-SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 
 e() {
 	echo "$@"
@@ -10,24 +10,24 @@ e() {
 }
 
 # Path to install the environment to
-: ${NGMOENVS_ENVDIR:="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"}
+: "${NGMOENVS_ENVDIR:="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"}"
 export NGMOENVS_ENVDIR
 
 # Path to base of this repo
 export NGMOENVS_DEFS=${SCRIPT_DIR}/..
 
 # Conda executable being used
-: ${CONDA_EXE:=conda}
+: "${CONDA_EXE:=conda}"
 export CONDA_EXE
 
 # Cache paths
-: ${NGMOENVS_SPACK_MIRROR:="file://$NGMOENVS_BASEDIR/spack-mirror"}
-: ${CONDA_BLD_PATH:="$NGMOENVS_BASEDIR/conda-bld"}
+: "${NGMOENVS_SPACK_MIRROR:="file://$NGMOENVS_BASEDIR/spack-mirror"}"
+: "${CONDA_BLD_PATH:="$NGMOENVS_BASEDIR/conda-bld"}"
 export NGMOENVS_SPACK_MIRROR
 export CONDA_BLD_PATH
 
-echo NGMOENVS_COMPILER=${NGMOENVS_COMPILER}
-echo NGMOENVS_MPI=${NGMOENVS_MPI}
+echo NGMOENVS_COMPILER="${NGMOENVS_COMPILER}"
+echo NGMOENVS_MPI="${NGMOENVS_MPI}"
 
 # Path to environment definition
 export ENVDEFS="${NGMOENVS_DEFS}/environments/${ENVIRONMENT}"
@@ -63,7 +63,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
 
 	# Install the compiler
-	${SCRIPT_DIR}/install-compiler.sh
+	"${SCRIPT_DIR}/install-compiler.sh"
 
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
