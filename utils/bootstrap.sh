@@ -1,12 +1,18 @@
 #!/bin/bash
 
 # Install all environment dependencies
+#
+# This is not needed if Spack and Conda are already available
+#
+# Configuration environment variables:
+#   NGMOENVS_BASEDIR: Base install directory
 
 set -eu
 set -o pipefail
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 
 e() {
-	echo "$@"
+	echo "$@" >&2
 	"$@"
 }
 
@@ -22,6 +28,8 @@ fi
 
 export MAMBA_ROOT_PREFIX="$NGMOENVS_BASEDIR/conda"
 e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build
+
+# shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
 
 if [[ ! -d "spack" ]]; then
@@ -29,11 +37,14 @@ if [[ ! -d "spack" ]]; then
 	curl -Ls "https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/spack-${SPACK_VERSION}.tar.gz" | tar -xz -C spack  --strip-components=1
 fi
 export SPACK_PYTHON="$NGMOENVS_BASEDIR/conda/bin/python"
+
+# shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 
 # Configure Spack
 e spack compiler find --scope site /usr/bin
 e spack external find --scope site --path /usr/bin gcc
+e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
 
 echo "Default Compiler and MPI:"
 spack spec --format '{name}@{version}%{compiler.name}@{compiler.version}' mpi
@@ -59,7 +70,6 @@ export NGMOENVS_BASEDIR
 export NGMOENVS_COMPILER
 export NGMOENVS_MPI
 EOF
-source "$NGMOENVS_BASEDIR/bin/activate"
 
 cat <<EOF
 

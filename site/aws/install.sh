@@ -18,4 +18,4 @@ export NGMOENVS_BASEDIR
 export NGMOENVS_DEFS=${SITE_DIR}/../..
 
 # Run the generic build script
-"$NGMOENVS_DEFS/utils/install-onestage.sh"
+"$NGMOENVS_DEFS/utils/install-stage-one.sh"

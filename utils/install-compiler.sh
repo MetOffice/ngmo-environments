@@ -6,7 +6,7 @@ set -eu
 set -o pipefail
 
 e() {
-	echo "$@"
+	echo "$@" >&2
 	"$@"
 }
 
@@ -15,35 +15,42 @@ echo NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 COMPILER_NAME="${NGMOENVS_COMPILER%@*}"
 COMPILER_VERSION="${NGMOENVS_COMPILER/#${COMPILER_NAME}/}"
 
-if [[ $COMPILER_NAME == "intel" ]]; then
-	COMPILER_PACKAGE="intel-oneapi-compilers-classic$COMPILER_VERSION"
-elif [[ $COMPILER_NAME == "oneapi" ]]; then
-	COMPILER_PACKAGE="intel-oneapi-compilers$COMPILER_VERSION"
+# Is the compiler already available?
+if e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPDIR/compiler_info"; then
+    echo Compiler is preconfigured
+
+    e spack env activate "$ENVDIR/spack"
 else
-	COMPILER_PACKAGE="$NGMOENVS_COMPILER"
+    echo Compiler is unavailable, installing with Spack
+
+    if [[ $COMPILER_NAME == "intel" ]]; then
+            COMPILER_PACKAGE="intel-oneapi-compilers-classic$COMPILER_VERSION"
+    elif [[ $COMPILER_NAME == "oneapi" ]]; then
+            COMPILER_PACKAGE="intel-oneapi-compilers$COMPILER_VERSION"
+    else
+            COMPILER_PACKAGE="$NGMOENVS_COMPILER"
+    fi
+
+    # Install the compiler outside any environment
+    e spack install --add "$COMPILER_PACKAGE"
+
+    COMPILER_PATH="$(e spack find --format '{prefix}' "$COMPILER_PACKAGE")"
+
+    # Add the compiler to the enviornment config
+    e spack env activate "$ENVDIR/spack"
+    e spack compiler find "$COMPILER_PATH"
+    e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPIR/compiler_info"
 fi
 
-e spack install --add "$COMPILER_PACKAGE"
-COMPILER_HASH="$(spack find --format '{name}/{hash}' "$COMPILER_PACKAGE")"
-COMPILER_PATH="$(spack find --format '{prefix}' "$COMPILER_PACKAGE")"
-
-spack load "$COMPILER_HASH"
+mkdir -p "$ENVDIR/etc"
 cat > "$ENVDIR/etc/compiler.sh" <<EOF
-export CC=$CC
-export FC=$FC
-export CXX=$CXX
+export CC="$(sed -n -e 's/^\s*cc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
+export FC="$(sed -n -e 's/^\s*fc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
+export CXX="$(sed -n -e 's/^\s*cxx\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
+
+# Compilers for MPI
+export OMPI_CC=\$CC
+export OMPI_FC=\$FC
+export OMPI_CXX=\$CXX
 EOF
-
-## Swap to hashed version
-echo COMPILER_PATH="$COMPILER_PATH"
-
-e spack env activate "$ENVDIR/spack"
-
-# Some packages must be built with gcc
-e spack config add "packages:intel-oneapi-compilers:require:'%gcc'"
-e spack config add "packages:intel-oneapi-compilers-classic:require:'%gcc'"
-e spack config add "packages:gcc-runtime:require:'%gcc'"
-e spack config add "packages:diffutils:require:'%gcc'"
-e spack config add "packages:gettext:require:'%gcc'"
-
-e spack compiler find "$COMPILER_PATH"
+cat "$ENVDIR/etc/compiler.sh"

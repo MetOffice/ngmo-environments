@@ -12,8 +12,8 @@ conda, e.g.
 ```bash
 conda create -n apptainer apptainer squashfuse
 
-export APPTAINER="conda run -n apptainer apptainer"
-export MKSQUASHFS="conda run -n apptainer mksquashfs"
+export APPTAINER=(conda run -n apptainer apptainer)
+export MKSQUASHFS=(conda run -n apptainer mksquashfs)
 ```
 
 ## Building containers

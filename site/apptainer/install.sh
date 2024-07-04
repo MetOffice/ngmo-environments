@@ -6,7 +6,7 @@ SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev
 export SITE_DIR
 
 e() {
-	echo "$@"
+	echo "$@" >&2
 	"$@"
 }
 
@@ -44,15 +44,17 @@ CONTAINER_ENVDIR="${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}"
 export NGMOENVS_DEFS="${SITE_DIR}/../.."
 
 # What apptainer command is being used?
-echo "APPTAINER=$APPTAINER"
+echo APPTAINER = "${APPTAINER[@]}"
 
 # Create the base image from our def file
-IMAGE="$INSTALL_ENVDIR/etc/apptainer.sif"
-mkdir -p "$(dirname "$IMAGE")"
-e $APPTAINER build \
-	--force \
-	"$IMAGE" \
-	"$SITE_DIR/image.def"
+: "${NGMOENVS_BASEIMAGE:="$NGMOENVS_TMPDIR/ngmoenvs-baseimage.sif"}"
+if [[ ! -f "$NGMOENVS_BASEIMAGE" ]]; then
+    mkdir -p "$(dirname "$NGMOENVS_BASEIMAGE")"
+    e "${APPTAINER[@]}" build \
+            --force \
+            "$NGMOENVS_BASEIMAGE" \
+            "$SITE_DIR/image.def"
+fi
 
 # Prepare to create the squashfs directory
 rm -rf "$LOCALSQUASHFS"
@@ -82,19 +84,22 @@ MOUNT_ARGS=("--bind" "$LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw")
 
 # Install conda and spack using the common bootstrap script
 export NGMOENVS_BASEDIR="${CONTAINER_BASEDIR}"
-e $APPTAINER exec "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "${SITE_DIR}/../../utils/bootstrap.sh"
+e "${APPTAINER[@]}" exec "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/bootstrap.sh"
 
 # Install the environment using the common onestage install script
 export NGMOENVS_ENVDIR="${CONTAINER_ENVDIR}"
 export ENVIRONMENT
-e $APPTAINER run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "${SITE_DIR}/../../utils/install-onestage.sh"
+e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-one.sh"
 
 # Convert to squashfs
 SQUASHFS="$NGMOENVS_TMPDIR/$ENVIRONMENT.squashfs"
-e $MKSQUASHFS "$LOCALSQUASHFS" "$SQUASHFS" -all-root -noappend
+e "${MKSQUASHFS[@]}" "$LOCALSQUASHFS" "$SQUASHFS" -all-root -noappend
 
 # Install the squashfs to the container
-e $APPTAINER sif add \
+IMAGE="$INSTALL_ENVDIR/etc/apptainer.sif"
+mkdir -p "$(dirname "$IMAGE")"
+cp "$NGMOENVS_BASEIMAGE" "$IMAGE"
+e "${APPTAINER[@]}" sif add \
 	--datatype 4 \
 	--partfs 1 \
 	--parttype 4 \

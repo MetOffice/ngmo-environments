@@ -50,6 +50,13 @@ Build the environment on Amazon Linux
 
 See [site/aws/README.md](site/aws/README.md)
 
+### NCI
+
+Build the environment on NCI Gadi - an example of building the container on a
+HPC using the system MPI
+
+See [site/nci/README.md](site/nci/README.md)
+
 ## Environments
 
 ### LFRic

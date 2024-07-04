@@ -1,0 +1,20 @@
+# Spack package config common to all sites
+packages:
+  intel-oneapi-compilers:
+    require: "%gcc"
+  intel-oneapi-compilers-classic:
+    require: "%gcc"
+  gcc-runtime:
+    require: "%gcc"
+  diffutils:
+    require: "%gcc"
+  gettext:
+    require: "%gcc"
+  boost:
+    conflict:
+      - spec: "@1.85.0"
+        when: "%intel"
+        message: "https://github.com/spack/spack/issues/44003"
+      - spec: "@1.85.0"
+        when: "%oneapi"
+        message: "https://github.com/spack/spack/issues/44003"

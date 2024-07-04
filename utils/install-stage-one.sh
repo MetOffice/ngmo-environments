@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# Installs the environment
+#
+# Site files should be used to set up Conda and Spack to install in the right locations
+#
+# Configuration environment variables:
+#   ENVIRONMENT: Environment name
+#   NGMOENVS_ENVDIR: Environment install path
+#   NGMOENVS_COMPILER: Compiler to build spack environment with
+#   NGMOENVS_MPI: MPI to build spack environment with
+#   NGMOENVS_SPACK_MIRROR: Spack build and source mirror
+#   CONDA_BLD_PATH: Conda local build directory
+#   NGMOENVS_DOWNLOAD_ONLY: Only download spack sources, don't build
+#                           Builds are then done in `install-stage-two.sh`
+#
+# Creates a script $NGMOENVS_ENVDIR/bin/envrun that will run a command inside the environment
+
 set -eu
 set -o pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
@@ -45,7 +61,7 @@ if [[ -f "$ENVDEFS/conda.yaml" ]]; then
 	"$SCRIPT_DIR/build-conda-packages.sh"
 
 	# Build the environment
-	e $CONDA_EXE env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
+	e "$CONDA_EXE" env create --yes --prefix "$ENVDIR/conda" --file "$ENVDEFS/conda.yaml"
 fi
 
 # Install spack environment
@@ -62,11 +78,14 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	# Copy in the environment definitions
 	cp "$ENVDEFS/spack.yaml" "$ENVDIR/spack/spack.yaml"
 
-	# Install the compiler
+	# Install the compiler - the compiler lives outside the environment
 	"${SCRIPT_DIR}/install-compiler.sh"
 
 	# Activate the environment
 	e spack env activate "$ENVDIR/spack"
+
+        # Add generic configs
+        e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
 	
 	# Add the local packages if they're not already available
 	e spack repo add "$NGMOENVS_DEFS/spack" || true
@@ -77,19 +96,26 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	fi
 
 	# Add site config
-	if [[ -f "$SITE_DIR/spack-config.yaml" ]]; then
-		e spack config add --file "$SITE_DIR/spack-config.yaml"
+	if [[ -f "$SITE_DIR/spack-packages.yaml" ]]; then
+		e spack config add --file "$SITE_DIR/spack-packages.yaml"
 	fi
 
 	# Add compiler and mpi requirements
 	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
 	spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
 
+        e spack config blame
+
 	# Solve dependencies
 	e spack concretize --fresh
 
 	# Install everything
-	e spack install
+        if [[ ! -v NGMOENVS_DOWNLOAD_ONLY ]]; then
+            e spack install
+        else
+            # Only download data to the mirror for later build
+            e spack mirror create --directory "${NGMOENVS_SPACK_MIRROR#file://}" --all
+        fi
 fi
 
 mkdir -p "$ENVDIR/bin"
