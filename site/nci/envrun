@@ -10,4 +10,7 @@ export FCM_KEYWORDS=/g/data/hr22/apps/etc/fcm/mosrs/keyword.cfg
 # Add central OpenMPI to cflags
 export FFLAGS="-I /apps/openmpi/4.1.5/include/Intel ${FFLAGS:-}"
 
+# Add system libraries to LD_LIBRARY_PATH for MPI
+export SINGULARITYENV_LD_LIBRARY_PATH="/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64:/system/lib"
+
 /opt/singularity/bin/singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/apptainer.sif" "$@"
