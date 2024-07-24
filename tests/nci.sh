@@ -9,7 +9,7 @@ ENVIRONMENT="$1"
 
 module purge
 
-module use /scratch/$PROJECT/$USER/ngmo-envs/modules
+module use "/scratch/$PROJECT/$USER/ngmo-envs/modules"
 
 module load "$ENVIRONMENT"
 
