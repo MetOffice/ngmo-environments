@@ -53,7 +53,8 @@ See [site/aws/README.md](site/aws/README.md)
 ### NCI
 
 Build the environment on NCI Gadi - an example of building the container on a
-HPC using the system MPI
+HPC using the system MPI, and of building in two stages - a download stage with
+network access and a build stage without network access
 
 See [site/nci/README.md](site/nci/README.md)
 
@@ -64,3 +65,14 @@ See [site/nci/README.md](site/nci/README.md)
 Environment for running the Momentum LFRic model
 
 See [environments/lfric/README.md](environments/lfric/README.md)
+
+## Testing
+
+Once an enviornment has been built it can be tested by building and running a
+demonstration case.
+
+Run a test case with
+
+```
+./tests/run.sh <ENVIRONMENT> <SITE>
+```

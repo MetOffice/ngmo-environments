@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Logs and runs a command
+e() {
+	echo RUN "$@" >&2
+	echo RUN "$@" >> install.log
+	"$@" | tee -a install.log
+}
+
+# Logging routines
+info() {
+	echo INFO "$@" | tee -a install.log
+}
+
+warning() {
+	echo WARNING "$@" | tee -a install.log
+}
+
+error() {
+	echo ERROR "$@" | tee -a install.log
+}
+

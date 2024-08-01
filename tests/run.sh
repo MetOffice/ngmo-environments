@@ -9,11 +9,34 @@ set -o pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 
+# shellcheck source=utils/common.sh
+source "$SCRIPT_DIR/../utils/common.sh"
+
 ENVIRONMENT="$1"
+SITE="${2:-${NGMOENVS_SITE:-generic}}"
 
-export PATH="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/bin:$PATH"
+if [[ ! -d "$SCRIPT_DIR/../environments/$ENVIRONMENT" ]]; then
+	error "Unknown environment $ENVIRONMENT"
+	exit 1
+fi
 
-export BASEDIR="${TMPDIR:-/tmp}/ngmo-envs-test/lfric"
-mkdir -p "$BASEDIR"
+echo "Testing $ENVIRONMENT at site $SITE"
 
-/bin/bash "$SCRIPT_DIR/test_${ENVIRONMENT}.sh"
+if [[ -f "$SCRIPT_DIR/site/$SITE.sh" ]]; then
+	# Run the site-specific test
+	"$SCRIPT_DIR/site/$SITE.sh" "$ENVIRONMENT"
+else
+	if [[ ! -f "$SCRIPT_DIR/envs/$ENVIRONMENT.sh" ]]; then
+		error "No test for environment $ENVIRONMENT"
+		exit 1
+	fi
+
+	# Default path
+	export PATH="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/bin:$PATH"
+
+	export BASEDIR="${TMPDIR:-/tmp}/ngmo-envs-test/$ENVIRONMENT"
+	mkdir -p "$BASEDIR"
+
+	/bin/bash "$SCRIPT_DIR/envs/${ENVIRONMENT}.sh"
+fi
+

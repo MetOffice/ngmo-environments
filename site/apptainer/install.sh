@@ -5,10 +5,8 @@ set -o pipefail
 SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 export SITE_DIR
 
-e() {
-	echo "$@" >&2
-	"$@"
-}
+# shellcheck source=utils/common.sh
+source "$SITE_DIR/../../utils/common.sh"
 
 # Build an apptainer container without requiring root permissions
 # We can convert from Docker format to apptainer format without root

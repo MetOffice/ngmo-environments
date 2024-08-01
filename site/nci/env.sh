@@ -3,10 +3,8 @@
 set -eu
 set -o pipefail
 
-e() {
-	echo "$@" >&2
-	"$@"
-}
+# shellcheck source=utils/common.sh
+source "$SITE_DIR/../../utils/common.sh"
 
 : "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
 export NGMOENVS_TMPDIR
