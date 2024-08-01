@@ -21,8 +21,8 @@ e() {
 ENVIRONMENT="$1"
 
 # Commands
-: "${APPTAINER:=$(which apptainer || which singularity)}"
-: "${MKSQUASHFS:=$(which mksquashfs)}"
+: "${APPTAINER:=$(which apptainer || which singularity || echo apptainer)}"
+: "${MKSQUASHFS:=$(which mksquashfs || echo mksquashfs)}"
 
 : "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
 
@@ -44,13 +44,14 @@ CONTAINER_ENVDIR="${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}"
 export NGMOENVS_DEFS="${SITE_DIR}/../.."
 
 # What apptainer command is being used?
-echo APPTAINER = "${APPTAINER[@]}"
+echo "APPTAINER=${APPTAINER}"
 
 # Create the base image from our def file
 : "${NGMOENVS_BASEIMAGE:="$NGMOENVS_TMPDIR/ngmoenvs-baseimage.sif"}"
 if [[ ! -f "$NGMOENVS_BASEIMAGE" ]]; then
     mkdir -p "$(dirname "$NGMOENVS_BASEIMAGE")"
-    e "${APPTAINER[@]}" build \
+    # shellcheck disable=SC2086
+    e $APPTAINER build \
             --force \
             "$NGMOENVS_BASEIMAGE" \
             "$SITE_DIR/image.def"
@@ -84,22 +85,25 @@ MOUNT_ARGS=("--bind" "$LOCALSQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw")
 
 # Install conda and spack using the common bootstrap script
 export NGMOENVS_BASEDIR="${CONTAINER_BASEDIR}"
-e "${APPTAINER[@]}" exec "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/bootstrap.sh"
+# shellcheck disable=SC2086
+e $APPTAINER exec "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/bootstrap.sh"
 
 # Install the environment using the common onestage install script
 export NGMOENVS_ENVDIR="${CONTAINER_ENVDIR}"
 export ENVIRONMENT
-e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-one.sh"
+# shellcheck disable=SC2086
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-one.sh"
 
 # Convert to squashfs
 SQUASHFS="$NGMOENVS_TMPDIR/$ENVIRONMENT.squashfs"
-e "${MKSQUASHFS[@]}" "$LOCALSQUASHFS" "$SQUASHFS" -all-root -noappend
+# shellcheck disable=SC2086
+e $MKSQUASHFS "$LOCALSQUASHFS" "$SQUASHFS" -all-root -noappend
 
 # Install the squashfs to the container
 IMAGE="$INSTALL_ENVDIR/etc/apptainer.sif"
 mkdir -p "$(dirname "$IMAGE")"
 cp "$NGMOENVS_BASEIMAGE" "$IMAGE"
-e "${APPTAINER[@]}" sif add \
+e $APPTAINER sif add \
 	--datatype 4 \
 	--partfs 1 \
 	--parttype 4 \

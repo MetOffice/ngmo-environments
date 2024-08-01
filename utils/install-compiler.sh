@@ -5,10 +5,7 @@
 set -eu
 set -o pipefail
 
-e() {
-	echo "$@" >&2
-	"$@"
-}
+source "$SCRIPT_DIR/common.sh"
 
 echo NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 
@@ -37,9 +34,9 @@ else
     COMPILER_PATH="$(e spack find --format '{prefix}' "$COMPILER_PACKAGE")"
 
     # Add the compiler to the enviornment config
-    e spack env activate "$ENVDIR/spack"
+    spack env activate "$ENVDIR/spack"
     e spack compiler find "$COMPILER_PATH"
-    e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPIR/compiler_info"
+    e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPDIR/compiler_info"
 fi
 
 mkdir -p "$ENVDIR/etc"

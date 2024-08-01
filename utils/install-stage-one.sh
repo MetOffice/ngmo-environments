@@ -19,15 +19,16 @@
 set -eu
 set -o pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
+export SCRIPT_DIR
 
-e() {
-	echo "$@"
-	"$@"
-}
+source "$SCRIPT_DIR/common.sh"
 
 # Path to install the environment to
 : "${NGMOENVS_ENVDIR:="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"}"
 export NGMOENVS_ENVDIR
+
+: "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
+export NGMOENVS_TMPDIR
 
 # Path to base of this repo
 export NGMOENVS_DEFS=${SCRIPT_DIR}/..
@@ -42,13 +43,13 @@ export CONDA_EXE
 export NGMOENVS_SPACK_MIRROR
 export CONDA_BLD_PATH
 
-echo NGMOENVS_COMPILER="${NGMOENVS_COMPILER}"
-echo NGMOENVS_MPI="${NGMOENVS_MPI}"
+info NGMOENVS_COMPILER="${NGMOENVS_COMPILER}"
+info NGMOENVS_MPI="${NGMOENVS_MPI}"
 
 # Path to environment definition
 export ENVDEFS="${NGMOENVS_DEFS}/environments/${ENVIRONMENT}"
 if [[ ! -d "$ENVDEFS" ]]; then
-	echo "Enviornment '$ENVIRONMENT' not found"
+	error "Enviornment '$ENVIRONMENT' not found"
 	exit 1
 fi
 
@@ -82,7 +83,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	"${SCRIPT_DIR}/install-compiler.sh"
 
 	# Activate the environment
-	e spack env activate "$ENVDIR/spack"
+	spack env activate "$ENVDIR/spack"
 
         # Add generic configs
         e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
@@ -101,8 +102,8 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	fi
 
 	# Add compiler and mpi requirements
-	spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
-	spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
+	e spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
+	e spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
 
         e spack config blame
 
