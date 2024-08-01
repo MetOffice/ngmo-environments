@@ -11,6 +11,7 @@ set -eu
 set -o pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 
+# shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
 SPACK_VERSION=0.22.0

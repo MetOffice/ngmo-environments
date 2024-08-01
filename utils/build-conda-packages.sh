@@ -3,6 +3,7 @@
 set -eu
 set -o pipefail
 
+# shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
 # Builds conda packages required for an environment

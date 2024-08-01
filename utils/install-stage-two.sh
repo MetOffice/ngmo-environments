@@ -8,10 +8,11 @@
 set -eu
 set -o pipefail
 
-e() {
-	echo "$@"
-	"$@"
-}
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
+export SCRIPT_DIR
+
+# shellcheck source=utils/common.sh
+source "$SCRIPT_DIR/common.sh"
 
 # Activate the environment
 e spack env activate "$NGMOENVS_ENVDIR/spack"

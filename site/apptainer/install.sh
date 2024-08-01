@@ -103,6 +103,7 @@ e $MKSQUASHFS "$LOCALSQUASHFS" "$SQUASHFS" -all-root -noappend
 IMAGE="$INSTALL_ENVDIR/etc/apptainer.sif"
 mkdir -p "$(dirname "$IMAGE")"
 cp "$NGMOENVS_BASEIMAGE" "$IMAGE"
+# shellcheck disable=SC2086
 e $APPTAINER sif add \
 	--datatype 4 \
 	--partfs 1 \

@@ -5,6 +5,7 @@
 set -eu
 set -o pipefail
 
+# shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
 echo NGMOENVS_COMPILER="$NGMOENVS_COMPILER"

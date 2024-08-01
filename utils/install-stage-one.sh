@@ -21,6 +21,7 @@ set -o pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 export SCRIPT_DIR
 
+# shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
 # Path to install the environment to
