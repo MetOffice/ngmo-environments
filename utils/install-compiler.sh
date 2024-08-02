@@ -8,18 +8,18 @@ set -o pipefail
 # shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
-echo NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
+info NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 
 COMPILER_NAME="${NGMOENVS_COMPILER%@*}"
 COMPILER_VERSION="${NGMOENVS_COMPILER/#${COMPILER_NAME}/}"
 
 # Is the compiler already available?
 if e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPDIR/compiler_info"; then
-    echo Compiler is preconfigured
+    info Compiler is preconfigured
 
     e spack env activate "$ENVDIR/spack"
 else
-    echo Compiler is unavailable, installing with Spack
+    info Compiler is unavailable, installing with Spack
 
     if [[ $COMPILER_NAME == "intel" ]]; then
             COMPILER_PACKAGE="intel-oneapi-compilers-classic$COMPILER_VERSION"

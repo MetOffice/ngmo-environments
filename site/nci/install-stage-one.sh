@@ -20,7 +20,7 @@ ENVIRONMENT="$1"
 source "$SITE_DIR/env.sh"
 
 # What apptainer command is being used?
-echo "APPTAINER=$APPTAINER"
+info "APPTAINER=$APPTAINER"
 
 # Path to externally created base image
 : "${NGMOENVS_BASEIMAGE:="$NGMOENVS_TMPDIR/ngmoenvs-baseimage.sif"}"

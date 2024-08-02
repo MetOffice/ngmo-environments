@@ -42,7 +42,7 @@ CONTAINER_ENVDIR="${CONTAINER_BASEDIR}/envs/${ENVIRONMENT}"
 export NGMOENVS_DEFS="${SITE_DIR}/../.."
 
 # What apptainer command is being used?
-echo "APPTAINER=${APPTAINER}"
+info "APPTAINER=${APPTAINER}"
 
 # Create the base image from our def file
 : "${NGMOENVS_BASEIMAGE:="$NGMOENVS_TMPDIR/ngmoenvs-baseimage.sif"}"

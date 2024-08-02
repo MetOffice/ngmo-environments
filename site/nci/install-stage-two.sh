@@ -17,7 +17,7 @@ ENVIRONMENT="$1"
 source "$SITE_DIR/env.sh"
 
 # What apptainer command is being used?
-echo "APPTAINER=$APPTAINER"
+info "APPTAINER=$APPTAINER"
 
 # Extract the squashfs created by stage 1
 SQUASHFS="$INSTALL_ENVDIR/etc/$ENVIRONMENT.squashfs"
