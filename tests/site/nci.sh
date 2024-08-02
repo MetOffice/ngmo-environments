@@ -11,13 +11,14 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 
 ENVIRONMENT="$1"
 
+# Load the environment
 module purge
-
 module use "/scratch/$PROJECT/$USER/ngmo-envs/modules"
-
 module load "$ENVIRONMENT"
 
+# Set up run directory
 export BASEDIR="$TMPDIR/ngmo-envs-test/lfric"
 mkdir -p "$BASEDIR"
 
-/bin/bash "$SCRIPT_DIR/test_${ENVIRONMENT}.sh"
+# Run the test
+/bin/bash "$SCRIPT_DIR/../envs/${ENVIRONMENT}.sh"
