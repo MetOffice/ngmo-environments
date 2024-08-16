@@ -7,7 +7,7 @@ package:
     version: {{version}}.{{revision}}
 
 source:
-    svn_url: https://code.metoffice.gov.uk/svn/lfric/GPL-utilities/tags/v{{version}}
+    svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/lfric/GPL-utilities/tags/v{{version}}
     svn_rev: {{revision}}
 
 build:

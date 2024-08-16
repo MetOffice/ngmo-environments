@@ -3,10 +3,8 @@
 set -eu
 set -o pipefail
 
-e() {
-	echo "$@"
-	"$@"
-}
+# shellcheck source=utils/common.sh
+source "$SCRIPT_DIR/common.sh"
 
 # Builds conda packages required for an environment
 
@@ -18,9 +16,8 @@ for PKGDIR in "$NGMOENVS_DEFS/conda/"*; do
 		continue
 	fi
 
-	if [[ ! -f "$(conda build -c conda-forge --output "$PKGDIR")" ]]; then
+	if [[ ! -f "$(e conda build -c conda-forge --output "$PKGDIR")" ]]; then
 		# Package needs to be built (will autobuild dependencies)
 		e "$CONDA_EXE" build -c conda-forge "$PKGDIR"
 	fi
-
 done

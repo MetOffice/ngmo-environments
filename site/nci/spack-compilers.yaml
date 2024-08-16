@@ -1,0 +1,43 @@
+compilers:
+  - compiler:
+      spec: oneapi@2024.0.2
+      paths:
+        cc: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/icx
+        cxx: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/icpx
+        f77: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/ifx
+        fc: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/ifx
+      flags: {}
+      operating_system: rocky8
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: intel@2021.10.0
+      paths:
+        cc: /apps/intel-ct/2021.10.0/compiler/linux/bin/intel64/icc
+        cxx: /apps/intel-ct/2021.10.0/compiler/linux/bin/intel64/icpc
+        f77: /apps/intel-ct/2021.10.0/compiler/linux/bin/intel64/ifort
+        fc: /apps/intel-ct/2021.10.0/compiler/linux/bin/intel64/ifort
+      flags: {}
+      operating_system: rocky8
+      target: x86_64
+      modules: []
+      environment:
+        prepend_path:
+          LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
+      extra_rpaths:
+        - /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin
+  - compiler:
+      spec: gcc@=8.5.0
+      paths:
+        cc: /usr/bin/gcc
+        cxx: /usr/bin/g++
+        f77: /usr/bin/gfortran
+        fc: /usr/bin/gfortran
+      flags: {}
+      operating_system: rocky8
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []

@@ -2,6 +2,9 @@
 
 ## Bootstrapping
 
+The environments have a number of dependencies that are required for Conda and
+Spack to work. These can be installed with the included `bootstrap.sh` script.
+
 You will need to manually install git with `sudo dnf install git` to check out
 this repository.
 
