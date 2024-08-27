@@ -1,0 +1,30 @@
+{% set name = "shumlib" %}
+{% set version = "2024.03.1" %}
+{% set revision = "7373" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  svn_url: <Insert MOSRS svn url>/utils/shumlib/trunk
+  svn_rev: "{{ revision }}"
+
+requirements:
+  build:
+    - sed
+    - make
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+
+test:
+  commands:
+    # Sanity checks only, unit tests run as part of the build
+    - test -f ${PREFIX}/lib/libshum.so
+    - test -f ${PREFIX}/lib/libshum.a
+
+about:
+  home: https://github.com/metomi/shumlib
+  license: BSD
+  license_family: BSD
+  summary: Shumlib is the collective name for a set of libraries which are used by the UM; the UK Met Office's Unified Model, that may be of use to external tools or applications where identical functionality is desired.
