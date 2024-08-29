@@ -1,0 +1,48 @@
+{% set version='11.1.0' %}
+
+package:
+    name: met
+    version: 11.1.0
+
+source:
+    url: https://github.com/dtcenter/MET/archive/refs/tags/v{{version}}.tar.gz
+    sha256: e2e371ae1f49185ff8bf08201b1a3e90864a467aa3369b04132d231213c3c9e5
+
+build:
+    number: 1
+
+requirements:
+    build:
+        - {{compiler('c')}}
+        - {{compiler('cxx')}}
+        - {{compiler('fortran')}}
+    host:
+        - python
+        - gsl
+        - nceplibs-bufr
+        - openmpi
+        - nceplibs-g2c
+        - netcdf-cxx4
+        - hdf5
+        - hdf4
+        - hdfeos2
+        - jasper
+        - freetype
+        - cairo
+    run:
+        - python
+        - gsl
+        - nceplibs-bufr
+        - openmpi
+        - nceplibs-g2c
+        - netcdf-cxx4
+        - hdf5
+        - hdf4
+        - hdfeos2
+        - jasper
+        - freetype
+        - cairo
+
+test:
+    run:
+        - ascii2nc --version

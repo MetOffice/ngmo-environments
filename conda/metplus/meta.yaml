@@ -1,0 +1,28 @@
+{% set version='5.1.0' %}
+
+package:
+    name: metplus
+    version: {{version}}
+
+source:
+    url: https://github.com/dtcenter/METplus/archive/refs/tags/v{{version}}.tar.gz
+    sha256: e80df2d1059176a453b7991a9f123cb5a187cc7ba7f48a75313b92c7a0e68474
+
+build:
+    script: {{PYTHON}} setup.py install #-m pip install . --no-deps
+    noarch: python
+    number: 1
+
+requirements:
+    host:
+        - python
+    run:
+        - python-dateutil
+        - netcdf4
+        - cartopy
+        - matplotlib
+        - met
+
+test:
+    imports:
+        - metplus
