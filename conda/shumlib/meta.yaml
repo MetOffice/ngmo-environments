@@ -7,7 +7,7 @@ package:
   version: "{{ version }}"
 
 source:
-  svn_url: <Insert MOSRS svn url>/utils/shumlib/trunk
+  svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/utils/shumlib/trunk
   svn_rev: "{{ revision }}"
 
 requirements:

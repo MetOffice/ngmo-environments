@@ -11,7 +11,7 @@ package:
   version: "{{ version }}"
 
 source:
-  svn_url: <Insert MOSRS svn url>/um/mule/trunk
+  svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/um/mule/trunk
   svn_rev: "{{ revision }}"
   patches:
     - um_ppibm_setup.patch

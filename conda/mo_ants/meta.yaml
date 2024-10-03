@@ -7,7 +7,7 @@ package:
   version: "{{ version }}"
 
 source:
-  svn_url: <Insert MOSRS svn url>/ancil/ants/tags/{{ version }}
+  svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/ancil/ants/tags/{{ version }}
   svn_rev: "{{ revision }}"
 
 build:
