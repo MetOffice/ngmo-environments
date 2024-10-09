@@ -42,3 +42,25 @@ executable inside the container you must also run it inside the container.
 envrun make
 envrun mpirun -n 6 lfric
 ```
+
+## Developing environments
+
+Develop environments in our local mirror of this repository at
+https://git.nci.org.au/bom/ngm/ngmo-environments/. CI is set up to
+automatically build branches, the built environments are usable with
+
+```
+module use /scratch/hc46/hc46_gitlab/ngm/modules
+module load ngmo-envs/lfric/$BRANCH
+```
+
+Once a change has been developed locally create a pull request on the Met
+Office repository https://github.com/metoffice/ngmo-environments to make it
+available at all sites.
+
+Builds off of the Met Office repository are usable with
+
+```
+module use /g/data/access/ngm/modules/envs
+module load lfric
+```

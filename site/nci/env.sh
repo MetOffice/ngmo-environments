@@ -9,13 +9,6 @@ source "$SITE_DIR/../../utils/common.sh"
 : "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
 export NGMOENVS_TMPDIR
 
-# Base directory for environments
-: "${NGMOENVS_BASEDIR:="$HOME/ngmo-envs"}"
-
-# Path to install the environment to on the host
-export ENVDIR="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"
-export INSTALL_ENVDIR="$ENVDIR"
-
 # Host filesystem path for building squashfs
 export LOCALSQUASHFS="$NGMOENVS_TMPDIR/squashfs"
 

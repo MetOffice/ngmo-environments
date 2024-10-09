@@ -1,0 +1,72 @@
+# This file should be included once for each environment being built
+spec:
+    inputs:
+        environment:
+---
+
+# Variables applied to all tasks
+variables:
+    ENV: $[[ inputs.environment ]]
+    VERSION: $CI_COMMIT_BRANCH
+    NGMOENVS_ENVDIR: /scratch/hc46/hc46_gitlab/ngmo-envs/envs/$ENV/$VERSION
+
+# Build the environment
+build:$[[ inputs.environment ]]:
+    stage: build
+    script:
+        - ./site/nci/install.sh "$ENV"
+    after_script:
+        - cat "ngmoenvs1-$ENV.o"*
+        - cat "ngmoenvs2-$ENV.o"*
+    environment: 
+        name: development/$[[ inputs.environment ]]/$CI_COMMIT_BRANCH
+        action: start
+        # Automatically clean up the install after a week
+        on_stop: clean:$[[ inputs.environment ]]
+        auto_stop_in: 1 week
+    tags:
+        - gadi
+
+# Run environment test script
+test:$[[ inputs.environment ]]:
+    stage: test
+    script:
+        - ./tests/site/nci.sh lfric
+    environment: 
+        name: development/$[[ inputs.environment ]]/$CI_COMMIT_BRANCH
+        action: access
+    needs:
+      - job: build:$[[ inputs.environment ]]
+    tags:
+        - gadi
+
+# Clean the environment
+clean:$[[ inputs.environment ]]:
+    stage: clean
+    script:
+        - rm -rf "$NGMOENVS_ENVDIR"
+    environment:
+        name: development/$[[ inputs.environment ]]/$CI_COMMIT_BRANCH
+        action: stop
+    when: manual
+    tags:
+        - gadi
+
+# Deploy environment to /g/data/access
+deploy:$[[ inputs.environment ]]:
+    stage: deploy
+    script:
+        - ./site/nci/deploy.sh "$ENV"
+    after_script:
+        - cat "ngmoenvs1-$ENV.o"*
+        - cat "ngmoenvs2-$ENV.o"*
+    environment:
+        name: production/$[[ inputs.environment ]]
+        action: start
+    needs:
+      - job: test:$[[ inputs.environment ]]
+    rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+        when: manual
+    tags:
+        - gadi
