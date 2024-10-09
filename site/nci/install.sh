@@ -5,6 +5,7 @@ set -o pipefail
 
 SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
 
+
 export ENVIRONMENT="$1"
 
 : "${NGMOENVS_BASEDIR:="/scratch/$PROJECT/$USER/ngmo-envs"}"
