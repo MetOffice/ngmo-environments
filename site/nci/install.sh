@@ -11,7 +11,7 @@ export ENVIRONMENT="$1"
 export NGMOENVS_BASEDIR
 
 # Version defaults to current git branch
-: "${VERSION="$(git sybmolic-ref --short HEAD)"}"
+: "${VERSION="$(git symbolic-ref --short HEAD)"}"
 export VERSION
 
 # Path to install the environment to
@@ -53,14 +53,17 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -N "ngmoenvs1-$ENVIRONMENT" \
         -q copyq \
         -l ncpus=1 \
-        -l walltime=0:10:00 \
+        -l walltime=0:30:00 \
         -l mem=4gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
         -- bash "$SITE_DIR/install-stage-one.sh" "$ENVIRONMENT")
     EXIT=$?
 
-    [[ $EXIT -eq 0 ]] || exit $EXIT
+    if ! [[ $EXIT -eq 0 ]]; then
+        error "Building stage 1"
+        exit $EXIT
+    fi
 
     # Second stage does the spack builds
     JOBID=$(e qsub \
@@ -75,7 +78,10 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -- bash "$SITE_DIR/install-stage-two.sh" "$ENVIRONMENT")
     EXIT=$?
 
-    [[ $EXIT -eq 0 ]] || exit $EXIT
+    if ! [[ $EXIT -eq 0 ]]; then
+        error "Building stage 2"
+        exit $EXIT
+    fi
 
     set -e
 else

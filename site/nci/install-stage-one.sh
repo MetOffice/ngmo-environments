@@ -35,6 +35,10 @@ mkdir -p "$(dirname "$ENTRYPOINT")"
 cat > "$ENTRYPOINT" << EOF
 #!/bin/bash
 
+# Isolate Spack
+export SPACK_DISABLE_LOCAL_CONFIG=true
+export SPACK_USER_CACHE_PATH="\${TMPDIR:-/tmp}/spack"
+
 # Activate spack and conda
 source "$CONTAINER_BASEDIR/bin/activate"
 export PATH=$CONTAINER_BASEDIR/conda/bin:\$PATH
@@ -58,6 +62,11 @@ e $APPTAINER exec "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR
 # Configure Spack to use NCI system packages
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=site add -f "${SITE_DIR}/spack-packages.yaml"
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=site add -f "${SITE_DIR}/spack-compilers.yaml"
+
+# Set up bootstraps
+BOOTSTRAP=${NGMOENVS_SPACK_MIRROR#file://}/bootstrap
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap mirror "$BOOTSTRAP"
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap add --scope=site --trust local "$BOOTSTRAP/metadata/sources"
 
 # Install the basic environment without building Spack packages - this will be
 # done in the compute queue

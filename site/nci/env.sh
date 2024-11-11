@@ -26,3 +26,7 @@ export MKSQUASHFS=/usr/sbin/mksquashfs
 
 # Prebuild base image
 export NGMOENVS_BASEIMAGE=/g/data/access/ngm/data/gadicontainer/202407/ngmoenvs-baseimage.sif
+
+# Isolate Spack
+export SPACK_DISABLE_LOCAL_CONFIG=true
+export SPACK_USER_CACHE_PATH="$TMPDIR/spack"
