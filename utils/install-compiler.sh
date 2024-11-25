@@ -40,6 +40,23 @@ else
     e spack compiler info "$NGMOENVS_COMPILER" | tee "$NGMOENVS_TMPDIR/compiler_info"
 fi
 
+# There might be more than one copy of a compiler installed - check them
+# all and pick the first one that has all four compilers (cc, cxx, f90, f77)
+# as not None. I.e. we ignore any compiler that has a 'None':
+found=0
+for compiler in $(spack compiler info "$NGMOENVS_COMPILER" | grep "^[^[:space:]]"); do
+    spack compiler info "$compiler" > "$NGMOENVS_TMPDIR/compiler_info"
+    grep --quiet None "$NGMOENVS_TMPDIR/compiler_info"
+    if [[ $? == 1 ]]; then
+        echo "Using compiler $compiler"
+        found=1
+    fi
+done
+
+if [[ $found == 0 ]]; then
+    error "Could not find compiler $NGMOENVS_COMPILER"
+fi
+
 mkdir -p "$ENVDIR/etc"
 cat > "$ENVDIR/etc/compiler.sh" <<EOF
 export CC="$(sed -n -e 's/^\s*cc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
