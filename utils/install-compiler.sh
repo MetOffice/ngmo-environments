@@ -46,8 +46,8 @@ fi
 found=0
 for compiler in $(spack compiler info "$NGMOENVS_COMPILER" | grep "^[^[:space:]]"); do
     spack compiler info "$compiler" > "$NGMOENVS_TMPDIR/compiler_info"
-    grep --quiet None "$NGMOENVS_TMPDIR/compiler_info"
-    if [[ $? == 1 ]]; then
+    num_none=$(grep -c None "$NGMOENVS_TMPDIR/compiler_info" || true)
+    if [[ $num_none == "0" ]]; then
         echo "Using compiler $compiler"
         found=1
     fi
