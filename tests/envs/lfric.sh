@@ -42,6 +42,8 @@ envrun lfric_apps/build/local_build.py --application "$APP" --core_source "$BASE
 pushd "$BASEDIR/lfric_apps/applications/$APP/example"
 envrun mpirun -n 6 "../bin/$APP" configuration.nml
 
+cat PET0.*.Log
+
 cat <<EOF
 
 LFRic app $APP successfully ran!

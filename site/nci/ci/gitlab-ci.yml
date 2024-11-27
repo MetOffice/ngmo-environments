@@ -1,0 +1,8 @@
+include:
+    # Include gitlab-ci-env.yml once for each environment
+    - local: site/nci/ci/gitlab-ci-env.yml
+      inputs:
+          environment: lfric
+  # - local: site/nci/ci/gitlab-ci-env.yml
+  #   inputs:
+  #       environment: jopa
