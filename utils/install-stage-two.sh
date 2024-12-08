@@ -14,6 +14,8 @@ export SCRIPT_DIR
 # shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
+e which python
+
 # Activate the environment
 e spack env activate "$NGMOENVS_ENVDIR/spack"
 

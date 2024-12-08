@@ -38,6 +38,7 @@ STAGE1=$(qsub \
     -l mem=4gb \
     -l jobfs=50gb \
     -l storage=gdata/access+gdata/ki32 \
+    -l wd \
     -j oe \
     -W umask=0022 \
     -v PROJECT,NGMOENVS_BASEDIR,NGMOENVS_COMPILER,NGMOENVS_MPI,NGMOENVS_BASEIMAGE,NGMOENVS_MOSRS_MIRROR,NGMOENVS_SPACK_MIRROR,CONDA_BLD_PATH,APPTAINER,MKSQUASHFS,SPACK_DOWNLOAD_ONLY=true \
@@ -96,8 +97,17 @@ prepend-path PATH "\$prefix/bin"
 EOF
 
 mkdir -p "$INSTALL_ENVDIR/bin"
-cp "$SITE_DIR/envrun" "$INSTALL_ENVDIR/bin"
-chmod +x "$INSTALL_ENVDIR/bin/envrun"
+
+for script in envrun envrun-wrapped; do
+    cp "$SITE_DIR/$script" "$INSTALL_ENVDIR/bin"
+    chmod +x "$INSTALL_ENVDIR/bin/$script"
+done
+
+# Old launcher name
+ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
+
+# Make rose commands run inside the container
+ln -sf "envrun-wrapped" "$INSTALL_ENVDIR/bin/rose"
 
 cat <<EOF
 
