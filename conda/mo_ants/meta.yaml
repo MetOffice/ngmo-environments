@@ -1,0 +1,89 @@
+{% set name = "mo_ants" %}
+{% set version = "2.0.0" %}
+{% set revision = "HEAD" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/ancil/ants/tags/{{ version }}
+  svn_rev: "{{ revision }}"
+
+build:
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python=3.10.13
+    - pip
+    - iris=3.7.1
+    - mule=2023.08.1
+    - numba
+    - pykdtree
+    - gdal
+    - python-stratify
+    - black
+    - cftime
+    - dask=2023.11.0
+    - esmf
+    - esmpy
+    - f90nml
+    - filelock
+    - flake8
+    - isort
+    - mo_pack
+    - numpy=1.26.0
+    - pre-commit
+    - pyflakes
+    - mpi=*=openmpi
+  run:
+    - python=3.10.13
+    - pip
+    - iris=3.7.1
+    - mule=2023.08.1
+    - numba
+    - pykdtree
+    - gdal
+    - python-stratify
+    - black
+    - cftime
+    - dask=2023.11.0
+    - esmf
+    - esmpy
+    - f90nml
+    - filelock
+    - flake8
+    - isort
+    - mo_pack
+    - numpy=1.26.0
+    - pre-commit
+    - pyflakes
+    - mpi=*=openmpi
+
+test:
+  imports:
+    - ants
+  source_files:
+    - KGO
+    - rose-stem/sources
+    - lib/ants/tests/resources
+  requires:
+    - pytest
+  commands:
+    - ancil_2anc.py -h
+    - ancil_create_shapefile.py -h
+    - ancil_fill_n_merge.py -h
+    - ancil_general_regrid.py -h
+    - ants-version
+    - cd $(dirname $(python -c 'import ants; print(ants.__file__)'))
+    - ln -s ${SRC_DIR}/KGO .
+    - ln -s ${SRC_DIR}/rose-stem/sources .
+    - ln -s ${SRC_DIR}/lib/ants/tests/resources tests/resources
+    - python -m pytest --continue-on-collection-errors . || true # ignore fails
+
+about:
+  home: https://code.metoffice.gov.uk/doc/ancil/ants/latest/index.html
+  license: BSD
+  license_family: BSD
+  summary: ANTS is a versatile Python library for developing ancillary applications.

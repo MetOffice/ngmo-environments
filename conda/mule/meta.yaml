@@ -1,0 +1,146 @@
+{% set name = "mule" %}
+{% set version = "2023.08.1" %}
+{% set revision = "119685" %}
+
+# Need to fix these versions for compatibility with ANTS
+{% set py_version = "3.10" %}
+{% set numpy_version = "1.26.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  svn_url: {{ environ.get('NGMOENVS_MOSRS_MIRROR', 'https://code.metoffice.gov.uk/svn') }}/um/mule/trunk
+  svn_rev: "{{ revision }}"
+  patches:
+    - um_ppibm_setup.patch
+    - um_utils_select_exit_code.patch
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+  host:
+    - python={{ py_version }}
+    - pip
+    - numpy={{ numpy_version }}
+    - six
+    - pillow
+    - shumlib
+
+outputs:
+  - name: mule-um-spiral-search
+    files:
+      - lib/python{{ py_version }}/site-packages/um_spiral_search
+      - lib/python{{ py_version }}/site-packages/um_spiral_search-{{ version|replace(".0", ".") }}.dist-info
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - shumlib
+    test:
+      imports:
+        - um_spiral_search
+      commands:
+        - python -m unittest discover -vs ${SP_DIR}/um_spiral_search/tests
+
+  - name: mule-um-packing
+    files:
+      - lib/python{{ py_version }}/site-packages/um_packing
+      - lib/python{{ py_version }}/site-packages/um_packing-{{ version|replace(".0", ".") }}.dist-info
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - six
+        - shumlib
+    test:
+      imports:
+        - um_packing
+      commands:
+        - python -m unittest discover -vs ${SP_DIR}/um_packing/tests
+
+  - name: mule-base
+    files:
+      - lib/python{{ py_version }}/site-packages/mule
+      - lib/python{{ py_version }}/site-packages/mule-{{ version|replace(".0", ".") }}.dist-info
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - six
+        - {{ pin_subpackage('mule-um-packing', exact=True) }}
+    test:
+      imports:
+        - mule
+      commands:
+        - python -m unittest discover -vs ${SP_DIR}/mule/tests
+
+  - name: mule-um-ppibm
+    files:
+      - lib/python{{ py_version }}/site-packages/um_ppibm
+      - lib/python{{ py_version }}/site-packages/um_ppibm-{{ version|replace(".0", ".") }}.dist-info
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - six
+        - shumlib
+        - {{ pin_subpackage('mule-base', exact=True) }}
+    test:
+      imports:
+        - um_ppibm
+
+  - name: mule-um-utils
+    files:
+      - bin
+      - lib/python{{ py_version }}/site-packages/um_utils
+      - lib/python{{ py_version }}/site-packages/um_utils-{{ version|replace(".0", ".") }}.dist-info
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - six
+        - pillow
+        - shumlib
+        - {{ pin_subpackage('mule-base', exact=True) }}
+        - {{ pin_subpackage('mule-um-ppibm', exact=True) }}
+    test:
+      imports:
+        - um_utils
+      commands:
+        # Rename test to avoid module name clash
+        - mv ${SP_DIR}/um_utils/tests/select ${SP_DIR}/um_utils/tests/mule_select
+        - python -m unittest discover -vs ${SP_DIR}/um_utils/tests
+        - mule-convpp -h
+        - mule-cumf -h
+        - mule-cutout -h
+        - mule-editmask -h
+        - mule-fixframe -h
+        - mule-pumf -h
+        - mule-select -h
+        - mule-summary -h
+        - mule-trim -h
+        - mule-unpack -h
+        - mule-version -h
+
+  # Explicitly define metapackage for installing Mule
+  - name: mule
+    requirements:
+      run:
+        - python={{ py_version }}
+        - numpy={{ numpy_version }}
+        - six
+        - pillow
+        - shumlib
+        - {{ pin_subpackage('mule-um-spiral-search', exact=True) }}
+        - {{ pin_subpackage('mule-um-packing', exact=True) }}
+        - {{ pin_subpackage('mule-base', exact=True) }}
+        - {{ pin_subpackage('mule-um-ppibm', exact=True) }}
+        - {{ pin_subpackage('mule-um-utils', exact=True) }}
+
+about:
+  home: https://github.com/metomi/mule
+  license: BSD
+  license_family: BSD
+  summary: Mule is a Python API for accessing the various file types used by the UM; the UK Met Office's Unified Model.

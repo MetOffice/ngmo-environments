@@ -1,0 +1,11 @@
+stages:
+    - build
+    - test
+    - deploy
+    - clean
+
+# If this $SITE has defined CI, use that
+include: 
+    local: site/$SITE/ci/gitlab-ci.yml
+    rules:
+        - exists: site/$SITE/ci/gitlab-ci.yml

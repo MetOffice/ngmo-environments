@@ -17,6 +17,7 @@ export BASEDIR
 module purge
 module use "/scratch/$PROJECT/$USER/ngmo-envs/modules"
 module load "$NGMO_ENVIRONMENT"
+module list
 
 if [[ ! -v PBS_ENVIRONMENT ]]; then
     # Only works outside of PBS

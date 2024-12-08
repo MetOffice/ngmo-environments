@@ -22,6 +22,21 @@ packages:
             append_path:
               # Fix up runtime environment
               LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
+      - spec: "openmpi@4.1.5%oneapi"
+        prefix: "/apps/openmpi/4.1.5"
+        extra_attributes:
+          environment:
+            set:
+              # Use the spack compilers when building packages
+              OMPI_CC: /ngmo/spack/lib/spack/env/oneapi/icx
+              OMPI_CXX: /ngmo/spack/lib/spack/env/oneapi/icpx
+              OMPI_FC: /ngmo/spack/lib/spack/env/oneapi/ifx
+              # Fix up the combined intel/gcc install
+              OMPI_FCFLAGS: -I/apps/openmpi/4.1.5/include/Intel
+              OMPI_LDFLAGS: -L/apps/openmpi/4.1.5/lib -L/apps/openmpi/4.1.5/lib/Intel -L/system/lib64 -Wl,-rpath=/apps/openmpi/4.1.5/lib -L/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin -Wl,-rpath=/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin
+            append_path:
+              # Fix up runtime environment
+              LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
     buildable: False
   git:
     externals:
@@ -33,3 +48,8 @@ packages:
           - spec: "git-lfs@3.3.0"
             prefix: /apps/git/2.39.2
       buildable: False
+  yaxt:
+    require: '%intel'
+  blitz:
+      # Needs setup for oneapi
+    require: '%intel'
