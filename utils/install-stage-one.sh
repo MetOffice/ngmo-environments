@@ -90,7 +90,11 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
         e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
 	
 	# Add the local packages if they're not already available
-	e spack repo add "$NGMOENVS_DEFS/spack" || true
+        # Make a copy in the environment directory so updates to this repo
+        # don't affect existing installs
+        e rm -rf "$ENVDIR/spack/ngmo"
+        e cp -r "$NGMOENVS_DEFS/spack" "$ENVDIR/spack/ngmo"
+	e spack repo add "$ENVDIR/spack/ngmo" || true
 
 	# Add package binary mirror
 	if [[ -n "${NGMOENVS_SPACK_MIRROR:-}" ]]; then
