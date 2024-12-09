@@ -1,0 +1,40 @@
+spack:
+    specs:
+        - eckit@1.24.4 compression=lz4
+        - ecmwf-atlas@0.35.0 +fckit +trans +tesselation +fftw
+        - fckit@0.11.0
+        - ectrans@1.2.0 +fftw
+        - fiat
+        - odc
+
+        - openblas
+        - boost
+        - cmake
+        - ecbuild
+        - eigen
+        - git-lfs
+        - gsl-lite
+        - jedi-cmake
+        - lapack
+        - netcdf-c
+        - netcdf-cxx4
+        - netcdf-fortran
+        - ninja
+        - nlohmann-json-schema-validator
+        - nlohmann-json@3.10
+        - py-pybind11
+        - shumlib
+        - udunits
+        - zstd
+        - fms@2023.04 precision=32,64 +deprecated_io +pic
+        - nccmp
+        - py-pycodestyle
+        - parallel-netcdf
+        - parallelio
+        - bufr
+
+    packages:
+        git-lfs:
+            require: '%gcc'
+        go:
+            require: '%gcc'
