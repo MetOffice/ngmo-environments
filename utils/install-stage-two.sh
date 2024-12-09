@@ -19,11 +19,22 @@ e which python
 # Activate the environment
 e spack env activate "$NGMOENVS_ENVDIR/spack"
 
+# Disable external bootstrap repos
+e spack bootstrap disable github-actions-v0.5
+e spack bootstrap disable github-actions-v0.4
+
+e spack config blame
+
 # Solve dependencies again in case node type changed
 e spack concretize --fresh --force
 
 # Install everything
-e spack install
+if ! e spack install; then
+
+    # Push completed packages to cache
+    e spack buildcache push ngmo-spack-local $(spack find --format '/{hash}')
+    exit 1
+fi
 
 # Run the post-install with the environment in place
 export ENVDEFS="${NGMOENVS_DEFS}/environments/${ENVIRONMENT}"

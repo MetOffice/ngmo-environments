@@ -15,6 +15,7 @@ ENVIRONMENT="$1"
 module purge
 module use "/scratch/$PROJECT/$USER/ngmo-envs/modules"
 module load "$ENVIRONMENT"
+module list
 
 # Set up run directory
 export BASEDIR="$TMPDIR/ngmo-envs-test/lfric"
