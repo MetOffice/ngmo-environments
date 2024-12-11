@@ -143,7 +143,10 @@ export NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 export NGMOENVS_MPI="$NGMOENVS_MPI"
 
 spack env activate "\$NGMOENVS_ENVDIR/spack"
-eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
+
+if [[ -d "\$NGMOENVS_ENVDIR/conda" ]]; then
+    eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
+fi
 
 if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
