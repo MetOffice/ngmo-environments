@@ -16,12 +16,15 @@ source "$SCRIPT_DIR/common.sh"
 
 e which python
 
-# Activate the environment
-e spack env activate "$NGMOENVS_ENVDIR/spack"
-
 # Disable external bootstrap repos
 e spack bootstrap disable github-actions-v0.5
 e spack bootstrap disable github-actions-v0.4
+
+# Bootstrap
+e spack bootstrap now
+
+# Activate the environment
+e spack env activate "$NGMOENVS_ENVDIR/spack"
 
 e spack config blame
 

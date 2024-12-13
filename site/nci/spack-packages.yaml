@@ -22,6 +22,21 @@ packages:
             append_path:
               # Fix up runtime environment
               LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
+      - spec: "openmpi@5.0.5%intel"
+        prefix: "/apps/openmpi/5.0.5"
+        extra_attributes:
+          environment:
+            set:
+              # Use the spack compilers when building packages
+              OMPI_CC: /ngmo/spack/lib/spack/env/intel/icc
+              OMPI_CXX: /ngmo/spack/lib/spack/env/intel/icpc
+              OMPI_FC: /ngmo/spack/lib/spack/env/intel/ifort
+              # Fix up the combined intel/gcc install
+              OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/Intel
+              OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/Intel -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib -L/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin -Wl,-rpath=/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin
+            append_path:
+              # Fix up runtime environment
+              LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
       - spec: "openmpi@4.1.5%oneapi"
         prefix: "/apps/openmpi/4.1.5"
         extra_attributes:

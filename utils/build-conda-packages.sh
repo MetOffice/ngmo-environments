@@ -20,4 +20,7 @@ for PKGDIR in "$NGMOENVS_DEFS/conda/"*; do
 		# Package needs to be built (will autobuild dependencies)
 		e "$CONDA_EXE" build -c conda-forge "$PKGDIR"
 	fi
+
+        # Clean up any builds
+        e "$CONDA_EXE" build purge
 done
