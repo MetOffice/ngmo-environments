@@ -21,3 +21,4 @@ packages:
   binutils:
     conflict:
       - spec: "@2.42"
+        message: "Identifier LONG_MIN is undefined"
