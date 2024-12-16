@@ -26,13 +26,14 @@ requirements:
     - sympy
   run:
     - configparser
-    - fparser
+    - fparser >=0.2.0
     - jsonschema
     - pyparsing
     - python
     - six
     - sympy
     - python-graphviz
+    - jinja2
     - termcolor
 
 test:
