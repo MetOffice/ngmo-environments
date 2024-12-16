@@ -15,28 +15,17 @@ class Xios(Package):
     homepage = "https://forge.ipsl.fr/ioserver/wiki"
 
     version("develop", svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
+    version("3.0.b2611", revision=2611, svn="http://forge.ipsl.fr/ioserver/svn/XIOS3/branches/xios-3.0-beta")
+    version("2.5.2629", revision=2629, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
+    version("2.5.2252", revision=2252, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
     version(
-        "3.0.b2611",
-        revision=2611,
-        svn="http://forge.ipsl.fr/ioserver/svn/XIOS3/branches/xios-3.0-beta",
+        "2.5", revision=1860, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.5"
     )
     version(
-        "2.5.2252", revision=2252, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk"
+        "2.0", revision=1627, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.0"
     )
     version(
-        "2.5",
-        revision=1860,
-        svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.5",
-    )
-    version(
-        "2.0",
-        revision=1627,
-        svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.0",
-    )
-    version(
-        "1.0",
-        revision=910,
-        svn="http://forge.ipsl.fr/ioserver/svn/XIOS/branchs/xios-1.0",
+        "1.0", revision=910, svn="http://forge.ipsl.fr/ioserver/svn/XIOS/branchs/xios-1.0"
     )
 
     variant(
@@ -54,6 +43,7 @@ class Xios(Package):
     # Use spack versions of blitz and netcdf-c for compatibility
     # with recent compilers and optimised platform libraries:
     patch("bld_extern_1.0.patch", when="@:1.0")
+    patch("lfric_xios3.patch", when="@2.5.2629")
     patch("lfric_xios3.patch", when="@3.0")
 
     # Workaround bug #17782 in llvm, where reading a double
@@ -62,7 +52,7 @@ class Xios(Package):
     patch("llvm_bug_17782.patch", when="@1.1: %clang")
 
     # Fix for recent gcc
-    patch("gcc_remap.patch", when="@2.5:2.9")
+    patch("gcc_remap.patch", when="@2.5.2252")
 
     # NEMO-specific patches from https://github.com/hiker/xios-2252/tree/master/patches
     patch("nemo/p1_add_refname", when="+nemo")
@@ -71,7 +61,8 @@ class Xios(Package):
     patch("nemo/p7_fix_crash_in_nc4_data_output", when="+nemo")
 
     # Fix for lfric to avoid run time segmentation fault reported at 'CMesh::createMeshEpsilon()' due to CMesh::createHashes()
-    patch("mesh_cpp.patch", when="+lfric")
+    patch("mesh_cpp.patch", when="@2.5.2252 +lfric")
+    patch("lfric_xios2.2629.patch", when="@2.5.2629")
 
     depends_on("netcdf-c+mpi")
     depends_on("netcdf-fortran")
@@ -104,9 +95,7 @@ class Xios(Package):
                 filter_file(r"([^:/])shared_ptr<", r"\1boost::shared_ptr<", filepath)
                 # Use type long for position in output stream:
                 filter_file(
-                    r"oss.tellp\(\) *- *startPos",
-                    r"(long)oss.tellp() - startPos",
-                    filepath,
+                    r"oss.tellp\(\) *- *startPos", r"(long)oss.tellp() - startPos", filepath
                 )
 
     def xios_env(self):
@@ -159,17 +148,12 @@ OASIS_LIB=""
         else:
             param["LIBCXX"] = "-lstdc++"
 
-        if spec.satisfies("%gcc"):
-            param["BACKTRACE"] = "-fbacktrace"
+        if spec.satisfies('%gcc'):
+            param['BACKTRACE'] = '-fbacktrace'
         else:
-            param["BACKTRACE"] = "-traceback"
+            param['BACKTRACE'] = '-traceback'
 
-        if any(
-            map(
-                spec.satisfies,
-                ("%gcc", "%intel", "%apple-clang", "%clang", "%fj", "%oneapi"),
-            )
-        ):
+        if any(map(spec.satisfies, ("%gcc", "%intel", "%apple-clang", "%clang", "%fj", "%oneapi"))):
             text = r"""
 %CCOMPILER      {MPICXX}
 %FCOMPILER      {MPIFC}
@@ -193,7 +177,9 @@ OASIS_LIB=""
 %CPP            {CC} -E
 %FPP            {CC} -E -P -x c
 %MAKE           gmake
-""".format(**param)
+""".format(
+                **param
+            )
         elif spec.satisfies("%cce"):
             # In the CC compiler prior to cce/8.3.7,
             # optimisation must be reduced to avoid a bug,
@@ -225,10 +211,12 @@ OASIS_LIB=""
 %CPP            cpp
 %FPP            cpp -P -CC
 %MAKE           gmake
-""".format(**param)
+""".format(
+                **param
+            )
         else:
             raise InstallError("Unsupported compiler.")
-
+        
         with open(file, "w") as f:
             f.write(text)
 

@@ -23,4 +23,3 @@ Index: extern/remap/src/meshutil.cpp
 +#include <array>
 
 namespace sphereRemap {
-

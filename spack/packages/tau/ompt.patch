@@ -1,0 +1,11 @@
+--- a/utils/FixMakefile
++++ b/utils/FixMakefile
+@@ -416,7 +416,7 @@ case $1 in
+ 	;;
+ 
+      omptlib=*)
+-        omptlib=`echo $1 | sed -e 's@^omptlib=@@' -e 's@#@ @g'`
++        omptlib=`echo $1 | sed -e 's@^omptlib=@@' -e 's@#@@g'`
+ 	echo "s@^OMPTLIB=.*@OMPTLIB=$omptlib@g" >> $sedout
+ 	;;
+ 

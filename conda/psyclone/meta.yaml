@@ -1,13 +1,13 @@
 {% set name = "psyclone" %}
-{% set version = "2.5.0" %}
+{% set version = "3.0.0" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 
 source:
-  url: https://github.com/stfc/PSyclone/archive/refs/tags/{{version}}.tar.gz
-  sha256: 00f5d4bed877293bd6327e1e545532a01ef288687f2e88b4f53799191bb819c3
+  url: https://github.com/stfc/PSyclone/archive/refs/tags/v{{version}}.tar.gz
+  sha256: 6ad57863644375c60b875da3c4ad0a9986a74af513f808f52a6c6aeadeb4b295
 
 build:
   number: 0
@@ -26,40 +26,19 @@ requirements:
     - sympy
   run:
     - configparser
-    - fparser
+    - fparser >=0.2.0
     - jsonschema
     - pyparsing
     - python
     - six
     - sympy
+    - python-graphviz
+    - jinja2
+    - termcolor
 
 test:
   imports:
     - psyclone
-    - psyclone.core
-    - psyclone.domain
-    - psyclone.domain.common
-    - psyclone.domain.common.algorithm
-    - psyclone.domain.common.psylayer
-    - psyclone.domain.common.transformations
-    - psyclone.domain.gocean
-    - psyclone.domain.gocean.transformations
-    - psyclone.domain.lfric
-    - psyclone.domain.lfric.algorithm
-    - psyclone.domain.lfric.transformations
-    - psyclone.domain.nemo
-    - psyclone.domain.nemo.transformations
-    - psyclone.parse
-    - psyclone.psyad
-    - psyclone.psyad.transformations
-    - psyclone.psyir
-    - psyclone.psyir.backend
-    - psyclone.psyir.frontend
-    - psyclone.psyir.nodes
-    - psyclone.psyir.symbols
-    - psyclone.psyir.tools
-    - psyclone.psyir.transformations
-    - psyclone.psyir.transformations.intrinsics
 
 about:
   home: "https://github.com/stfc/psyclone"

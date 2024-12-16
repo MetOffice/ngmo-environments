@@ -14,9 +14,10 @@ export NGMOENVS_BASEDIR
 : "${VERSION="$(git symbolic-ref --short HEAD)"}"
 export VERSION
 
-# Path to install the environment to
+# Path to install the environment to on the local machine
 : "${NGMOENVS_ENVDIR:="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/$VERSION"}"
 export NGMOENVS_ENVDIR
+INSTALL_ENVDIR=$NGMOENVS_ENVDIR
 
 # Path for modulefiles
 : "${NGMOENVS_MODULE:="$NGMOENVS_BASEDIR/modules/$ENVIRONMENT/$VERSION"}"
@@ -39,9 +40,10 @@ QSUB_FLAGS=(
     -P "$PROJECT" \
     -l jobfs=50gb \
     -l storage=gdata/access+gdata/ki32 \
+    -l wd \
     -j oe \
     -W umask=0022 \
-    -v PROJECT,NGMOENVS_BASEDIR,NGMOENVS_COMPILER,NGMOENVS_MPI,NGMOENVS_SPACK_MIRROR,CONDA_BLD_PATH,SPACK_DOWNLOAD_ONLY=true,INSTALL_ENVDIR="${NGMOENVS_ENVDIR}" \
+    -v PROJECT,NGMOENVS_BASEDIR,NGMOENVS_COMPILER,NGMOENVS_MPI,NGMOENVS_SPACK_MIRROR,CONDA_BLD_PATH,SPACK_DOWNLOAD_ONLY=true,INSTALL_ENVDIR="${INSTALL_ENVDIR}" \
 )
 
 if ! [[ -v NGMOENVS_DEBUG ]]; then
@@ -108,7 +110,7 @@ set version      "$VERSION"
 set origin       "$(git remote get-url origin) $(git rev-parse HEAD)"
 set install_date "$(date --iso=minute)"
 set installed_by "$USER - $(getent passwd "$USER" | cut -d ':' -f 5)"
-set prefix       "$NGMOENVS_ENVDIR"
+set prefix       "$INSTALL_ENVDIR"
 
 proc ModulesHelp {} {
     global name version origin install_date installed_by
@@ -129,9 +131,18 @@ setenv \${name_upcase}_VERSION "\$version"
 prepend-path PATH "\$prefix/bin"
 EOF
 
-mkdir -p "$NGMOENVS_ENVDIR/bin"
-cp "$SITE_DIR/envrun" "$NGMOENVS_ENVDIR/bin"
-chmod +x "$NGMOENVS_ENVDIR/bin/envrun"
+mkdir -p "$INSTALL_ENVDIR/bin"
+
+for script in envrun envrun-wrapped; do
+    cp "$SITE_DIR/$script" "$INSTALL_ENVDIR/bin"
+    chmod +x "$INSTALL_ENVDIR/bin/$script"
+done
+
+# Old launcher name
+ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
+
+# Make rose commands run inside the container
+ln -sf "envrun-wrapped" "$INSTALL_ENVDIR/bin/rose"
 
 cat <<EOF
 
