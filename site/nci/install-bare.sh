@@ -16,6 +16,7 @@ source "$SITE_DIR/env.sh"
 
 # Load bootstrap conda and spack
 if [[ -f "$NGMOENVS_BASEDIR/bin/activate" ]]; then
+    # shellcheck disable=SC1091
     source "$NGMOENVS_BASEDIR/bin/activate"
 fi
 

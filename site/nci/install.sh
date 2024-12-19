@@ -17,7 +17,7 @@ QSUB_FLAGS=(
     -l wd \
     -j oe \
     -W umask=0022 \
-    -v PROJECT,NGMOENVS_BASEDIR,NGMOENVS_COMPILER,NGMOENVS_MPI,NGMOENVS_SPACK_MIRROR,CONDA_BLD_PATH,SPACK_DOWNLOAD_ONLY=true,INSTALL_ENVDIR="${INSTALL_ENVDIR}" \
+    -v "PROJECT,NGMOENVS_BASEDIR,NGMOENVS_COMPILER,NGMOENVS_MPI,NGMOENVS_SPACK_MIRROR,CONDA_BLD_PATH,SPACK_DOWNLOAD_ONLY=true,INSTALL_ENVDIR=${INSTALL_ENVDIR}" \
 )
 
 if ! [[ -v NGMOENVS_DEBUG ]]; then
@@ -25,7 +25,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
 
     # Run the apptainer build in the queue
     # First stage is everything requiring networking - only download spack sources
-    JOBID=$(e qsub \
+    e qsub \
         -N "ngmoenvs1-$ENVIRONMENT" \
         -q copyq \
         -l ncpus=1 \
@@ -33,7 +33,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -l mem=4gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
-        -- bash "$SITE_DIR/install-stage-one.sh" "$ENVIRONMENT")
+        -- bash "$SITE_DIR/install-stage-one.sh" "$ENVIRONMENT"
     EXIT=$?
 
     if ! [[ $EXIT -eq 0 ]]; then
@@ -42,7 +42,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
     fi
 
     # Second stage does the spack builds
-    JOBID=$(e qsub \
+    e qsub \
         -N "ngmoenvs2-$ENVIRONMENT" \
         -q normal \
         -l ncpus=8 \
@@ -51,7 +51,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -l jobfs=50gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
-        -- bash "$SITE_DIR/install-stage-two.sh" "$ENVIRONMENT")
+        -- bash "$SITE_DIR/install-stage-two.sh" "$ENVIRONMENT"
     EXIT=$?
 
     if ! [[ $EXIT -eq 0 ]]; then

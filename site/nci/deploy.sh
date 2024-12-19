@@ -10,7 +10,8 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 export ENVIRONMENT="$1"
 
 # Install version
-export VERSION=$(date +%y%m)
+VERSION="$(date +%y%m)"
+export VERSION
 
 # Path to install the environment to
 export NGMOENVS_ENVDIR=/g/data/access/ngm/envs/$ENVIRONMENT/$VERSION
@@ -24,5 +25,5 @@ if [[ -f "$NGMOENVS_ENVDIR" ]]; then
 fi
 
 # Run the install script with the pre-set central install paths
-$SCRIPT_DIR/install.sh $ENVIRONMENT
+"$SCRIPT_DIR/install.sh" "$ENVIRONMENT"
 
