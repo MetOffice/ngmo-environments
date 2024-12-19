@@ -35,6 +35,7 @@ e spack concretize --fresh --force
 if ! e spack install; then
 
     # Push completed packages to cache if there was an error
+    # shellcheck disable=SC2046
     e spack buildcache push ngmo-spack-local $(spack find --format '/{hash}')
     exit 1
 fi
