@@ -16,11 +16,14 @@ source "$SITE_DIR/env.sh"
 
 # Don't use /usr/bin/python on NCI
 cat >> "$NGMOENVS_BASEDIR/bin/activate" <<EOF
-export SPACK_PYTHON=/apps/python3/3.11.7/bin/python3
+export SPACK_PYTHON=$NGMOENVS_BASEDIR/conda/bin/python
 EOF
 
 # shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/bin/activate"
+
+# Allow container spack builds to be used outside the container with different path lengths
+spack config --scope=site add config:install_tree:padded_length:128
 
 # Configure Spack to use NCI system packages
 e spack config --scope=site add -f "${SITE_DIR}/spack-packages.yaml"
@@ -28,6 +31,10 @@ e spack config --scope=site add -f "${SITE_DIR}/spack-compilers.yaml"
 
 # Set up bootstraps
 BOOTSTRAP="${NGMOENVS_SPACK_MIRROR#file://}/bootstrap"
-e spack bootstrap mirror "$BOOTSTRAP"
-e spack bootstrap add --scope=site --trust local "$BOOTSTRAP/metadata/sources"
-e spack bootstrap root --scope=site "${BOOTSTRAP}_cache"
+if ! [[ -d "$BOOTSTRAP" ]]; then
+    e spack bootstrap mirror "$BOOTSTRAP"
+fi
+if ! e spack config get bootstrap | grep -w "$BOOTSTRAP"; then
+    e spack bootstrap add --scope=site --trust local "$BOOTSTRAP/metadata/sources"
+fi
+e spack bootstrap root --scope=site "${BOOTSTRAP}_cache/bare"

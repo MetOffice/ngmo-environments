@@ -70,7 +70,7 @@ e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=s
 BOOTSTRAP=${NGMOENVS_SPACK_MIRROR#file://}/bootstrap
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap mirror "$BOOTSTRAP"
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap add --scope=site --trust local "$BOOTSTRAP/metadata/sources"
-e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap root --scope=site "${BOOTSTRAP}_cache"
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap root --scope=site "${BOOTSTRAP}_cache/container"
 
 # Install the basic environment without building Spack packages - this will be
 # done in the compute queue
