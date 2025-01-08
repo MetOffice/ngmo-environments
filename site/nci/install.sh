@@ -4,6 +4,7 @@ set -eu
 set -o pipefail
 
 SITE_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
+export SITE_DIR
 
 export ENVIRONMENT="$1"
 
@@ -76,4 +77,4 @@ else
 fi
 
 # shellcheck source=site/nci/post-install.sh
-bash "$SITE_DIR/post-install.sh"
+e bash "$SITE_DIR/post-install.sh"

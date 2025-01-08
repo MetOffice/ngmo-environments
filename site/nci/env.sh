@@ -42,6 +42,7 @@ export INSTALL_ENVDIR
 
 # Path for modulefiles
 : "${NGMOENVS_MODULE:="$NGMOENVS_BASEDIR/modules/$ENVIRONMENT/$VERSION"}"
+export NGMOENVS_MODULE
 
 # Cache paths
 : "${NGMOENVS_SPACK_MIRROR:="file://$NGMOENVS_BASEDIR/spack-mirror"}"
