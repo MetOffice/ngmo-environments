@@ -46,3 +46,6 @@ packages:
   blitz:
       # Needs setup for oneapi
     require: '%intel'
+  perl:
+    # Getting linking errors when using shared perl libs - tries to use the system libperl.so
+    require: '-shared'
