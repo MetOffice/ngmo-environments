@@ -1,0 +1,30 @@
+compilers:
+  - compiler:
+      spec: intel@2023.1.0
+      paths:
+        cc: /opt/intel/oneapi/compiler/2023.1.0/linux/bin/intel64/icc
+        cxx: /opt/intel/oneapi/compiler/2023.1.0/linux/bin/intel64/icpc
+        f77: /opt/intel/oneapi/compiler/2023.1.0/linux/bin/intel64/ifort
+        fc: /opt/intel/oneapi/compiler/2023.1.0/linux/bin/intel64/ifort
+      flags: {}
+      operating_system: sles15
+      target: x86_64
+      modules: []
+      environment:
+        prepend_path:
+          LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/2023.1.0/linux/compiler/lib/intel64_lin
+      extra_rpaths:
+        - /opt/intel/oneapi/compiler/2023.1.0/linux/compiler/lib/intel64_lin
+  - compiler:
+      spec: oneapi@2024.2
+      paths:
+        cc: /pe/intel/oneapi/compiler/2024.2/bin/icx
+        cxx: /pe/intel/oneapi/compiler/2024.2/bin/icpx
+        f77: /pe/intel/oneapi/compiler/2024.2/bin/ifx
+        fc: /pe/intel/oneapi/compiler/2024.2/bin/ifx
+      flags: {}
+      operating_system: sles15
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []

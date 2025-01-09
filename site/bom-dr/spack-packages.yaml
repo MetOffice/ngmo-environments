@@ -1,0 +1,98 @@
+packages:
+  intel-oneapi-compilers:
+    buildable: False
+  intel-oneapi-compilers-classic:
+    buildable: False
+  gcc:
+    buildable: False
+  mpich:
+    buildable: False
+    externals:
+      - spec: "mpich@8.1.29%gcc"
+        prefix: "/opt/cray/pe/mpich/8.1.29/ofi/gnu/12.3"
+        extra_attributes:
+          environment:
+            append_path:
+              # Add libfabric
+              LD_LIBRARY_PATH: "/opt/cray/lib64"
+      - spec: "mpich@8.1.29%intel"
+        prefix: "/opt/cray/pe/mpich/8.1.29/ofi/intel/2022.1"
+        extra_attributes:
+          environment:
+            append_path:
+              # Add libfabric
+              LD_LIBRARY_PATH: "/opt/cray/lib64"
+      - spec: "mpich@8.1.29%oneapi"
+        prefix: "/opt/cray/pe/mpich/8.1.29/ofi/intel/2022.1"
+        extra_attributes:
+          environment:
+            append_path:
+              # Add libfabric
+              LD_LIBRARY_PATH: "/opt/cray/lib64"
+      - spec: "mpich@8.1.29%cce"
+        prefix: "/opt/cray/pe/mpich/8.1.29/ofi/crayclang/17.0"
+        extra_attributes:
+          environment:
+            append_path:
+              # Add libfabric
+              LD_LIBRARY_PATH: "/opt/cray/lib64"
+  netcdf-c:
+    buildable: False
+    externals:
+      - spec: "netcdf-c@4.9.0%gcc +mpi +nczarr_zip -zstd -szip"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/gnu/12.3/"
+      - spec: "netcdf-c@4.9.0%intel +mpi +nczarr_zip -zstd -szip"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-c@4.9.0%oneapi +mpi +nczarr_zip -zstd -szip"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-c@4.9.0%cce +mpi +nczarr_zip -zstd -szip"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/crayclang/17.0/"
+  netcdf-fortran:
+    buildable: False
+    externals:
+      - spec: "netcdf-fortran@4.5.3%gcc"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/gnu/12.3/"
+      - spec: "netcdf-fortran@4.5.3%intel"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-fortran@4.5.3%oneapi"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-fortran@4.5.3%cce"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/crayclang/17.0/"
+  netcdf-cxx4:
+    buildable: False
+    externals:
+      - spec: "netcdf-cxx4@4.3.1%gcc"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/gnu/12.3/"
+      - spec: "netcdf-cxx4@4.3.1%intel"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-cxx4@4.3.1%oneapi"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/intel/2023.2/"
+      - spec: "netcdf-cxx4@4.3.1%cce"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.11/crayclang/17.0/"
+  hdf5:
+    buildable: False
+    externals:
+      - spec: "hdf5@1.12.2%gcc +hl +fortran"
+        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.11/gnu/12.3/"
+      - spec: "hdf5@1.12.2%intel +hl +fortran"
+        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.11/intel/2023.2/"
+      - spec: "hdf5@1.12.2%oneapi +hl +fortran"
+        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.11/intel/2023.2/"
+      - spec: "hdf5@1.12.2%cce +hl +fortran"
+        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.11/crayclang/17.0/"
+  python:
+    buildable: False
+    externals:
+      - spec: "python@3.11.7"
+        prefix: "/opt/cray/pe/python/3.11.7"
+  libfabric:
+    buildable: False
+    externals:
+      - spec: "libfabric@1.20.1"
+        prefix: "/opt/cray"
+  papi:
+    buildable: False
+    externals:
+      - spec: "papi@7.1.0"
+        prefix: "/opt/cray/pe/papi/7.1.0.1"
+
