@@ -25,6 +25,9 @@ class Blitz(AutotoolsPackage):
     # Fix makefile and include to build with Fujitsu compiler
     patch("fujitsu_compiler_specfic_header.patch", when="%fj")
 
+    # Fix makefile and include to build with llvm compiler
+    patch("llvm_compiler_specific_header.patch", when="%oneapi")
+
     build_targets = ["lib"]
 
     def check(self):

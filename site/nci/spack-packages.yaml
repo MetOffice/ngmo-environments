@@ -53,8 +53,3 @@ packages:
               # Fix up runtime environment
               LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64
     buildable: False
-  yaxt:
-    require: '%intel'
-  blitz:
-      # Needs setup for oneapi
-    require: '%intel'
