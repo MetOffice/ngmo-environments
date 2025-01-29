@@ -1,11 +1,11 @@
 compilers:
   - compiler:
-      spec: oneapi@2024.0.2
+      spec: oneapi@2024.2.1
       paths:
-        cc: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/icx
-        cxx: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/icpx
-        f77: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/ifx
-        fc: /apps/intel-tools/intel-compiler-llvm/2024.0.2/bin/ifx
+        cc: /apps/intel-tools/intel-compiler-llvm/2024.2.1/bin/icx
+        cxx: /apps/intel-tools/intel-compiler-llvm/2024.2.1/bin/icpx
+        f77: /apps/intel-tools/intel-compiler-llvm/2024.2.1/bin/ifx
+        fc: /apps/intel-tools/intel-compiler-llvm/2024.2.1/bin/ifx
       flags: {}
       operating_system: rocky8
       target: x86_64

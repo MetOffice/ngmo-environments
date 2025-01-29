@@ -22,3 +22,7 @@ packages:
     conflict:
       - spec: "@2.42"
         message: "Identifier LONG_MIN is undefined"
+  papi:
+      conflict:
+          - spec: "%oneapi"
+            message: "Error in patch"

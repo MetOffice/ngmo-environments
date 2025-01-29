@@ -27,6 +27,7 @@ class Blitz(AutotoolsPackage):
 
     # Fix makefile and include to build with llvm compiler
     patch("llvm_compiler_specific_header.patch", when="%oneapi")
+    force_autoreconf = True
 
     build_targets = ["lib"]
 
