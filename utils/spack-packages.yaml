@@ -26,3 +26,24 @@ packages:
       conflict:
           - spec: "%oneapi"
             message: "Error in patch"
+  xios:
+      conflict:
+          # Not yet set up to run with oneapi
+          - "%oneapi"
+      require:
+          # Get the compiler type by matching against dependency netcdf-c
+          # If the default compiler is oneapi use intel for xios
+          # Blitz compiler must match xios
+          - one_of:
+              - "%intel ^netcdf-c%oneapi ^blitz%intel"
+              - "%intel ^netcdf-c%intel  ^blitz%intel"
+              - "%gcc   ^netcdf-c%gcc    ^blitz%gcc"
+              - "%nvhpc ^netcdf-c%nvhpc  ^blitz%nvhpc"
+  blitz:
+      # Remove the compiler constraint so it can satisfy XIOS
+      require:
+          - one_of:
+              - "%intel"
+              - "%oneapi"
+              - "%gcc"
+              - "%nvhpc"
