@@ -31,6 +31,9 @@ packages:
           # Not yet set up to run with oneapi
           - "%oneapi"
       require:
+          # If building everything with oneapi compile xios with intel
+          # to get compatible fortran modules
+          #
           # Get the compiler type by matching against dependency netcdf-c
           # If the default compiler is oneapi use intel for xios
           # Blitz compiler must match xios
