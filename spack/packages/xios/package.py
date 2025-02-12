@@ -236,7 +236,7 @@ OASIS_LIB=""
             "--use_extern_boost",
             "--use_extern_blitz",
             "--job",
-            str(1),
+            str(1), # Errors in oneapi parallel builds when > 1
         ]
 
         self.xios_env()
