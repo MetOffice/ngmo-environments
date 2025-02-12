@@ -16,7 +16,7 @@ ENVIRONMENT="$1"
 # Load the environment
 module purge
 module use "/scratch/$PROJECT/$USER/ngmo-envs/modules"
-module load "$ENVIRONMENT/$VERSION"
+module load "$ENVIRONMENT"
 module list
 
 # Set up run directory
