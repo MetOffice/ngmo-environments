@@ -6,5 +6,4 @@ spack:
     - tau +mpi +openmp +opari ~pthreads +lfric
     - fcm
     - rsync
-    - hdf5
-    - python@3.11 # For otf2
+    - python@3.10
