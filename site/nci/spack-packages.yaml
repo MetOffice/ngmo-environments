@@ -58,3 +58,8 @@ packages:
   blitz:
       # Needs setup for oneapi
     require: '%intel'
+  cuda:
+    externals:
+      - spec: "cuda@12.6.2"
+        prefix: "/apps/cuda/12.6.2/"
+    buildable: False        
