@@ -1,4 +1,4 @@
 spack:
   specs:
-    - python@3.11 # For otf2
+    - python@3.11
     - cuda@12.6.2
