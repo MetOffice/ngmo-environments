@@ -25,7 +25,7 @@ if [[ ! -f "bin/micromamba" ]]; then
 fi
 
 export MAMBA_ROOT_PREFIX="$NGMOENVS_BASEDIR/conda"
-e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build
+e "$NGMOENVS_BASEDIR/bin/micromamba" install -y -c conda-forge -n base conda conda-build
 
 # shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"

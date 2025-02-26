@@ -20,3 +20,7 @@ error() {
 	echo ERROR "$@" | tee -a install.log
 }
 
+# Version defaults to current git branch
+: "${VERSION="$(git symbolic-ref --short HEAD)"}"
+export VERSION
+
