@@ -63,11 +63,14 @@ e $APPTAINER exec "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=site add -f "${SITE_DIR}/spack-packages.yaml"
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=site add -f "${SITE_DIR}/spack-compilers.yaml"
 
+# Allow container spack builds to be used outside the container with different path lengths
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack config --scope=site add config:install_tree:padded_length:128
+
 # Set up bootstraps
 BOOTSTRAP=${NGMOENVS_SPACK_MIRROR#file://}/bootstrap
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap mirror "$BOOTSTRAP"
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap add --scope=site --trust local "$BOOTSTRAP/metadata/sources"
-e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap root --scope=site "${BOOTSTRAP}_cache"
+e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" spack bootstrap root --scope=site "${BOOTSTRAP}_cache/container"
 
 # Install the basic environment without building Spack packages - this will be
 # done in the compute queue
