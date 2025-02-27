@@ -2,7 +2,7 @@ channels:
   - conda-forge
   - local
 dependencies:
-  - python=3.11
+  - python=3.10
   - psyclone
   - lfric-gpl-utils=2
   - jinja2

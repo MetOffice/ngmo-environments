@@ -142,6 +142,11 @@ export NGMOENVS_ENVDIR="$ENVDIR"
 export NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 export NGMOENVS_MPI="$NGMOENVS_MPI"
 
+# If we have bootstrapped, activate the bootstrap
+if [[ -f "$NGMOENVS_BASEDIR/bin/activate" ]]; then
+    source "$NGMOENVS_BASEDIR/bin/activate"
+fi
+
 # If this env has a spack environment, activate it
 if [[ -d "\$NGMOENVS_ENVDIR/spack" ]]; then
     spack env activate "\$NGMOENVS_ENVDIR/spack"
