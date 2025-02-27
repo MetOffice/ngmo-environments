@@ -41,11 +41,6 @@ packages:
               # Fix up runtime environment
               LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64:/lib64
     buildable: False
-  yaxt:
-    require: '%intel'
-  blitz:
-      # Needs setup for oneapi
-    require: '%intel'
   perl:
     # Getting linking errors when using shared perl libs - tries to use the system libperl.so
     require: '-shared'
