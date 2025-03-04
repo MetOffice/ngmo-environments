@@ -2,7 +2,7 @@
 #
 # Run an environment test case
 #
-#     tests/run.sh $ENVIRONMENT
+#     tests/run.sh $ENVIRONMENT $SITE
 
 set -eu
 set -o pipefail
@@ -13,7 +13,11 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 source "$SCRIPT_DIR/../utils/common.sh"
 
 ENVIRONMENT="$1"
+export ENVIRONMENT
 SITE="${2:-${NGMOENVS_SITE:-generic}}"
+
+: "${NGMOENVS_BASEDIR:="/scratch/$PROJECT/$USER/ngmo-envs"}"
+export NGMOENVS_BASEDIR
 
 if [[ ! -d "$SCRIPT_DIR/../environments/$ENVIRONMENT" ]]; then
 	error "Unknown environment $ENVIRONMENT"

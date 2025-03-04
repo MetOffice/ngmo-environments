@@ -53,3 +53,9 @@ packages:
     conflict:
         - spec: "@3.11"
           message: "Error building outside the container"
+  cuda:
+    externals:
+      - spec: "cuda@12.6.2"
+        prefix: "/apps/cuda/12.6.2/"
+    buildable: False
+

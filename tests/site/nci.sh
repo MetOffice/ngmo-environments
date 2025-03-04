@@ -21,7 +21,7 @@ module load "$ENVIRONMENT/$VERSION"
 module list
 
 # Set up run directory
-export BASEDIR="$TMPDIR/ngmo-envs-test/lfric"
+export BASEDIR="$TMPDIR/ngmo-envs-test/$ENVIRONMENT"
 mkdir -p "$BASEDIR"
 
 # Run the test
