@@ -25,7 +25,7 @@ qsub << EOF
 #PBS -q copyq
 #PBS -l walltime=00:10:00,mem=10GB,ncpus=1
 #PBS -l jobfs=10GB
-#PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dk92+gdata/ux62+gdata/wr45+gdata/dp9+scratch/dp9
+#PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dk92+gdata/ux62+gdata/wr45
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
 #PBS -N prepare_ICs_test_${ENVIRONMENT}
@@ -59,7 +59,7 @@ qsub << EOF
 #PBS -q copyq
 #PBS -l walltime=00:10:00,mem=50GB,ncpus=1
 #PBS -l jobfs=50GB
-#PBS -l storage=gdata/dx2+scratch/dx2+gdata/dp9+scratch/dp9
+#PBS -l storage=gdata/dx2+scratch/dx2
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
 #PBS -N download_model_weights_${ENVIRONMENT}
@@ -87,7 +87,7 @@ qsub << EOF
 #PBS -q dgxa100
 #PBS -l walltime=00:10:00,mem=50GB,ncpus=16,ngpus=1
 #PBS -l jobfs=10GB
-#PBS -l storage=gdata/dx2+scratch/dx2+gdata/dp9+scratch/dp9
+#PBS -l storage=gdata/dx2+scratch/dx2
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
 #PBS -N run_model_${ENVIRONMENT}
@@ -123,7 +123,7 @@ qsub << EOF
 #PBS -q normal
 #PBS -l walltime=00:20:00,mem=100GB,ncpus=4
 #PBS -l jobfs=50GB
-#PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dp9+scratch/dp9
+#PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
 #PBS -N postprocess_test_${ENVIRONMENT}
