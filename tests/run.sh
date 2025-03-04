@@ -2,7 +2,7 @@
 #
 # Run an environment test case
 #
-#     tests/run.sh $ENVIRONMENT
+#     tests/run.sh $ENVIRONMENT $SITE
 
 set -eu
 set -o pipefail
