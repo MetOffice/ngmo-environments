@@ -1,6 +1,8 @@
 # AIFS use environment
 
-Contains all dependencies required for preparation of ICs, running and postprocessing with AIFS
+Contains all dependencies required for preparation of ICs, running and postprocessing with AIFS.
+
+It is recommended to build the container in the dx2 project to facilitate running the aifs scripts without changing project.
 
 ## Testing the environment
 
