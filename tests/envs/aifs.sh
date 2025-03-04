@@ -24,7 +24,7 @@ qsub << EOF
 #PBS -P dx2
 #PBS -q copyq
 #PBS -l walltime=00:10:00,mem=10GB,ncpus=1
-#PBS -l jobfs=50GB
+#PBS -l jobfs=10GB
 #PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dk92+gdata/ux62+gdata/wr45+gdata/dp9+scratch/dp9
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
@@ -85,8 +85,8 @@ qsub << EOF
 #-------------------------------------------------------------------------------
 #PBS -P dx2
 #PBS -q dgxa100
-#PBS -l walltime=00:20:00,mem=500GB,ncpus=16,ngpus=1
-#PBS -l jobfs=50GB
+#PBS -l walltime=00:10:00,mem=50GB,ncpus=16,ngpus=1
+#PBS -l jobfs=10GB
 #PBS -l storage=gdata/dx2+scratch/dx2+gdata/dp9+scratch/dp9
 #PBS -l wd
 #PBS -v "PROJECT,ENVIRONMENT,VERSION,USER,NGMOENVS_BASEDIR" 
@@ -98,6 +98,8 @@ qsub << EOF
 
 # Load the environment
 module purge
+# dgxa100 needs intel-mkl module for gpus to be available for pytorch
+module load intel-mkl/2023.2.0
 module use "$NGMOENVS_BASEDIR/modules"
 module load "$ENVIRONMENT/$VERSION"
 module list
@@ -119,7 +121,7 @@ qsub << EOF
 #-------------------------------------------------------------------------------
 #PBS -P dx2
 #PBS -q normal
-#PBS -l walltime=00:20:00,mem=50GB,ncpus=4
+#PBS -l walltime=00:20:00,mem=100GB,ncpus=4
 #PBS -l jobfs=50GB
 #PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dp9+scratch/dp9
 #PBS -l wd
