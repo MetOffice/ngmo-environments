@@ -30,6 +30,10 @@ class Yaxt(AutotoolsPackage):
             env.prepend_path('PATH', self.spec['intel-oneapi-mpi'].package.component_prefix.bin)
             env.unset('I_MPI_ROOT')
 
+        if '%aocc' in self.spec:
+            # Pretend to be gfortran
+            env.set('FCFLAGS', '-g -DpgiFortran')
+
     def configure_args(self):
         options = []
         options.append('--with-idxtype='+self.spec.variants['idxtype'].value)
