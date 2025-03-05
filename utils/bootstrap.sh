@@ -25,7 +25,7 @@ if [[ ! -f "bin/micromamba" ]]; then
 fi
 
 export MAMBA_ROOT_PREFIX="$NGMOENVS_BASEDIR/conda"
-e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build
+e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build python=3.12
 
 # shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
@@ -43,6 +43,11 @@ source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 e spack compiler find --scope site /usr/bin
 e spack external find --scope site --path /usr/bin gcc
 e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
+
+if [[ -v SPACK_BOOTSTRAP_ROOT ]]; then
+    e spack bootstrap root --scope site "$SPACK_BOOTSTRAP_ROOT"
+fi
+e spack bootstrap now
 
 echo "Default Compiler and MPI:"
 e spack spec --format '{name}@{version}%{compiler.name}@{compiler.version}' mpi
