@@ -22,7 +22,7 @@ export CONDA_BLD_PATH
 
 # Default compiler and MPI
 : "${NGMOENVS_COMPILER:="aocc"}"
-: "${NGMOENVS_MPI:="cray_mpich@8.1.27"}"
+: "${NGMOENVS_MPI:="cray-mpich@8.1.27"}"
 export NGMOENVS_COMPILER NGMOENVS_MPI
 
 VERSION="$(git describe --always)"

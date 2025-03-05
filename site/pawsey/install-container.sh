@@ -15,8 +15,9 @@ export SPACK_BOOTSTRAP_ROOT="$CONTAINER_BASEDIR/spack-bootstrap"
 # Arguments to apptainer
 export MOUNT_ARGS=(
     "--bind" "$LOCAL_SQUASHFS$CONTAINER_BASEDIR:$CONTAINER_BASEDIR:rw"
-    "--bind" "/opt/AMD"
-    "--bind" "/opt/rocm-5.7.1"
+    "--bind" "/opt/AMD" # AOCC compiler
+    "--bind" "/opt/rocm-5.7.1" # ROCM/clang compiler
+    "--bind" "/usr/lib64:/host/lib64" # System libraries
 )
 
 set -x
