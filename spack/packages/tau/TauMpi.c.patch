@@ -1,0 +1,11 @@
+--- a/src/Profile/TauMpi.c
++++ b/src/Profile/TauMpi.c
+@@ -1007,7 +1007,7 @@ MPI_Comm * comm;
+   //TAU_MPI_COLLECTIVE_SYNC(comm);
+ 
+   MPI_Comm silly =  *comm;
+-  returnVal = PMPI_Comm_free( &(silly) );
++  returnVal = MPI_SUCCESS;
+   TIMER_EXIT_COMM_FREE_EVENT(*comm);
+ 
+   TAU_PROFILE_STOP(tautimer);

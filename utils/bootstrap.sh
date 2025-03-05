@@ -14,7 +14,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 # shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
-SPACK_VERSION=0.22.0
+SPACK_VERSION=0.22.2
 export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
@@ -25,7 +25,7 @@ if [[ ! -f "bin/micromamba" ]]; then
 fi
 
 export MAMBA_ROOT_PREFIX="$NGMOENVS_BASEDIR/conda"
-e "$NGMOENVS_BASEDIR/bin/micromamba" install -c conda-forge -n base conda conda-build python=3.12
+e "$NGMOENVS_BASEDIR/bin/micromamba" install -y -c conda-forge -n base conda conda-build python=3.12
 
 # shellcheck disable=SC1091
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"

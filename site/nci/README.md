@@ -16,23 +16,34 @@ A container can be built with
 ./site/nci/install.sh lfric
 ```
 
-By default the container will be installed into
-`/scratch/$PROJECT/$USER/ngmo-envs`. Modules are provided, which can be loaded
-with:
+## Building bare (no container) environments
+
+Set up your account to be able to build the environments by running the bare
+bootstrap script, this only needs to be run once and will create
+`/scratch/$PROJECT/$USER/ngmo-envs` by default:
 
 ```bash
-module use /scratch/$PROJECT/$USER/ngmo-envs/modules
-module load ngmo-envs/lfric
+./site/nci/bootstrap-bare.sh
 ```
 
-## Using container environments
+Bare environments can be built with:
 
-Make sure the container environment's `bin/` directory is on your `PATH`, e.g.
+```bash
+./site/nci/install-bare.sh lfric
+```
+
+## Using environments
+
+Both container and bare environments work in exactly the same way.
+By default the environments will be installed into
+`/scratch/$PROJECT/$USER/ngmo-envs/envs/$ENVIRONMENT/$BRANCH`.
+
+Make sure the environment's `bin/` directory is on your `PATH`, e.g.
 by loading the module:
 
 ```bash
 module use /scratch/$PROJECT/$USER/ngmo-envs/modules
-module load ngmo-envs/lfric
+module load lfric
 ```
 
 Run commands inside the container using the `envrun` script. If you build an
@@ -41,4 +52,36 @@ executable inside the container you must also run it inside the container.
 ```
 envrun make
 envrun mpirun -n 6 lfric
+```
+
+A script `envrun-wrapped` is also provided, this can be symlinked to other
+names to run the named command inside the environment:
+
+```
+ln -s /scratch/$PROJECT/$USER/ngmo-envs/envs/lfric/master/bin/{envrun-wrapped,python}
+
+# Now `python` will get run inside the environment
+python
+```
+
+## Developing environments
+
+Develop environments in our local mirror of this repository at
+https://git.nci.org.au/bom/ngm/ngmo-environments/. CI is set up to
+automatically build branches, the built environments are usable with
+
+```
+module use /scratch/hc46/hc46_gitlab/ngm/modules
+module load lfric/$BRANCH
+```
+
+Once a change has been developed locally create a pull request on the Met
+Office repository https://github.com/metoffice/ngmo-environments to make it
+available at all sites.
+
+Builds off of the Met Office repository are usable with
+
+```
+module use /g/data/access/ngm/modules/envs
+module load lfric
 ```

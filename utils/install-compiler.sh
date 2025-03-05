@@ -50,5 +50,8 @@ export CXX="$(sed -n -e 's/^\s*cxx\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compil
 export OMPI_CC=\$CC
 export OMPI_FC=\$FC
 export OMPI_CXX=\$CXX
+
+# Add compiler to path
+export PATH="\$PATH:\$(dirname \$CC)"
 EOF
 cat "$ENVDIR/etc/compiler.sh"

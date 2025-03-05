@@ -30,7 +30,20 @@ export SINGULARITYENV_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:/system/lib64"
 # Build the spack packages themselves
 export NGMOENVS_ENVDIR="${CONTAINER_ENVDIR}"
 export ENVIRONMENT
-e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-two.sh"
+
+if [[ -v NGMOENVS_DEBUG ]]; then
+    # Running in debug mode, start a shell in the container
+    e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash
+    exit 0
+fi
+
+if ! e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-two.sh"; then
+    # Copy failed build logs to scratch
+    mkdir -p "/scratch/$PROJECT/$USER/tmp/spack-stage"
+    cp -r "$TMPDIR/$USER/spack-stage/"* "/scratch/$PROJECT/$USER/tmp/spack-stage"
+    echo "Logs available under /scrach/$PROJECT/$USER/tmp/spack-stage"
+    exit 1
+fi
 
 # Convert to squashfs
 SQUASHFS="$INSTALL_ENVDIR/etc/$ENVIRONMENT.squashfs"

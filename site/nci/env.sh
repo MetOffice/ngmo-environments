@@ -6,15 +6,11 @@ set -o pipefail
 # shellcheck source=utils/common.sh
 source "$SITE_DIR/../../utils/common.sh"
 
+: "${NGMOENVS_BASEDIR:="/scratch/$PROJECT/$USER/ngmo-envs"}"
+export NGMOENVS_BASEDIR
+
 : "${NGMOENVS_TMPDIR:=${TMPDIR:-/tmp}}"
 export NGMOENVS_TMPDIR
-
-# Base directory for environments
-: "${NGMOENVS_BASEDIR:="$HOME/ngmo-envs"}"
-
-# Path to install the environment to on the host
-export ENVDIR="${NGMOENVS_BASEDIR}/envs/${ENVIRONMENT}"
-export INSTALL_ENVDIR="$ENVDIR"
 
 # Host filesystem path for building squashfs
 export LOCALSQUASHFS="$NGMOENVS_TMPDIR/squashfs"
@@ -33,3 +29,29 @@ export MKSQUASHFS=/usr/sbin/mksquashfs
 
 # Prebuild base image
 export NGMOENVS_BASEIMAGE=/g/data/access/ngm/data/gadicontainer/202407/ngmoenvs-baseimage.sif
+
+# Isolate Spack
+export SPACK_DISABLE_LOCAL_CONFIG=true
+export SPACK_USER_CACHE_PATH="$TMPDIR/spack"
+
+# Path to install the environment to on the local machine
+: "${NGMOENVS_ENVDIR:="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/$VERSION"}"
+export NGMOENVS_ENVDIR
+INSTALL_ENVDIR="$NGMOENVS_ENVDIR"
+export INSTALL_ENVDIR
+
+# Path for modulefiles
+: "${NGMOENVS_MODULE:="$NGMOENVS_BASEDIR/modules/$ENVIRONMENT/$VERSION"}"
+export NGMOENVS_MODULE
+
+# Cache paths
+: "${NGMOENVS_SPACK_MIRROR:="file://$NGMOENVS_BASEDIR/spack-mirror"}"
+: "${CONDA_BLD_PATH:="$NGMOENVS_BASEDIR/conda-bld"}"
+export NGMOENVS_SPACK_MIRROR
+export CONDA_BLD_PATH
+
+# Default compiler and MPI
+: "${NGMOENVS_COMPILER:="intel@2021.10.0"}"
+: "${NGMOENVS_MPI:="openmpi@4.1.5"}"
+export NGMOENVS_COMPILER
+export NGMOENVS_MPI

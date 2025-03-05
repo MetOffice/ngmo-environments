@@ -90,7 +90,11 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
         e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
 	
 	# Add the local packages if they're not already available
-	e spack repo add "$NGMOENVS_DEFS/spack" || true
+        # Make a copy in the environment directory so updates to this repo
+        # don't affect existing installs
+        e rm -rf "$ENVDIR/spack/ngmo"
+        e cp -r "$NGMOENVS_DEFS/spack" "$ENVDIR/spack/ngmo"
+	e spack repo add "$ENVDIR/spack/ngmo" || true
 
 	# Add package binary mirror
 	if [[ -n "${NGMOENVS_SPACK_MIRROR:-}" ]]; then
@@ -138,8 +142,21 @@ export NGMOENVS_ENVDIR="$ENVDIR"
 export NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 export NGMOENVS_MPI="$NGMOENVS_MPI"
 
-spack env activate "\$NGMOENVS_ENVDIR/spack"
-eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
+# If we have bootstrapped, activate the bootstrap
+if [[ -f "$NGMOENVS_BASEDIR/bin/activate" ]]; then
+    source "$NGMOENVS_BASEDIR/bin/activate"
+fi
+
+# If this env has a spack environment, activate it
+if [[ -d "\$NGMOENVS_ENVDIR/spack" ]]; then
+    spack env activate "\$NGMOENVS_ENVDIR/spack"
+    export CPATH="\$SPACK_ENV/.spack-env/view/include:\$CPATH"
+fi
+
+# If this env has a conda environment, activate it
+if [[ -d "\$NGMOENVS_ENVDIR/conda" ]]; then
+    eval "\$(conda shell.bash activate "\$NGMOENVS_ENVDIR/conda")"
+fi
 
 if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"

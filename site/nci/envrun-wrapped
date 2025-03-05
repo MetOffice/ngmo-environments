@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# This script gets run *outside* the container
+# 
+# Symlink the script to the name of a command, then it will work like that command only running inside the container
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )"
+
+COMMAND="$(basename $0)"
+
+# Remove the wrapper command from PATH
+export PATH="$(echo ":$PATH:" | sed -e "s#:$(dirname "$0"):#:#g" -e "s#^:\(.*\):\$#\1#")"
+export SINGULARITYENV_APPEND_PATH="$PATH"
+
+"$SCRIPT_DIR/envrun" "$COMMAND" "$@"

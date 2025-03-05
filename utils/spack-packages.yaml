@@ -18,3 +18,7 @@ packages:
       - spec: "@1.85.0"
         when: "%oneapi"
         message: "https://github.com/spack/spack/issues/44003"
+  binutils:
+    conflict:
+      - spec: "@2.42"
+        message: "Identifier LONG_MIN is undefined"

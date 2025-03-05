@@ -1,0 +1,53 @@
+--- a/src/node/mesh.cpp	(revision 2629)
++++ b/src/node/mesh.cpp	(working copy)
+@@ -148,8 +148,8 @@
+ 
+   vector<size_t> CMesh::createHashes (const double longitude, const double latitude)
+   {
+-    double minBoundLon = 0. ;
+-    double maxBoundLon = 360. ;
++    double minBoundLon = -180. ;
++    double maxBoundLon = 180. ;
+     double minBoundLat = -90. ;
+     double maxBoundLat = 90. ;
+     double prec=1e-11 ;
+@@ -158,8 +158,6 @@
+     double lon = longitude;
+     double lat = latitude;
+ 
+-    if (lon > (360.- prec)) lon = 0.;
+-
+     size_t maxsize_t=numeric_limits<size_t>::max() ;
+     if ( (maxBoundLon-minBoundLon)/maxsize_t > precLon) precLon=(maxBoundLon-minBoundLon)/maxsize_t ;
+     if ( (maxBoundLat-minBoundLat)/maxsize_t > precLat) precLat=(maxBoundLat-minBoundLat)/maxsize_t ;
+@@ -855,10 +853,11 @@
+         }
+         else
+         {
+-          if (mpiRank == (mpiSize - 1) )
++          int tmprem = nbEdgesGlo%mpiSize;
++          if (mpiRank >= tmprem)
+           {
+             edge_count = nbEdgesGlo/mpiSize;
+-            edge_start = mpiRank*(nbEdgesGlo/mpiSize + 1);
++            edge_start = (mpiRank - tmprem)*edge_count + tmprem*(nbEdgesGlo/mpiSize + 1);
+           }
+           else
+           {
+@@ -884,6 +883,7 @@
+         for (int i = 0; i < edge_count; ++i)
+         {
+           CClientClientDHTSizet::Index2VectorInfoTypeMap::iterator it = edgeIdxGlo2FaceIdx.find(i + edge_start);
++          if (it != edgeIdxGlo2FaceIdx.end()) {
+           int indexGlo = it->first;
+           vector<size_t> faces = it->second;
+           int face1 = faces[0];
+@@ -896,7 +896,7 @@
+           else
+           {
+             edge_faces(1, indexGlo - edge_start) = fill_value_edge_faces();
+-          }
++          }}
+         }
+ 
+         size_t tmp;
