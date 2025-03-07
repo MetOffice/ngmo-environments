@@ -1,24 +1,20 @@
-FROM rockylinux:8-minimal
+FROM opensuse/leap:15
 
-RUN microdnf install -y --nodocs \
+RUN zypper --non-interactive install \
              bzip2 \
-             bzip2-devel \
              curl \
              diffutils \
              file \
              findutils \
              gcc \
              gcc-c++ \
-             gcc-gfortran \
              git \
              gzip \
-             libatomic \
+             libatomic1 \
              libtool \
              make \
              openssl \
-             openssl-devel \
              patch \
-             pinentry-curses \
              subversion \
              tar \
              time \
@@ -27,7 +23,6 @@ RUN microdnf install -y --nodocs \
              which \
              xz \
              xz-devel \
-             zstd \
-        && microdnf clean all
+             zstd
 
 ENTRYPOINT ["/ngmo/bin/entrypoint.sh"]
