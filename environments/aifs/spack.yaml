@@ -1,3 +1,2 @@
 spack:
-  specs:
-    - cuda@12.6.2
+  specs: []
