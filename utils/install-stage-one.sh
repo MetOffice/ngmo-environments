@@ -113,7 +113,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
         e spack config blame
 
 	# Solve dependencies
-	e spack concretize --fresh
+	e spack --debug concretize --fresh
 
 	# Install everything
         if [[ ! -v NGMOENVS_DOWNLOAD_ONLY ]]; then
