@@ -1,19 +1,66 @@
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
-  - huggingface_hub=0.26.5
-  - matplotlib=3.10.0
-  - numpy=2.2.1
+  - python
+  - cuda-version=12.8
+  - cuda
+  - huggingface_hub
+  - matplotlib
+  - numpy
   - pip
+  - cartopy
+  - ecmwf-opendata =0.3.19
+    # - earthkit-data=0.11.4 # not recognised by pip packages
+  - earthkit-geo =0.3.0
+  - flash-attn =2.7.2
+
+    # Only install with pip as a fallback
   - pip:
     - anemoi_inference==0.3.3
     - anemoi_models==0.2.1
     - anemoi_transform==0.1.0
     - anemoi_utils==0.4.9
-    - earthkit_data==0.11.4
-    - earthkit_geo==0.3.0
     - earthkit_meteo==0.3.0
     - earthkit_regrid==0.3.4
-    - Cartopy==0.24.1
-    - ecmwf_opendata==0.3.14
+    - earthkit_data==0.11.4
+
+# anemoi deps - prefer using conda to pip
+  - aniso8601
+  - anytree
+  - cfunits
+  - cfgrib
+    # - eccodes >2.38 # not recognised by pip packages
+  - einops
+  - gitdb
+  - gitpython
+  - hydra-core
+  - joblib
+  - packaging
+    # - pdbufr # not recognised by pip packages
+  - pydantic
+  - pytorch
+  - pytorch_geometric >=2.3,<2.5
+  - pyyaml
+  - scikit-learn
+  - semantic_version
+  - smmap <6
+  - termcolor
+  - threadpoolctl
+  - tqdm
+  - xarray
+
+  - array-api-compat
+  - attrs
+  - cfgrib
+  - dask
+  - entrypoints
+  - findlibs
+  - jsonschema
+  - jsonschema-specifications
+  - lru-dict
+  - markdown
+  - netcdf4
+  - pdbufr
+  - referencing
+  - rpds-py
+  - wcwidth
