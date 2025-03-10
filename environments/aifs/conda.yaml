@@ -1,18 +1,17 @@
 channels:
   - conda-forge
 dependencies:
-  - python
-  - cuda-version=12.8
   - cuda
+  - cuda-version=12.8
+    # - earthkit-data=0.11.4 # not recognised by pip packages
+  - earthkit-geo =0.3.0
+  - ecmwf-opendata =0.3.19
+  - flash-attn =2.7.2
   - huggingface_hub
   - matplotlib
   - numpy
   - pip
-  - cartopy
-  - ecmwf-opendata =0.3.19
-    # - earthkit-data=0.11.4 # not recognised by pip packages
-  - earthkit-geo =0.3.0
-  - flash-attn =2.7.2
+  - python
 
     # Only install with pip as a fallback
   - pip:
@@ -20,16 +19,16 @@ dependencies:
     - anemoi_models==0.2.1
     - anemoi_transform==0.1.0
     - anemoi_utils==0.4.9
+    - earthkit_data==0.11.4
     - earthkit_meteo==0.3.0
     - earthkit_regrid==0.3.4
-    - earthkit_data==0.11.4
 
 # anemoi deps - prefer using conda to pip
   - aniso8601
   - anytree
   - array-api-compat
   - attrs
-  - cfgrib
+  - cartopy
   - cfgrib
   - cfunits
   - dask
