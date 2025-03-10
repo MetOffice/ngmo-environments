@@ -27,40 +27,38 @@ dependencies:
 # anemoi deps - prefer using conda to pip
   - aniso8601
   - anytree
-  - cfunits
+  - array-api-compat
+  - attrs
   - cfgrib
+  - cfgrib
+  - cfunits
+  - dask
     # - eccodes >2.38 # not recognised by pip packages
   - einops
+  - entrypoints
+  - findlibs
   - gitdb
   - gitpython
   - hydra-core
   - joblib
+  - jsonschema
+  - jsonschema-specifications
+  - lru-dict
+  - markdown
+  - netcdf4
   - packaging
     # - pdbufr # not recognised by pip packages
   - pydantic
   - pytorch
   - pytorch_geometric >=2.3,<2.5
   - pyyaml
+  - referencing
+  - rpds-py
   - scikit-learn
   - semantic_version
   - smmap <6
   - termcolor
   - threadpoolctl
   - tqdm
-  - xarray
-
-  - array-api-compat
-  - attrs
-  - cfgrib
-  - dask
-  - entrypoints
-  - findlibs
-  - jsonschema
-  - jsonschema-specifications
-  - lru-dict
-  - markdown
-  - netcdf4
-  - pdbufr
-  - referencing
-  - rpds-py
   - wcwidth
+  - xarray
