@@ -78,7 +78,7 @@ export NGMOENVS_ENVDIR="${CONTAINER_ENVDIR}"
 export NGMOENVS_DOWNLOAD_ONLY=1
 export ENVIRONMENT
 
-# For GPU packages
+# Allow GPU packages to be installed on non-gpu nodes
 export CONDA_OVERRIDE_CUDA="12.8"
 
 e $APPTAINER run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-one.sh"
