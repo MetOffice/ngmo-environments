@@ -1,6 +1,8 @@
 packages:
   gcc:
     buildable: False
+  cce:
+    buildable: False
   
 #  mpi:
 #    buildable: False
@@ -25,8 +27,9 @@ packages:
         prefix: "/opt/cray/pe/mpich/8.1.27/ofi/cray/14.0"
         extra_attributes:
           environment:
-            append_path:
-              LD_LIBRARY_PATH: /opt/cray/libfabric/1.15.2.0/lib64:/opt/cray/pe/lib64:/host/lib64
+            set:
+              # Hijack the profiling variables to add a required lib paths
+              PROFILE_POSTLIB: "-L/opt/cray/pe/cce/16.0.1/cce/x86_64/lib  -L/opt/cray/pe/gcc/12.2.0/snos/lib64"
       - spec:   "cray-mpich@8.1.27 %gcc"
         prefix: "/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1"
         extra_attributes:
@@ -82,3 +85,16 @@ packages:
         prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/cray/17.0"
       - spec:   "hdf5@1.12.2 %gcc +fortran +mpi"
         prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/gnu/12.3"
+
+  # Errors building with Cray
+  papi:
+    require:
+      - "%gcc"
+      - "%oneapi"
+      - "%intel"
+
+  libelf:
+    require:
+      - "%gcc"
+      - "%oneapi"
+      - "%intel"

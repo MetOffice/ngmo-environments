@@ -6,31 +6,40 @@ compilers:
         cxx: /opt/cray/pe/gcc/12.2.0/bin/g++
         f77: /opt/cray/pe/gcc/12.2.0/bin/gfortran
         fc:  /opt/cray/pe/gcc/12.2.0/bin/gfortran
-      flags:
-        # For the container `/bin/as`
-        cflags: -gdwarf-4
-        cxxflags: -gdwarf-4
-        fflags: -gdwarf-4
-      operating_system: rocky8
+      flags: {}
+#        # For the container `/bin/as`
+#        cflags: -gdwarf-4
+#        cxxflags: -gdwarf-4
+#        fflags: -gdwarf-4
+      operating_system: opensuse15
       target: x86_64
       modules: []
-      environment: {}
+      environment:
+        append_path:
+          LD_LIBRARY_PATH: /opt/cray/pe/gcc-libs:/host/lib64
       extra_rpaths: []
   - compiler:
-      spec: cce@17.0.0
+      spec: cce@16.0.1
       paths:
-        cc:  /opt/cray/pe/cce/17.0.0/bin/craycc
-        cxx: /opt/cray/pe/cce/17.0.0/bin/crayCC
-        f77: /opt/cray/pe/cce/17.0.0/bin/crayftn
-        fc:  /opt/cray/pe/cce/17.0.0/bin/crayftn
+        cc:  /opt/cray/pe/cce/16.0.1/bin/craycc
+        cxx: /opt/cray/pe/cce/16.0.1/bin/crayCC
+        f77: /opt/cray/pe/cce/16.0.1/bin/crayftn
+        fc:  /opt/cray/pe/cce/16.0.1/bin/crayftn
       flags: {}
-      operating_system: rocky8
+      operating_system: opensuse15
       target: x86_64
       modules: []
       environment:
         set:
           GCC_X86_64: /opt/cray/pe/gcc/10.3.0/snos
-      extra_rpaths: []
+        append_path:
+          LD_LIBRARY_PATH: /opt/cray/pe/gcc-libs:/host/lib64
+      extra_rpaths:
+        - /opt/cray/pe/cce/18.0.1/cce/x86_64/lib
+        - /opt/cray/libfabric/1.15.2.0/lib64
+        - /opt/cray/pe/lib64/cce
+        - /opt/cray/pe/lib64
+        - /opt/cray/pe/gcc-libs
   - compiler:
       spec: aocc@3.2.0
       paths:
@@ -39,7 +48,7 @@ compilers:
         f77: /opt/AMD/aocc-compiler-3.2.0/bin/flang
         fc:  /opt/AMD/aocc-compiler-3.2.0/bin/flang
       flags: {}
-      operating_system: rocky8
+      operating_system: opensuse15
       target: x86_64
       modules: []
       environment: {}

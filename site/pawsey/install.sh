@@ -29,7 +29,7 @@ VERSION="$(git describe --always)"
 export VERSION
 
 # Base image
-: "${NGMOENVS_BASEIMAGE:="$SITE_DIR/baseimage/baseimage.sif"}"
+: "${NGMOENVS_BASEIMAGE:="$HOME/ngmoenvs-baseimage.sif"}"
 
 # Directory we'll install the container to
 : "${NGMOENVS_ENVDIR:="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/$VERSION"}"
