@@ -47,7 +47,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -N "ngmoenvs2-$ENVIRONMENT" \
         -q normal \
         -l ncpus=8 \
-        -l walltime=1:00:00 \
+        -l walltime=2:00:00 \
         -l mem=32gb \
         -l jobfs=50gb \
         "${QSUB_FLAGS[@]}" \
