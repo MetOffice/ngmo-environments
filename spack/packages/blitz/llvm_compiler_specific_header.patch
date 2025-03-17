@@ -1,0 +1,12 @@
+diff -Nur spack-src.org/m4/ac_compiler_specific_header.m4 spack-src/m4/ac_compiler_specific_header.m4
+--- spack-src.org/m4/ac_compiler_specific_header.m4	2019-10-02 07:50:17.000000000 +0900
++++ spack-src/m4/ac_compiler_specific_header.m4	2023-05-25 15:13:06.000000000 +0900
+@@ -21,7 +21,8 @@
+                                       [COMPILER_VENDOR="gnu"])],
+   [*KCC*],        [COMPILER_VENDOR="kai"],
+   [*pgCC*],       [COMPILER_VENDOR="pgi"],
+ dnl  [*FCC*],        [COMPILER_VENDOR="fujitsu"],
++  [*icpx*|*icx*],        [COMPILER_VENDOR="llvm"],
+   [*pathCC*],     [COMPILER_VENDOR="pathscale"],
+   [*CC*],         [AS_CASE([$target],
+                       [*sgi*],      [COMPILER_VENDOR="sgi"],

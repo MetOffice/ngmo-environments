@@ -30,7 +30,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -N "ngmoenvs1-$ENVIRONMENT" \
         -q copyq \
         -l ncpus=1 \
-        -l walltime=1:00:00 \
+        -l walltime=1:30:00 \
         -l mem=32gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
@@ -47,7 +47,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -N "ngmoenvs2-$ENVIRONMENT" \
         -q normal \
         -l ncpus=8 \
-        -l walltime=1:00:00 \
+        -l walltime=2:00:00 \
         -l mem=32gb \
         -l jobfs=50gb \
         "${QSUB_FLAGS[@]}" \
