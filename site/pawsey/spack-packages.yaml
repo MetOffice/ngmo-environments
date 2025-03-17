@@ -90,11 +90,11 @@ packages:
   papi:
     require:
       - "%gcc"
-      - "%oneapi"
-      - "%intel"
 
   libelf:
     require:
       - "%gcc"
-      - "%oneapi"
-      - "%intel"
+
+  serf:
+    require:
+      - "%gcc"
