@@ -31,7 +31,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -q copyq \
         -l ncpus=1 \
         -l walltime=1:30:00 \
-        -l mem=4gb \
+        -l mem=32gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
         -- bash "$SITE_DIR/install-stage-one.sh" "$ENVIRONMENT"
