@@ -3,6 +3,8 @@
 set -eu
 set -o pipefail
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )
+
 cat <<EOF
 Running lfric_apps test in $BASEDIR
 
@@ -26,6 +28,9 @@ if [[ ! -d "$BASEDIR/lfric_core" ]]; then
  FFLAGS_UNIT_WARNINGS      = -warn all -gen-interfaces nosource
  FFLAGS_INIT               = -ftrapuv
 EOF
+
+    # Fix for oneapi
+    patch -p0 --forward --directory "$BASEDIR/lfric_core" < "$SCRIPT_DIR/lfric-oneapi.patch"
 fi
 
 APP=gravity_wave
