@@ -8,3 +8,4 @@ dependencies:
   - jinja2
   - sci-fab
   - python-clang
+  - libsqlite <3.49 # Allow double quotes for dependency generator
