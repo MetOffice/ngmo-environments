@@ -54,3 +54,14 @@ packages:
         prefix: "/apps/cuda/12.6.2/"
     buildable: False
 
+  yaxt:
+    conflict:
+      - spec: "%intel"
+        message: "Excessively slow when compiled with intel classic"
+    require:
+      - one_of:
+          # Match against glibc to find the requested compiler
+        - "%oneapi ^glibc%intel"
+        - "%oneapi ^glibc%oneapi"
+        - "%gcc    ^glibc%gcc"
+        - "%nvcc   ^glibc%nvcc"
