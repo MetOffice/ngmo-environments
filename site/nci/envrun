@@ -19,7 +19,10 @@ export FFLAGS="-I /apps/openmpi/4.1.5/include/Intel ${FFLAGS:-}"
 # Pass through LD_LIBRARY_PATH
 export SINGULARITYENV_LD_LIBRARY_PATH="/.singularity.d/libs:${LD_LIBRARY_PATH:-}"
 
+# Remove the wrapper dir from path
+NGMOENVS_CLEAN_PATH=$(tr ':' '\n' <<< "$PATH" | xargs readlink -f | uniq | grep -v $(readlink -f "$ENV_DIR/bin") | paste -sd ':')
+
 # Required for oneapi sanitizers to show addresses
-export SINGULARITYENV_APPEND_PATH="/apps/intel-tools/intel-compiler-llvm/2025.0.4/bin/compiler"
+export SINGULARITYENV_APPEND_PATH="$NGMOENVS_CLEAN_PATH:/apps/intel-tools/intel-compiler-llvm/2025.0.4/bin/compiler"
 
 /opt/singularity/bin/singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/apptainer.sif" "$@"
