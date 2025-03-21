@@ -46,7 +46,7 @@ packages:
       - spec:   "netcdf-c@4.9.0 %clang +mpi +parallel-netcdf"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/amd/5.0"
       - spec:   "netcdf-c@4.9.0 %cce   +mpi +parallel-netcdf"
-        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/cray/17.0"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0"
       - spec:   "netcdf-c@4.9.0 %gcc   +mpi +parallel-netcdf"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/gnu/12.3"
 
@@ -58,7 +58,7 @@ packages:
       - spec:   "netcdf-fortran@4.5.3 %clang"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/amd/5.0"
       - spec:   "netcdf-fortran@4.5.3 %cce"
-        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/cray/17.0"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0"
       - spec:   "netcdf-fortran@4.5.3 %gcc"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/gnu/12.3"
 
@@ -70,7 +70,7 @@ packages:
       - spec:   "netcdf-cxx4@4.3.1 %clang"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/amd/5.0"
       - spec:   "netcdf-cxx4@4.3.1 %cce"
-        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/cray/17.0"
+        prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0"
       - spec:   "netcdf-cxx4@4.3.1 %gcc"
         prefix: "/opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/gnu/12.3"
 
@@ -82,7 +82,7 @@ packages:
       - spec:   "hdf5@1.12.2 %clang +fortran +mpi"
         prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/amd/5.0"
       - spec:   "hdf5@1.12.2 %cce +fortran +mpi"
-        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/cray/17.0"
+        prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/crayclang/17.0"
       - spec:   "hdf5@1.12.2 %gcc +fortran +mpi"
         prefix: "/opt/cray/pe/hdf5-parallel/1.12.2.9/gnu/12.3"
 

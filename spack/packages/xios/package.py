@@ -52,7 +52,7 @@ class Xios(Package):
     patch("llvm_bug_17782.patch", when="@1.1: %clang")
 
     # Fix for recent gcc
-    patch("gcc_remap.patch", when="@2.5.2252")
+    #patch("gcc_remap.patch", when="@2.5.2252")
 
     # NEMO-specific patches from https://github.com/hiker/xios-2252/tree/master/patches
     patch("nemo/p1_add_refname", when="+nemo")
@@ -195,6 +195,7 @@ OASIS_LIB=""
 %LINKER         {MPIFC}
 
 %BASE_CFLAGS    -DMPICH_SKIP_MPICXX -h msglevel_4 -h zero -h gnu \
+                -std=c++11 \
                 -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR}
 %PROD_CFLAGS    {CC_OPT_PROD} -DBOOST_DISABLE_ASSERTS
 %DEV_CFLAGS     {CC_OPT_DEV}
@@ -206,10 +207,10 @@ OASIS_LIB=""
 %DEBUG_FFLAGS   -g
 
 %BASE_INC       -D__NONE__
-%BASE_LD        -D__NONE__ -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz
+%BASE_LD        -D__NONE__ -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz {LIBCXX}
 
 %CPP            cpp
-%FPP            cpp -P -CC
+%FPP            cpp -E -P -x c
 %MAKE           gmake
 """.format(
                 **param

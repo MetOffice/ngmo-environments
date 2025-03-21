@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Build the container
+set -eu
+set -o pipefail
 
-module load "singularity/4.1.0-slurm"
+# Build the container
+source "$NGMOENVS_DEFS/utils/common.sh"
 
 # Where we'll set up squashfs within the container
 export CONTAINER_BASEDIR="/ngmo"
@@ -20,8 +22,6 @@ export MOUNT_ARGS=(
     "--bind" "/usr/lib64:/host/lib64" # System libraries
 )
 
-set -x
-
 # Set up squashfs directory
 mkdir -p "$LOCAL_SQUASHFS$CONTAINER_BASEDIR/bin"
 
@@ -33,11 +33,20 @@ sed "$SITE_DIR/entrypoint.sh" \
 chmod +x "$LOCAL_SQUASHFS$CONTAINER_BASEDIR/bin/entrypoint.sh"
 
 # Bootstrap container
-singularity run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "$NGMOENVS_DEFS/utils/bootstrap.sh"
+e singularity run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "$NGMOENVS_DEFS/utils/bootstrap.sh"
 
 # Configure site
-singularity run "${MOUNT_ARGS[@]}" "$IMAGE" spack config --scope=site add -f "$SITE_DIR/spack-packages.yaml"
-singularity run "${MOUNT_ARGS[@]}" "$IMAGE" spack config --scope=site add -f "$SITE_DIR/spack-compilers.yaml"
+e singularity run "${MOUNT_ARGS[@]}" "$IMAGE" spack config --scope=site add -f "$SITE_DIR/spack-packages.yaml"
+e singularity run "${MOUNT_ARGS[@]}" "$IMAGE" spack config --scope=site add -f "$SITE_DIR/spack-compilers.yaml"
 
 # Install container environment
-singularity run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "$NGMOENVS_DEFS/utils/install-stage-one.sh"
+e singularity run "${MOUNT_ARGS[@]}" "$IMAGE" /bin/bash "$NGMOENVS_DEFS/utils/install-stage-one.sh"
+
+if [[ "${NGMOENVS_COMPILER%@*}" == cce ]]; then
+    # Set compiler variables 
+    cat >> "$LOCAL_SQUASHFS$NGMOENVS_ENVDIR/bin/activate" <<EOF
+
+# Variables specific for pawsey site
+export GCC_X86_64=/opt/cray/pe/gcc/10.3.0/snos
+EOF
+fi
