@@ -39,10 +39,9 @@ mkdir -p "$INSTALL_ENVDIR/bin"
 
 # If installing through a container use the site-specific 'envrun',
 # if not then the default will get installed
-for script in envrun envrun-wrapped; do
-    if ! [[ -f "$INSTALL_ENVDIR/bin/$script" ]]; then
+for script in $SITE_DIR/bin/*; do
+    if ! [[ -f "$INSTALL_ENVDIR/bin/$(basename $script)" ]]; then
         cp "$SITE_DIR/$script" "$INSTALL_ENVDIR/bin"
-        chmod +x "$INSTALL_ENVDIR/bin/$script"
     fi
 done
 
