@@ -14,14 +14,24 @@ source "$SCRIPT_DIR/../utils/common.sh"
 
 ENVIRONMENT="$1"
 export ENVIRONMENT
-SITE="${2:-${NGMOENVS_SITE:-generic}}"
 
-: "${NGMOENVS_BASEDIR:="/scratch/$PROJECT/$USER/ngmo-envs"}"
-export NGMOENVS_BASEDIR
+# Try to detect the site
+if [[ $(hostname -f) =~ gadi.nci.org.au$ ]]; then
+    NGMOENVS_SITE=pawsey
+elif [[ $(hostname -f) =~ setonix.pawsey.org.au$ ]]; then
+    NGMOENVS_SITE=pawsey
+fi
+
+SITE="${2:-${NGMOENVS_SITE:-generic}}"
 
 if [[ ! -d "$SCRIPT_DIR/../environments/$ENVIRONMENT" ]]; then
 	error "Unknown environment $ENVIRONMENT"
 	exit 1
+fi
+
+if [[ ! -f "$SCRIPT_DIR/envs/$ENVIRONMENT.sh" ]]; then
+        error "No test for environment $ENVIRONMENT"
+        exit 1
 fi
 
 echo "Testing $ENVIRONMENT at site $SITE"
@@ -29,11 +39,11 @@ echo "Testing $ENVIRONMENT at site $SITE"
 if [[ -f "$SCRIPT_DIR/site/$SITE.sh" ]]; then
 	# Run the site-specific test
 	"$SCRIPT_DIR/site/$SITE.sh" "$ENVIRONMENT"
+
 else
-	if [[ ! -f "$SCRIPT_DIR/envs/$ENVIRONMENT.sh" ]]; then
-		error "No test for environment $ENVIRONMENT"
-		exit 1
-	fi
+        # Generic scripts without site specifics
+        : "${NGMOENVS_BASEDIR:="~/ngmo-envs"}"
+        export NGMOENVS_BASEDIR
 
 	# Default path
 	export PATH="$NGMOENVS_BASEDIR/envs/$ENVIRONMENT/bin:$PATH"

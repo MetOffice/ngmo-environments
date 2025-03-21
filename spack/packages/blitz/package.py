@@ -26,7 +26,7 @@ class Blitz(AutotoolsPackage):
     patch("fujitsu_compiler_specfic_header.patch", when="%fj")
 
     # Fix makefile and include to build with llvm compiler
-    patch("llvm_compiler_specific_header.patch", when="%oneapi")
+    patch("llvm_compiler_specific_header.patch")
     force_autoreconf = True
 
     build_targets = ["lib"]

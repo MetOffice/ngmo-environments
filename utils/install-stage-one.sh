@@ -162,6 +162,7 @@ if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
 fi
 EOF
+e cat "$ENVDIR/bin/activate"
 
 # Set compiler variables
 cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
