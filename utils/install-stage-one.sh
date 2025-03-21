@@ -107,7 +107,53 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
 	fi
 
 	# Add compiler and mpi requirements
-	e spack config add "packages:all:require:'%${NGMOENVS_COMPILER}'"
+        # Compilers should get preferred in the order of 'one_of'
+        case ${NGMOENVS_COMPILER} in
+            gcc)
+                # No fallback compiler
+                cat > "$ENVDIR/spack/spack-compiler.yaml" <<-EOF
+		packages:
+		  all:
+		    require: "%${NGMOENVS_COMPILER}"
+		EOF
+                ;;
+            intel)
+                # Fallback to oneapi then gcc
+                cat > "$ENVDIR/spack/spack-compiler.yaml" <<-EOF
+		packages:
+		  all:
+		    require:
+		      - one_of:
+		        - "%${NGMOENVS_COMPILER}"
+		        - "%oneapi"
+		        - "%gcc"
+		EOF
+                ;;
+            oneapi)
+                # Fallback to intel then gcc
+                cat > "$ENVDIR/spack/spack-compiler.yaml" <<-EOF
+		packages:
+		  all:
+		    require:
+		      - one_of:
+		        - "%${NGMOENVS_COMPILER}"
+		        - "%intel"
+		        - "%gcc"
+		EOF
+                ;;
+            *)
+                # Fallback to gcc
+                cat > "$ENVDIR/spack/spack-compiler.yaml" <<-EOF
+		packages:
+		  all:
+		    require:
+		      - one_of:
+		        - "%${NGMOENVS_COMPILER}"
+		        - "%gcc"
+		EOF
+                ;;
+        esac
+        e spack config add --file "$ENVDIR/spack/spack-compiler.yaml"
 	e spack config add "packages:mpi:require:'${NGMOENVS_MPI}'"
 
         e spack config blame
