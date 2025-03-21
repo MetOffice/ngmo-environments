@@ -12,6 +12,7 @@ RUN zypper --non-interactive install \
              gzip \
              libatomic1 \
              libtool \
+             lua53 \
              make \
              openssl \
              patch \
