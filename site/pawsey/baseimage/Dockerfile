@@ -13,17 +13,21 @@ RUN zypper --non-interactive install \
              libatomic1 \
              libtool \
              lua53 \
+             lua53-luaposix \
+             lua53-luasocket \
              make \
              openssl \
              patch \
              subversion \
              tar \
+             tcl \
              time \
              unzip \
              wget \
              which \
              xz \
              xz-devel \
-             zstd
+             zstd \
+    && zypper clean
 
 ENTRYPOINT ["/ngmo/bin/entrypoint.sh"]
