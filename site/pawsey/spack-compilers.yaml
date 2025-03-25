@@ -7,7 +7,6 @@ compilers:
         f77: /opt/cray/pe/craype/2.7.23/bin/ftn
         fc:  /opt/cray/pe/craype/2.7.23/bin/ftn
       flags: {}
-      #  fflags: "-L/host/lib64"
       operating_system: opensuse15
       target: x86_64
       modules:
@@ -16,13 +15,10 @@ compilers:
         - craype-x86-milan
       environment: #{}
         append_path:
-          # LD_LIBRARY_PATH: /opt/cray/pe/lib64/cce:/usr/lib64:/host/lib64
           LD_LIBRARY_PATH: /usr/lib64:/host/lib64
       extra_rpaths:
         - /opt/cray/pe/lib64/cce
         - /opt/cray/pe/lib64
-        #- /host/lib64
-        #- /opt/cray/pe/gcc-libs
   - compiler:
       spec: gcc@12.2.0
       paths:
