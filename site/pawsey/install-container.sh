@@ -46,7 +46,7 @@ if [[ "${NGMOENVS_COMPILER%@*}" == cce ]]; then
     # Set compiler variables 
     cat >> "$LOCAL_SQUASHFS$NGMOENVS_ENVDIR/bin/activate" <<EOF
 
-# Variables specific for pawsey site
-export GCC_X86_64=/opt/cray/pe/gcc/10.3.0/snos
+# Load Cray PE
+module load PrgEnv-cray
 EOF
 fi

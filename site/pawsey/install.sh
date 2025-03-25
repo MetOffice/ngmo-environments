@@ -10,6 +10,9 @@ export SITE_DIR
 # Base environments directory
 export NGMOENVS_DEFS="$SITE_DIR/../.."
 
+module purge
+module load "pawsey"
+module load "pawseyenv/2024.05"
 module load "singularity/4.1.0-slurm"
 source "$NGMOENVS_DEFS/utils/common.sh"
 
@@ -25,8 +28,8 @@ export NGMOENVS_SPACK_MIRROR
 export CONDA_BLD_PATH
 
 # Default compiler and MPI
-: "${NGMOENVS_COMPILER:="aocc"}"
-: "${NGMOENVS_MPI:="cray-mpich@8.1.27"}"
+: "${NGMOENVS_COMPILER:="cce"}"
+: "${NGMOENVS_MPI:="cray-mpich"}"
 export NGMOENVS_COMPILER NGMOENVS_MPI
 
 # Base image
