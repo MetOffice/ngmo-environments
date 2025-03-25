@@ -1,0 +1,14 @@
+#!/bin/bash
+
+ENV_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )/..
+
+# Arguments to apptainer
+export MOUNT_ARGS=(
+    "--bind" "/opt/AMD" # AOCC compiler
+    "--bind" "/opt/rocm-5.7.1" # ROCM/clang compiler
+    "--bind" "/usr/lib64:/host/lib64" # System libraries
+)
+
+module load "singularity/4.1.0-slurm"
+
+singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/image.sif" "$@"
