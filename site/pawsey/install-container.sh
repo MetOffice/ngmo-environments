@@ -20,6 +20,7 @@ export MOUNT_ARGS=(
     "--bind" "/opt/AMD" # AOCC compiler
     "--bind" "/opt/rocm-5.7.1" # ROCM/clang compiler
     "--bind" "/usr/lib64:/host/lib64" # System libraries
+    "--bind" "/run/user/$UID" # gpgagent sockets
 )
 
 # Set up squashfs directory
@@ -48,5 +49,17 @@ if [[ "${NGMOENVS_COMPILER%@*}" == cce ]]; then
 
 # Load Cray PE
 module load PrgEnv-cray
+module load cce/18.0.1
+
+export PKG_CONFIG_PATH=/opt/cray/xpmem/2.8.4-1.0_7.23__ga37cbd9.shasta/lib64/pkgconfig:\$PKG_CONFIG_PATH
 EOF
 fi
+
+cat >> "$LOCAL_SQUASHFS$NGMOENVS_ENVDIR/bin/activate" <<EOF
+# Modules used when building the env
+module load craype-x86-milan
+module load craype-network-ofi
+module load cray-mpich/8.1.28
+module load cray-hdf5-parallel/1.12.2.9
+module load cray-netcdf-hdf5parallel/4.9.0.9
+EOF
