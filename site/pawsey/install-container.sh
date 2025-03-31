@@ -52,6 +52,7 @@ module load PrgEnv-cray
 module load cce/18.0.1
 
 export PKG_CONFIG_PATH=/opt/cray/xpmem/2.8.4-1.0_7.23__ga37cbd9.shasta/lib64/pkgconfig:\$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/cray/pe/lib64:/opt/cray/pe/lib64/cce
 EOF
 fi
 

@@ -15,7 +15,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 source "$SCRIPT_DIR/common.sh"
 
 SPACK_VERSION=0.22.2
-export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
 pushd "$NGMOENVS_BASEDIR" > /dev/null
