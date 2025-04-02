@@ -53,6 +53,9 @@ mkdir -p "$NGMOENVS_ENVDIR"/{bin,etc}
 export IMAGE="$NGMOENVS_ENVDIR/etc/image.sif"
 cp "$NGMOENVS_BASEIMAGE" "$IMAGE"
 
+# Set temp dir
+export NGMOENVS_TMPDIR=/scratch/$PAWSEY_PROJECT/$USER/tmp
+
 # Build the container
 bash "$SITE_DIR/install-container.sh"
 
