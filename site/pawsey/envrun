@@ -6,6 +6,7 @@ ENV_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/
 export MOUNT_ARGS=(
     "--bind" "/opt/AMD" # AOCC compiler
     "--bind" "/usr/lib64:/host/lib64" # System libraries
+    "--bind" "/var/spool/slurmd" # For MPI to talk to slurm
 )
 
 module load "singularity/4.1.0-slurm"
