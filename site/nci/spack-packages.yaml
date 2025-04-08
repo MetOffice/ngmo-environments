@@ -40,6 +40,14 @@ packages:
             append_path:
               # Fix up runtime environment
               LD_LIBRARY_PATH: /apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin:/system/lib64:/lib64
+      - spec: "openmpi@5.0.5%gcc"
+        prefix: "/apps/openmpi/5.0.5"
+        extra_attributes:
+          environment:
+            set:
+              # Fix up the combined intel/gcc install
+              OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/GNU
+              OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/GNU -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib
     buildable: False
   perl:
     # Getting linking errors when using shared perl libs - tries to use the system libperl.so
