@@ -49,18 +49,35 @@ if [[ "${NGMOENVS_COMPILER%@*}" == cce ]]; then
 
 # Load Cray PE
 module load PrgEnv-cray
+module load craype-x86-milan
+module load craype-network-ofi
+
 module load cce/18.0.1
+module load cray-mpich/8.1.28
+module load cray-hdf5-parallel/1.12.2.9
+module load cray-netcdf-hdf5parallel/4.9.0.9
 
 export PKG_CONFIG_PATH=/opt/cray/xpmem/2.8.4-1.0_7.23__ga37cbd9.shasta/lib64/pkgconfig:\$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/cray/pe/lib64:/opt/cray/pe/lib64/cce
 EOF
 fi
 
-cat >> "$LOCAL_SQUASHFS$NGMOENVS_ENVDIR/bin/activate" <<EOF
-# Modules used when building the env
+if [[ "${NGMOENVS_COMPILER%@*}" == gcc ]]; then
+    # Set compiler variables 
+    cat >> "$LOCAL_SQUASHFS$NGMOENVS_ENVDIR/bin/activate" <<EOF
+
+# Load Cray PE
+module load PrgEnv-gnu
 module load craype-x86-milan
 module load craype-network-ofi
-module load cray-mpich/8.1.28
-module load cray-hdf5-parallel/1.12.2.9
-module load cray-netcdf-hdf5parallel/4.9.0.9
+
+module load gcc/12.2.0
+module load cray-mpich/8.1.27
+module load cray-hdf5-parallel/1.12.2.7
+module load cray-netcdf-hdf5parallel/4.9.0.7
+
+export PKG_CONFIG_PATH=/opt/cray/xpmem/2.8.4-1.0_7.23__ga37cbd9.shasta/lib64/pkgconfig:\$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/cray/pe/lib64:/opt/cray/pe/lib64/cce
 EOF
+fi
+

@@ -13,7 +13,7 @@ compilers:
         - PrgEnv-cray
         - cce/18.0.1
         - craype-x86-milan
-      environment: #{}
+      environment:
         append_path:
           LD_LIBRARY_PATH: /usr/lib64:/host/lib64
       extra_rpaths:
@@ -33,5 +33,9 @@ compilers:
         - PrgEnv-gnu
         - gcc/12.2.0
         - craype-x86-milan
-      environment: {}
-      extra_rpaths: []
+      environment:
+        append_path:
+          LD_LIBRARY_PATH: /usr/lib64:/host/lib64
+      extra_rpaths:
+        - /opt/cray/pe/lib64/cce
+        - /opt/cray/pe/lib64

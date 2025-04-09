@@ -39,7 +39,7 @@ APP=gravity_wave
 pushd "$BASEDIR"
 
 # Clean any previous build
-# rm -rf "$BASEDIR/lfric_apps/applications/$APP/working"
+rm -rf "$BASEDIR/lfric_apps/applications/$APP/working"
 
 # Build lfric
 envrun lfric_apps/build/local_build.py --application "$APP" --core_source "$BASEDIR/lfric_core"
