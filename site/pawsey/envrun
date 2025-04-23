@@ -6,6 +6,7 @@ ENV_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/
 export MOUNT_ARGS=(
     "--bind" "/opt/AMD" # AOCC compiler
     "--bind" "/usr/lib64:/host/lib64" # System libraries
+    "--bind" "/run/user/$UID" # Sockets
 )
 
 # Used by srun on the queue
