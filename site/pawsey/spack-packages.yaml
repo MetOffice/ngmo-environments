@@ -71,6 +71,12 @@ packages:
     require:
       - "%gcc@7"
 
+  subversion:
+    buildable: False
+    externals:
+      - spec: "subversion@1.14.1"
+        prefix: /dev/null
+
   tar:
     require:
       - "%gcc"
