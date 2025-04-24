@@ -17,6 +17,9 @@ class Yaxt(AutotoolsPackage):
     depends_on('mpi')
     variant('idxtype', default='int', values=('int','long'), multi=False)
 
+    # Doesn't work for gcc
+    parallel = False
+
     def setup_build_environment(self, env):
         env.set('CC', self.spec['mpi'].mpicc)
         env.set('CXX', self.spec['mpi'].mpicxx)

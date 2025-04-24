@@ -52,6 +52,6 @@ export CONDA_BLD_PATH
 
 # Default compiler and MPI
 : "${NGMOENVS_COMPILER:="intel@2021.10.0"}"
-: "${NGMOENVS_MPI:="openmpi@4.1.5"}"
+: "${NGMOENVS_MPI:="openmpi@5.0.5"}"
 export NGMOENVS_COMPILER
 export NGMOENVS_MPI
