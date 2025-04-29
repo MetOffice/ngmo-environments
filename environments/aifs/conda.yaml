@@ -15,13 +15,13 @@ dependencies:
 
     # Only install with pip as a fallback
   - pip:
-    - anemoi_inference==0.3.3
-    - anemoi_models==0.2.1
+    - anemoi_inference==0.4.9
+    - anemoi_models==0.3.1
     - anemoi_transform==0.1.0
     - anemoi_utils==0.4.9
     - earthkit_data==0.11.4
     - earthkit_meteo==0.3.0
-    - earthkit_regrid==0.3.4
+    - earthkit_regrid==0.4.0
 
 # anemoi deps - prefer using conda to pip
   - aniso8601
@@ -61,3 +61,4 @@ dependencies:
   - tqdm
   - wcwidth
   - xarray
+  - ecmwf-api-client
