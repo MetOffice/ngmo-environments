@@ -40,7 +40,7 @@ module use "$NGMOENVS_BASEDIR/modules"
 module load "$ENVIRONMENT/$VERSION"
 module list
 
-envrun ./prepare_ICs.py opendata_aifs.yaml
+envrun ./prepare_ICs.py accessg_aifs_v1.yaml
 
 #-------------------------------------------------------------------------------
 EOF
@@ -74,7 +74,7 @@ module use "$NGMOENVS_BASEDIR/modules"
 module load "$ENVIRONMENT/$VERSION"
 module list
 
-envrun ./run_AIFS.py opendata_aifs.yaml
+envrun ./run_AIFS.py accessg_aifs_v1.yaml
 
 #-------------------------------------------------------------------------------
 EOF
@@ -98,13 +98,11 @@ qsub << EOF
 
 # Load the environment
 module purge
-# dgxa100 needs intel-mkl module for gpus to be available for pytorch
-module load intel-mkl/2023.2.0
 module use "$NGMOENVS_BASEDIR/modules"
 module load "$ENVIRONMENT/$VERSION"
 module list
 
-envrun ./run_AIFS.py opendata_aifs.yaml
+envrun ./run_AIFS.py accessg_aifs_v1.yaml
 
 #-------------------------------------------------------------------------------
 EOF
@@ -138,7 +136,7 @@ module use "$NGMOENVS_BASEDIR/modules"
 module load "$ENVIRONMENT/$VERSION"
 module list
 
-envrun ./postprocess_forecast.py opendata_aifs.yaml
+envrun ./postprocess_forecast.py accessg_aifs_v1.yaml
 
 #-------------------------------------------------------------------------------
 EOF
