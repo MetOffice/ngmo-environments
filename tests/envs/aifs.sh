@@ -22,8 +22,8 @@ pushd "$BASEDIR/aifs/aifs-single"
 qsub << EOF
 #-------------------------------------------------------------------------------
 #PBS -P dx2
-#PBS -q copyq
-#PBS -l walltime=00:10:00,mem=10GB,ncpus=1
+#PBS -q normal
+#PBS -l walltime=00:40:00,mem=192GB,ncpus=16
 #PBS -l jobfs=10GB
 #PBS -l storage=gdata/dx2+scratch/dx2+gdata/rt52+gdata/dk92+gdata/ux62+gdata/wr45
 #PBS -l wd
