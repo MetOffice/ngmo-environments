@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# This script gets run *outside* the container
+# 
+# Symlink the script to the name of a command inside the container (e.g.
+# 'python'), the link will then run that command from the container
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )"
+
+COMMAND="$(basename $0)"
+
+# Remove the wrapper command from PATH
+NGMOENVS_CLEAN_PATH=$(tr ':' '\n' <<< "$PATH" | xargs readlink -f | uniq | grep -v $(readlink -f "$SCRIPT_DIR") | paste -sd ':')
+export PATH=$NGMOENVS_CLEAN_PATH
+
+"$SCRIPT_DIR/envrun" "$COMMAND" "$@"
