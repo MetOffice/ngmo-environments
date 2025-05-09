@@ -113,7 +113,7 @@ if [[ -f "$ENVDEFS/spack.yaml" ]]; then
         e spack config blame
 
 	# Solve dependencies
-	e spack concretize --fresh
+	e spack --debug concretize --fresh
 
 	# Install everything
         if [[ ! -v NGMOENVS_DOWNLOAD_ONLY ]]; then
@@ -141,7 +141,12 @@ export NGMOENVS_ENVIRONMENT="$ENVIRONMENT"
 export NGMOENVS_ENVDIR="$ENVDIR"
 export NGMOENVS_COMPILER="$NGMOENVS_COMPILER"
 export NGMOENVS_MPI="$NGMOENVS_MPI"
+EOF
 
+# Set compiler variables
+cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
+
+cat >> "$ENVDIR/bin/activate" <<EOF
 # If we have bootstrapped, activate the bootstrap
 if [[ -f "$NGMOENVS_BASEDIR/bin/activate" ]]; then
     source "$NGMOENVS_BASEDIR/bin/activate"
@@ -150,6 +155,7 @@ fi
 # If this env has a spack environment, activate it
 if [[ -d "\$NGMOENVS_ENVDIR/spack" ]]; then
     spack env activate "\$NGMOENVS_ENVDIR/spack"
+    export LD_LIBRARY_PATH="\$SPACK_ENV/.spack-env/view/lib:\$LD_LIBRARY_PATH"
     export CPATH="\$SPACK_ENV/.spack-env/view/include:\$CPATH"
 fi
 
@@ -162,9 +168,7 @@ if [[ -f "\$NGMOENVS_ENVDIR/etc/env.activate.sh" ]]; then
 	source "\$NGMOENVS_ENVDIR/etc/env.activate.sh"
 fi
 EOF
-
-# Set compiler variables
-cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
+e cat "$ENVDIR/bin/activate"
 
 # Run script
 cat > "$ENVDIR/bin/envrun" <<EOF

@@ -17,6 +17,8 @@ class Yaxt(AutotoolsPackage):
     depends_on('mpi')
     variant('idxtype', default='int', values=('int','long'), multi=False)
 
+    parallel = False
+
     def setup_build_environment(self, env):
         env.set('CC', self.spec['mpi'].mpicc)
         env.set('CXX', self.spec['mpi'].mpicxx)
@@ -29,6 +31,10 @@ class Yaxt(AutotoolsPackage):
         if 'intel-oneapi-mpi' in self.spec:
             env.prepend_path('PATH', self.spec['intel-oneapi-mpi'].package.component_prefix.bin)
             env.unset('I_MPI_ROOT')
+
+        if '%aocc' in self.spec:
+            # Pretend to be gfortran
+            env.set('FCFLAGS', '-g -DpgiFortran')
 
     def configure_args(self):
         options = []

@@ -24,3 +24,5 @@ error() {
 : "${VERSION="$(git symbolic-ref --short HEAD)"}"
 export VERSION
 
+# Don't consider ~/.spack
+export SPACK_DISABLE_LOCAL_CONFIG=1

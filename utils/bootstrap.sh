@@ -15,7 +15,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 source "$SCRIPT_DIR/common.sh"
 
 SPACK_VERSION=0.22.2
-export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
 pushd "$NGMOENVS_BASEDIR" > /dev/null
@@ -43,6 +42,11 @@ source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 e spack compiler find --scope site /usr/bin
 e spack external find --scope site --path /usr/bin gcc
 e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
+
+if [[ -v SPACK_BOOTSTRAP_ROOT ]]; then
+    e spack bootstrap root --scope site "$SPACK_BOOTSTRAP_ROOT"
+fi
+e spack bootstrap now
 
 echo "Default Compiler and MPI:"
 e spack spec --format '{name}@{version}%{compiler.name}@{compiler.version}' mpi

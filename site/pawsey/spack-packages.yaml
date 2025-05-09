@@ -1,0 +1,99 @@
+packages:
+  gcc:
+    buildable: False
+  cce:
+    buildable: False
+  
+  cray-mpich:
+    buildable: False
+    externals:
+      - spec:   "cray-mpich@8.1.28 %cce@18"
+        prefix: "/opt/cray/pe/mpich/8.1.28/ofi/crayclang/17.0"
+        modules: 
+          - cray-mpich/8.1.28
+        extra_attributes:
+          environment:
+            append_path:
+              LD_LIBRARY_PATH: /opt/cray/libfabric/1.15.2.0/lib64
+      - spec:   "cray-mpich@8.1.27 %gcc"
+        prefix: "/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1"
+        modules: 
+          - cray-mpich/8.1.27
+        extra_attributes:
+          environment:
+            append_path:
+              LD_LIBRARY_PATH: /opt/cray/libfabric/1.15.2.0/lib64
+
+  netcdf-c:
+    buildable: False
+    require: "+mpi"
+    externals:
+      - spec:   "netcdf-c@4.9.0 +mpi +parallel-netcdf %cce"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0
+      - spec:   "netcdf-c@4.9.0 +mpi +parallel-netcdf %gcc"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.7/gnu/9.1
+
+  netcdf-fortran:
+    buildable: False
+    externals:
+      - spec:   "netcdf-fortran@4.5.3 %cce"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0
+      - spec:   "netcdf-fortran@4.5.3 %gcc"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.7/gnu/9.1
+
+  netcdf-cxx4:
+    buildable: False
+    externals:
+      - spec:   "netcdf-cxx4@4.3.1 %cce"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.9/crayclang/17.0
+      - spec:   "netcdf-cxx4@4.3.1 %gcc"
+        prefix: /opt/cray/pe/netcdf-hdf5parallel/4.9.0.7/gnu/9.1
+
+  hdf5:
+    buildable: False
+    externals:
+      - spec:   "hdf5@1.12.2 +fortran +mpi %cce"
+        prefix: /opt/cray/pe/hdf5-parallel/1.12.2.9/crayclang/17.0
+      - spec:   "hdf5@1.12.2 +fortran +mpi %gcc"
+        prefix: /opt/cray/pe/hdf5-parallel/1.12.2.7/gnu/9.1
+
+  # Errors building with Cray
+  papi:
+    require:
+      - "%gcc"
+
+  libelf:
+    require:
+      - "%gcc"
+
+  serf:
+    # Scons doesn't play with Cray environments
+    require:
+      - "%gcc@7"
+
+  subversion:
+    buildable: False
+    externals:
+      - spec: "subversion@1.14.1"
+        prefix: /dev/null
+
+  tar:
+    require:
+      - "%gcc"
+
+  libxml2:
+    require:
+      - "%gcc"
+
+  ncurses:
+    require:
+      - "%gcc"
+
+  libxcrypt:
+    require:
+      - "%gcc"
+
+  zlib-ng:
+    require:
+      - "%gcc"
+

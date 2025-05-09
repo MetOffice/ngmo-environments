@@ -35,10 +35,11 @@ packages:
           # If the default compiler is oneapi use intel for xios
           # Blitz compiler must match xios
           - one_of:
-              - "%intel ^netcdf-c%oneapi ^blitz%intel"
-              - "%intel ^netcdf-c%intel  ^blitz%intel"
-              - "%gcc   ^netcdf-c%gcc    ^blitz%gcc"
-              - "%nvhpc ^netcdf-c%nvhpc  ^blitz%nvhpc"
+              - "%intel ^glibc%oneapi ^blitz%intel"
+              - "%intel ^glibc%intel  ^blitz%intel"
+              - "%gcc   ^glibc%gcc    ^blitz%gcc"
+              - "%nvhpc ^glibc%nvhpc  ^blitz%nvhpc"
+              - "%cce   ^glibc%cce    ^blitz%cce"
   blitz:
       # Remove the compiler constraint so it can satisfy XIOS
       require:
@@ -47,3 +48,4 @@ packages:
               - "%oneapi"
               - "%gcc"
               - "%nvhpc"
+              - "%cce"

@@ -58,6 +58,12 @@ network access and a build stage without network access
 
 See [site/nci/README.md](site/nci/README.md)
 
+### Pawsey
+
+Build the environment at Pawsey Setonix
+
+See [site/pawsey/README.md](site/pawsey/README.md)
+
 ## Environments
 
 ### LFRic

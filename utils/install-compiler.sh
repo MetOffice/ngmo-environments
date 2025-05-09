@@ -42,9 +42,9 @@ fi
 
 mkdir -p "$ENVDIR/etc"
 cat > "$ENVDIR/etc/compiler.sh" <<EOF
-export CC="$(sed -n -e 's/^\s*cc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
-export FC="$(sed -n -e 's/^\s*fc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
-export CXX="$(sed -n -e 's/^\s*cxx\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info")"
+export CC="$(sed -n -e 's/^\s*cc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info" | tail -n1)"
+export FC="$(sed -n -e 's/^\s*fc\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info" | tail -n1)"
+export CXX="$(sed -n -e 's/^\s*cxx\s*=\s*\(\S\+\)/\1/p' "$NGMOENVS_TMPDIR/compiler_info" | tail -n1)"
 
 # Compilers for MPI
 export OMPI_CC=\$CC
