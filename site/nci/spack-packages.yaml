@@ -12,6 +12,7 @@ packages:
         extra_attributes:
           environment:
             set:
+              OMPI_PRTERUN: /apps/prrte/3.0.6/bin/prterun
               # Fix up the combined intel/gcc install
               OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/Intel
               OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/Intel -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib -L/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin -Wl,-rpath=/apps/intel-oneapi/compiler/2023.2.0/linux/compiler/lib/intel64_lin
@@ -23,6 +24,7 @@ packages:
         extra_attributes:
           environment:
             set:
+              OMPI_PRTERUN: /apps/prrte/3.0.6/bin/prterun
               # Fix up the combined intel/gcc install
               OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/Intel
               OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/Intel -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib
@@ -31,6 +33,7 @@ packages:
         extra_attributes:
           environment:
             set:
+              OMPI_PRTERUN: /apps/prrte/3.0.6/bin/prterun
               # Fix up the combined intel/gcc install
               OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/GNU
               OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/GNU -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib
