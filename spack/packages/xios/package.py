@@ -3,135 +3,81 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+from spack.pkg.builtin.xios import Xios as BaseXios
+from llnl.util import tty
 import os
 
-from spack.package import *
-from spack.pkg.builtin.boost import Boost
 
+class Xios(BaseXios):
+    """Extension of builtin XIOS package."""
 
-class Xios(Package):
-    """XML-IO-SERVER library for IO management of climate models."""
+    # LFRic requires the following:
+    # https://forge.ipsl.fr/ioserver/svan/XIOS/trunk revision=2252
+    # https://forge.ipsl.fr/ioserver/browser/XIOS2
 
-    homepage = "https://forge.ipsl.fr/ioserver/wiki"
+    version("develop", svn="https://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
+    version("2252", revision=2252, svn="https://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
+    version("2663", revision=2663, svn="https://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
+    version("2701", revision=2701, svn="https://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
 
-    version("develop", svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
-    version("3.0.b2611", revision=2611, svn="http://forge.ipsl.fr/ioserver/svn/XIOS3/branches/xios-3.0-beta")
-    version("2.5.2629", revision=2629, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
-    version("2.5.2252", revision=2252, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/trunk")
-    version(
-        "2.5", revision=1860, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.5"
-    )
-    version(
-        "2.0", revision=1627, svn="http://forge.ipsl.fr/ioserver/svn/XIOS2/branches/xios-2.0"
-    )
-    version(
-        "1.0", revision=910, svn="http://forge.ipsl.fr/ioserver/svn/XIOS/branchs/xios-1.0"
-    )
+    variant("oasis", default=False, description="enable OASIS support")
 
-    variant(
-        "mode",
-        values=("debug", "dev", "prod"),
-        default="dev",
-        description="Build for debugging, development or production",
-    )
-
-    variant("lfric", default=False, description="Add patch for LFRic grid coordinates")
-    variant("nemo", default=False, description="Add patches to support NEMO")
-
-    # NOTE: oasis coupler could be supported with a variant
-
-    # Use spack versions of blitz and netcdf-c for compatibility
-    # with recent compilers and optimised platform libraries:
-    patch("bld_extern_1.0.patch", when="@:1.0")
-    patch("lfric_xios3.patch", when="@2.5.2629")
-    patch("lfric_xios3.patch", when="@3.0")
-
-    # Workaround bug #17782 in llvm, where reading a double
-    # followed by a character is broken (e.g. duration '1d'):
-    patch("llvm_bug_17782.patch", when="@1.1: %apple-clang")
-    patch("llvm_bug_17782.patch", when="@1.1: %clang")
-
-    # Fix for recent gcc
-    patch("gcc_remap.patch", when="@2.5.2252")
-
-    # NEMO-specific patches from https://github.com/hiker/xios-2252/tree/master/patches
-    patch("nemo/p1_add_refname", when="+nemo")
-    patch("nemo/p2_fix_multi_file_exception", when="+nemo")
-    patch("nemo/p5_fix_inconsistent_checks", when="+nemo")
-    patch("nemo/p7_fix_crash_in_nc4_data_output", when="+nemo")
-
-    # Fix for lfric to avoid run time segmentation fault reported at 'CMesh::createMeshEpsilon()' due to CMesh::createHashes()
-    patch("mesh_cpp.patch", when="@2.5.2252 +lfric")
-    patch("lfric_xios2.2629.patch", when="@2.5.2629")
-
-    depends_on("netcdf-c+mpi")
-    depends_on("netcdf-fortran")
-    depends_on("hdf5+mpi")
-    depends_on("mpi")
-
-    # TODO: replace this with an explicit list of components of Boost,
-    # for instance depends_on('boost +filesystem')
-    # See https://github.com/spack/spack/pull/22303 for reference
-    depends_on(Boost.with_default_variants)
     depends_on("blitz")
-    depends_on("perl", type="build")
-    depends_on("perl-uri", type="build")
-    depends_on("gmake", type="build")
+    depends_on("subversion", type="build")
+    depends_on("oasis", type="build", when="+oasis")
 
-    @when("%clang")
     def patch(self):
-        self.patch_llvm()
 
-    @when("%apple-clang")
-    def patch(self):
-        self.patch_llvm()
+        """Patch GCC 12 header problems.
 
-    def patch_llvm(self):
-        """Fix type references that are ambiguous for clang."""
-        for dirpath, dirnames, filenames in os.walk("src"):
-            for filename in filenames:
-                filepath = os.path.join(dirpath, filename)
-                # Use boost definition of type shared_ptr:
-                filter_file(r"([^:/])shared_ptr<", r"\1boost::shared_ptr<", filepath)
-                # Use type long for position in output stream:
+        With GCC 12, some lesser-used C++ header files are no longer
+        included by default.  This causes XIOS to fail to build and
+        the following patches the missing array header files back in.
+
+        These changes were adopted by XIOS at r2701, so are only applicable
+        to older revisions of XIOS.
+        """
+
+        if (self.spec.satisfies("%gcc@12:") and
+                self.spec.satisfies("@2252:2700")):
+            # Only patch for GCC 12 and above and XIOS r2252 : r2700
+            # Note that the replacements are not r-strings because they
+            # need to contain newlines
+            filter_file(
+                r"^(#include\s*<vector>\s*)$",
+                "#include <array>\n\\1",
+                "src/xios_spl.hpp",
+                backup=True,
+            )
+
+            filter_file(
+                r"^(#include\s*<list>\s*)$",
+                "#include <array>\n\\1",
+                "extern/remap/src/elt.hpp",
+                backup=True,
+            )
+
+            if self.spec.satisfies("@2663:"):
+                # Needed at 2663 with GCC 12
                 filter_file(
-                    r"oss.tellp\(\) *- *startPos", r"(long)oss.tellp() - startPos", filepath
+                    r"^(#include\s*<limits.h>\s*)$",
+                    "#include <cfloat>\n\\1",
+                    "src/io/nc4_data_output.cpp",
+                    backup=True,
                 )
 
-    def xios_env(self):
-        file = join_path("arch", "arch-SPACK.env")
-        touch(file)
-
-    def xios_path(self):
-        file = join_path("arch", "arch-SPACK.path")
-        spec = self.spec
-        paths = {
-            "NETCDF_INC_DIR": spec["netcdf-c"].prefix.include,
-            "NETCDF_LIB_DIR": spec["netcdf-c"].prefix.lib,
-            "HDF5_INC_DIR": spec["hdf5"].prefix.include,
-            "HDF5_LIB_DIR": spec["hdf5"].prefix.lib,
-        }
-        text = r"""
-NETCDF_INCDIR="-I {NETCDF_INC_DIR}"
-NETCDF_LIBDIR="-L {NETCDF_LIB_DIR}"
-NETCDF_LIB="-lnetcdff -lnetcdf"
-
-MPI_INCDIR=""
-MPI_LIBDIR=""
-MPI_LIB=""
-
-HDF5_INCDIR="-I {HDF5_INC_DIR}"
-HDF5_LIBDIR="-L {HDF5_LIB_DIR}"
-HDF5_LIB="-lhdf5_hl -lhdf5"
-
-OASIS_INCDIR=""
-OASIS_LIBDIR=""
-OASIS_LIB=""
-"""
-        with open(file, "w") as f:
-            f.write(text.format(**paths))
+        return
 
     def xios_fcm(self):
+
+        """Create an fcm configuration for the current system.
+
+        Override the method in the base package to create a modified
+        fcm configuration for the latest releases of XIOS.  Fixes
+        include the addition of the -lstdc++ flag and a flag to
+        support long source lines in gfortran.
+        """
+
         file = join_path("arch", "arch-SPACK.fcm")
         spec = self.spec
         param = dict()
@@ -148,31 +94,34 @@ OASIS_LIB=""
         else:
             param["LIBCXX"] = "-lstdc++"
 
-        if spec.satisfies('%gcc'):
-            param['BACKTRACE'] = '-fbacktrace'
+        if spec.satisfies("%gcc"):
+            # Allow long lines in gfortran
+            param["FFLAGS"] = "-ffree-line-length-none"
         else:
-            param['BACKTRACE'] = '-traceback'
+            param["FFLAGS"] = ""
 
-        if any(map(spec.satisfies, ("%gcc", "%intel", "%apple-clang", "%clang", "%fj", "%oneapi"))):
+        # Note: removed "%intel", "%apple-clang", "%clang", "%fj" from
+        # the list on the assumption that the flags will need changing
+        # to work with these compilers
+        if any(map(spec.satisfies, ("%gcc", "%cce"))):
             text = r"""
 %CCOMPILER      {MPICXX}
 %FCOMPILER      {MPIFC}
 %LINKER         {MPIFC}
 
 %BASE_CFLAGS    -ansi -w -D_GLIBCXX_USE_CXX11_ABI=0 \
-                -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR} \
-                -std=gnu++11
+                -I{BOOST_INC_DIR} -std=c++11
 %PROD_CFLAGS    -O3 -DBOOST_DISABLE_ASSERTS
-%DEV_CFLAGS     -g {BACKTRACE} -O2
-%DEBUG_CFLAGS   -g {BACKTRACE}
+%DEV_CFLAGS     -g -O2
+%DEBUG_CFLAGS   -g
 
-%BASE_FFLAGS    -D__NONE__ -ffree-line-length-none
+%BASE_FFLAGS    -D__NONE__ {FFLAGS}
 %PROD_FFLAGS    -O3
-%DEV_FFLAGS     -g {BACKTRACE} -O2
-%DEBUG_FFLAGS   -g {BACKTRACE}
+%DEV_FFLAGS     -g -O2
+%DEBUG_FFLAGS   -g
 
 %BASE_INC       -D__NONE__
-%BASE_LD        -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz {LIBCXX}
+%BASE_LD        -L{BOOST_LIB_DIR} {LIBCXX}
 
 %CPP            {CC} -E
 %FPP            {CC} -E -P -x c
@@ -180,47 +129,16 @@ OASIS_LIB=""
 """.format(
                 **param
             )
-        elif spec.satisfies("%cce"):
-            # In the CC compiler prior to cce/8.3.7,
-            # optimisation must be reduced to avoid a bug,
-            # as reported by Mike Rezny at the UK Met Office:
-            if spec.satisfies("%cce@8.3.7:"):
-                param.update({"CC_OPT_DEV": "-O2", "CC_OPT_PROD": "-O3"})
-            else:
-                param.update({"CC_OPT_DEV": "-O1", "CC_OPT_PROD": "-O1"})
 
-            text = r"""
-%CCOMPILER      {MPICXX}
-%FCOMPILER      {MPIFC}
-%LINKER         {MPIFC}
-
-%BASE_CFLAGS    -DMPICH_SKIP_MPICXX -h msglevel_4 -h zero -h gnu \
-                -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR}
-%PROD_CFLAGS    {CC_OPT_PROD} -DBOOST_DISABLE_ASSERTS
-%DEV_CFLAGS     {CC_OPT_DEV}
-%DEBUG_CFLAGS   -g
-
-%BASE_FFLAGS    -em -m 4 -e0 -eZ
-%PROD_FFLAGS    -O3
-%DEV_FFLAGS     -G2
-%DEBUG_FFLAGS   -g
-
-%BASE_INC       -D__NONE__
-%BASE_LD        -D__NONE__ -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz
-
-%CPP            cpp
-%FPP            cpp -P -CC
-%MAKE           gmake
-""".format(
-                **param
-            )
         else:
             raise InstallError("Unsupported compiler.")
-        
+
         with open(file, "w") as f:
             f.write(text)
 
     def install(self, spec, prefix):
+        """Replacement install method."""
+
         env["CC"] = spec["mpi"].mpicc
         env["CXX"] = spec["mpi"].mpicxx
         env["F77"] = spec["mpi"].mpif77
@@ -233,11 +151,28 @@ OASIS_LIB=""
             "SPACK",
             "--netcdf_lib",
             "netcdf4_par",
-            "--use_extern_boost",
-            "--use_extern_blitz",
             "--job",
-            str(1), # Errors in oneapi parallel builds when > 1
+            str(make_jobs),
         ]
+
+        if "%cce" in self.spec:
+            # Parallel builds do not work with CCE, so disable them
+            tty.warn("restricted to serial builds with Cray compiler")
+            options[-1] = "1"
+
+        if "+oasis" in self.spec:
+            # Add OASIS build flag
+            options += ["--use_oasis", "oasis3_mct"]
+
+            # Save OASIS flags for later use
+            self.oasis_incdir = join_path(self.spec["oasis"].prefix, "include")
+            self.oasis_libdir = join_path(self.spec["oasis"].prefix, "lib")
+            self.oasis_lflags = "-lpsmile.MPI1 -lscrip -lmct -lmpeu"
+
+        else:
+            self.oasis_incdir = None
+            self.oasis_libdir = None
+            self.oasis_lflags = None
 
         self.xios_env()
         self.xios_path()
@@ -253,15 +188,72 @@ OASIS_LIB=""
         install_tree("etc", spec.prefix.etc)
         install_tree("cfg", spec.prefix.cfg)
 
+    def xios_env(self):
+        """Create XIOS environment file.
+
+        The parent method creates an empty file.  Overload this to add
+        OASIS environment variables if necessary.
+        """
+
+        # This creates an empty environment file
+        super().xios_env()
+
+        if "-oasis" in self.spec:
+            # Do nothing if OASIS is not enabled
+            return
+
+        # Add OASIS compiler settings to the env file
+        with open(join_path("arch", "arch-SPACK.env"), "w") as f:
+            print(f'export OASIS_INCDIR="-I{self.oasis_incdir}"', file=f)
+            print(f'export OASIS_LIBDIR="-L{self.oasis_libdir}"', file=f)
+            print(f'export OASIS_LIB="{self.oasis_lflags}"', file=f)
+
+    def xios_path(self):
+        """Create XIOS path file.
+
+        The parent method sets a number of variable but leaves the
+        OASIS settings empty.  Overload this use filter_file with a
+        custom replacement function to set the various OASIS flags
+        based on attribute values set in install().
+        """
+
+        # This creates the file with its default values
+        super().xios_path()
+
+        if "-oasis" in self.spec:
+            # Do nothing if OASIS is not enabled
+            return
+
+        def replacer(match):
+            """Add the correct OASIS flags"""
+            if match.group(1).endswith("INCDIR"):
+                setting = f"-I{self.oasis_incdir}"
+            elif match.group(1).endswith("LIBDIR"):
+                setting = f"-L{self.oasis_libdir}"
+            elif match.group(1).endswith("LIB"):
+                setting = self.oasis_lflags
+            return f'{match.group(1)}="{setting}"'
+
+        # Use spack's filter_file with a custom replacement function
+        # to change all the OASIS flags in a single operation
+        filter_file(
+            r"^\s*(OASIS_[^=]+)=.*",
+            replacer,
+            join_path("arch", "arch-SPACK.path"),
+            backup=True,
+        )
+
     @run_after("install")
-    @on_package_attributes(run_tests=True)
-    def check_build(self):
-        mpirun = os.getenv("MPIRUN")
-        if mpirun is None:
-            mpirun = "mpiexec"
-        mpiexec = Executable(mpirun)
-        with working_dir("inputs"):
-            try:
-                mpiexec("-n", "2", join_path("..", "bin", "test_client.exe"))
-            except Exception:
-                raise InstallError("Test failed; defining MPIRUN variable may help.")
+    def remove_fcm_env(self):
+        """Remove broken fcm_env.ksh symlink."""
+        target = os.path.join(self.spec.prefix.bin, "fcm_env.ksh")
+        if os.path.islink(target):
+            os.unlink(target)
+
+    def setup_run_environment(self, env):
+
+        """Setup custom variables in the generated module file"""
+
+        env.prepend_path("FFLAGS", "-I" + self.spec.prefix.include, " ")
+        env.prepend_path("CPPFLAGS", "-I" + self.spec.prefix.include, " ")
+        env.prepend_path("LDFLAGS", "-L" + self.spec.prefix.lib + " -Wl,-rpath=" + self.spec.prefix.lib, " ")
