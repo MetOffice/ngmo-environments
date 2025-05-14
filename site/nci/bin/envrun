@@ -18,16 +18,16 @@ fi
 # Local FCM keyword file
 export FCM_KEYWORDS=/g/data/hr22/apps/etc/fcm/mosrs/keyword.cfg
 
-# Add central OpenMPI to cflags
-export FFLAGS="-I /apps/openmpi/4.1.5/include/Intel ${FFLAGS:-}"
-
 # Pass through LD_LIBRARY_PATH
-export SINGULARITYENV_LD_LIBRARY_PATH="/.singularity.d/libs:${LD_LIBRARY_PATH:-}"
+export SINGULARITYENV_LD_LIBRARY_PATH="/.singularity.d/libs:${LD_LIBRARY_PATH:-}:/system/lib64"
 
 # Required for oneapi sanitizers to show addresses
 export SINGULARITYENV_APPEND_PATH="$PATH:/apps/intel-tools/intel-compiler-llvm/2025.0.4/bin/compiler"
 
 # Setup MPI to launch on other nodes inside the container by using an envrun-external link
 export OMPI_MCA_orte_launch_agent="$ENV_DIR/bin/orted"
+
+# Keep MPI temp data off of shared filesystems
+export OMPI_MCA_orte_tmpdir_base=/tmp
 
 /opt/singularity/bin/singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/apptainer.sif" "$@"

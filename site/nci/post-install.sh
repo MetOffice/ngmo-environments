@@ -39,18 +39,18 @@ mkdir -p "$INSTALL_ENVDIR/bin"
 
 # If installing through a container use the site-specific 'envrun',
 # if not then the default will get installed
-for script in envrun envrun-wrapped; do
-    if ! [[ -f "$INSTALL_ENVDIR/bin/$script" ]]; then
-        cp "$SITE_DIR/$script" "$INSTALL_ENVDIR/bin"
-        chmod +x "$INSTALL_ENVDIR/bin/$script"
-    fi
+for script in "$SITE_DIR/bin"/*; do
+    cp "$script" "$INSTALL_ENVDIR/bin"
 done
 
 # Old launcher name
 ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
 
+# Make MPI ranks on other nodes run inside the container
+ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/orted"
+
 # Make rose commands run inside the container
-ln -sf "envrun-wrapped" "$INSTALL_ENVDIR/bin/rose"
+ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/rose"
 
 cat <<EOF
 
