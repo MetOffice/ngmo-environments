@@ -27,7 +27,7 @@ class Xios(BaseXios):
     depends_on("oasis", type="build", when="+oasis")
 
     # Fixup hashing
-    patch("lfric_xios2.2629.patch" when="%intel")
+    patch("lfric_xios2.2629.patch", when="%intel")
 
     def patch(self):
 

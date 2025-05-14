@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -d /.singularity ]]; then
+if [[ -d /.singularity.d ]]; then
     # Already in the container
     exec "$@"
 fi

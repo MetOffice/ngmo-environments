@@ -29,8 +29,8 @@ proc ModulesHelp {} {
 
 set name_upcase [string toupper [string map {- _} \$name]]
 
-setenv \${name_upcase}_ROOT "\$prefix"
-setenv \${name_upcase}_VERSION "\$version"
+setenv \${name_upcase}_NGMOENV_ROOT "\$prefix"
+setenv \${name_upcase}_NGMOENV_VERSION "\$version"
 
 prepend-path PATH "\$prefix/bin"
 EOF
