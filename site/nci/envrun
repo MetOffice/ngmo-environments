@@ -19,4 +19,7 @@ export SINGULARITYENV_LD_LIBRARY_PATH="/.singularity.d/libs:${LD_LIBRARY_PATH:-}
 # Required for oneapi sanitizers to show addresses
 export SINGULARITYENV_APPEND_PATH="/apps/intel-tools/intel-compiler-llvm/2025.0.4/bin/compiler"
 
+# Keep MPI temp data off of shared filesystems
+export OMPI_MCA_orte_tmpdir_base=/tmp
+
 /opt/singularity/bin/singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/apptainer.sif" "$@"

@@ -26,6 +26,9 @@ class Xios(BaseXios):
     depends_on("subversion", type="build")
     depends_on("oasis", type="build", when="+oasis")
 
+    #patch("mesh_cpp.patch", when="%intel")
+    patch("lfric_xios2.2629.patch", when="%intel")
+
     def patch(self):
 
         """Patch GCC 12 header problems.
@@ -97,31 +100,33 @@ class Xios(BaseXios):
         if spec.satisfies("%gcc"):
             # Allow long lines in gfortran
             param["FFLAGS"] = "-ffree-line-length-none"
+            param['BACKTRACE'] = '-fbacktrace'
         else:
             param["FFLAGS"] = ""
+            param['BACKTRACE'] = '-traceback'
 
         # Note: removed "%intel", "%apple-clang", "%clang", "%fj" from
         # the list on the assumption that the flags will need changing
         # to work with these compilers
-        if any(map(spec.satisfies, ("%gcc", "%cce"))):
+        if any(map(spec.satisfies, ("%gcc", "%cce", "%intel", "%oneapi"))):
             text = r"""
 %CCOMPILER      {MPICXX}
 %FCOMPILER      {MPIFC}
 %LINKER         {MPIFC}
 
 %BASE_CFLAGS    -ansi -w -D_GLIBCXX_USE_CXX11_ABI=0 \
-                -I{BOOST_INC_DIR} -std=c++11
+                -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR} -std=c++11
 %PROD_CFLAGS    -O3 -DBOOST_DISABLE_ASSERTS
 %DEV_CFLAGS     -g -O2
 %DEBUG_CFLAGS   -g
 
 %BASE_FFLAGS    -D__NONE__ {FFLAGS}
 %PROD_FFLAGS    -O3
-%DEV_FFLAGS     -g -O2
-%DEBUG_FFLAGS   -g
+%DEV_FFLAGS     -g {BACKTRACE} -O2
+%DEBUG_FFLAGS   -g {BACKTRACE}
 
 %BASE_INC       -D__NONE__
-%BASE_LD        -L{BOOST_LIB_DIR} {LIBCXX}
+%BASE_LD        -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz {LIBCXX}
 
 %CPP            {CC} -E
 %FPP            {CC} -E -P -x c
@@ -151,6 +156,8 @@ class Xios(BaseXios):
             "SPACK",
             "--netcdf_lib",
             "netcdf4_par",
+            "--use_extern_boost",
+            "--use_extern_blitz",
             "--job",
             str(make_jobs),
         ]
