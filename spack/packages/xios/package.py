@@ -26,8 +26,8 @@ class Xios(BaseXios):
     depends_on("subversion", type="build")
     depends_on("oasis", type="build", when="+oasis")
 
-    #patch("mesh_cpp.patch", when="%intel")
-    patch("lfric_xios2.2629.patch", when="%intel")
+    # Fixup hashing
+    patch("lfric_xios2.2629.patch" when="%intel")
 
     def patch(self):
 
