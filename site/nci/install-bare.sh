@@ -30,9 +30,6 @@ cat >> "$NGMOENVS_ENVDIR/bin/activate" <<EOF
 
 # Local FCM keyword file
 export FCM_KEYWORDS=/g/data/hr22/apps/etc/fcm/mosrs/keyword.cfg
-
-# Add central OpenMPI to cflags
-export FFLAGS="-I /apps/openmpi/4.1.5/include/Intel \${FFLAGS:-}"
 EOF
 
 # shellcheck source=site/nci/post-install.sh
