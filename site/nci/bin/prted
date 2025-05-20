@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ENV_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /dev/null && pwd )/..
+
+# Run the remote MPI launcher from inside the container
+"$ENV_DIR/bin/envrun" "/apps/prrte/3.0.6/bin/prted" "$@"
