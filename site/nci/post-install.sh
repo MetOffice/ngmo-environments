@@ -46,9 +46,6 @@ done
 # Old launcher name
 ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
 
-# Make MPI ranks on other nodes run inside the container
-ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/orted"
-
 # Make rose commands run inside the container
 ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/rose"
 
