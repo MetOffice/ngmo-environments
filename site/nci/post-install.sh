@@ -29,8 +29,8 @@ proc ModulesHelp {} {
 
 set name_upcase [string toupper [string map {- _} \$name]]
 
-setenv \${name_upcase}_ROOT "\$prefix"
-setenv \${name_upcase}_VERSION "\$version"
+setenv \${name_upcase}_NGMOENV_ROOT "\$prefix"
+setenv \${name_upcase}_NGMOENV_VERSION "\$version"
 
 prepend-path PATH "\$prefix/bin"
 EOF
@@ -39,18 +39,15 @@ mkdir -p "$INSTALL_ENVDIR/bin"
 
 # If installing through a container use the site-specific 'envrun',
 # if not then the default will get installed
-for script in envrun envrun-wrapped; do
-    if ! [[ -f "$INSTALL_ENVDIR/bin/$script" ]]; then
-        cp "$SITE_DIR/$script" "$INSTALL_ENVDIR/bin"
-        chmod +x "$INSTALL_ENVDIR/bin/$script"
-    fi
+for script in "$SITE_DIR/bin"/*; do
+    cp "$script" "$INSTALL_ENVDIR/bin"
 done
 
 # Old launcher name
 ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
 
 # Make rose commands run inside the container
-ln -sf "envrun-wrapped" "$INSTALL_ENVDIR/bin/rose"
+ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/rose"
 
 cat <<EOF
 
