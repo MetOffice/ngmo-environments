@@ -5,13 +5,14 @@
 
 from spack.package import PythonPackage
 from llnl.util.filesystem import install_tree
+import os
 
 
 class RosePicker(PythonPackage):
 
     """rose_picker - utility for LFRIC."""
 
-    homepage = "https://code.metoffice.gov.uk/svn/lfric/GPL-utilities"
+    homepage = os.environ.get("NGMOENVS_MOSRS_MIRROR", "https://code.metoffice.gov.uk/svn") +"/lfric/GPL-utilities"
     svn = f"{homepage}/trunk"
 
     version("2.0.0", svn=f"{homepage}/tags/v2.0.0")
