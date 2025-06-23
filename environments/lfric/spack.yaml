@@ -6,4 +6,8 @@ spack:
     - tau +mpi +openmp +opari ~pthreads +lfric
     - fcm
     - rsync
-    - python@3.10
+    - python
+    - sci-fab
+    - py-psyclone
+    - rose-picker
+    - shumlib
