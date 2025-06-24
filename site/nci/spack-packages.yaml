@@ -52,4 +52,8 @@ packages:
       - spec: "cuda@12.6.2"
         prefix: "/apps/cuda/12.6.2/"
     buildable: False
-
+  llvm:
+    externals:
+      - spec: "llvm@16.0.4 +clang"
+        prefix: "/apps/llvm/16.0.4"
+    buildable: False
