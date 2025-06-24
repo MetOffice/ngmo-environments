@@ -79,7 +79,8 @@ class Pfunit(CMakePackage):
         description="Max number of Fortran dimensions of array asserts",
     )
 
-    depends_on("python@2.7:", type=("build", "run"))  # python3 too!
+    # Uses deprecated 'imp' module
+    depends_on("python@2.7:3.11", type=("build", "run"))  # python3 too!
     depends_on("mpi", when="+mpi")
     depends_on("m4", when="@4.1.5:", type="build")
 
