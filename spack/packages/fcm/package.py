@@ -58,13 +58,15 @@ class Fcm(Package):
         sha256="eabb1743976b57ff07a87bb37176465bdad15e0cea84e59894f56ebc6891f8c9",
     )
 
+    variant("gui", default=False, description="Enable GUI")
+
     depends_on("perl")
     depends_on("perl-alien-svn")
     depends_on("perl-config-inifiles")
     depends_on("perl-dbd-sqlite")
     depends_on("perl-digest-md5")
     depends_on("perl-time-piece")
-    depends_on("perl-tk")
+    depends_on("perl-tk", when="+gui")
     depends_on("perl-xml-parser")
     depends_on("rsync")
     depends_on("subversion")
