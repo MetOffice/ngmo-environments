@@ -9,6 +9,7 @@ spack:
     - python
     - sci-fab
     - py-psyclone
+    - py-jinja2
     - rose-picker
     - shumlib
     - vernier
