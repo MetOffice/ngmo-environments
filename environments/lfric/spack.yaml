@@ -11,3 +11,4 @@ spack:
     - py-psyclone
     - rose-picker
     - shumlib
+    - vernier
