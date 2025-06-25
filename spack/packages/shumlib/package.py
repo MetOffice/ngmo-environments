@@ -48,6 +48,10 @@ class Shumlib(MakefilePackage):
         makefile = FileFilter(self.dest)
         makefile.filter(r"^\s*PLATFORM\s*=.*", "PLATFORM=spack-fortran-cc")
 
+        # Use spack's compiler
+        makefile.filter(r"^\s*CC\s*=.*", "")
+        makefile.filter(r"^\s*FC\s*=.*", "")
+
         if "+openmp" not in self.spec:
             # Ensure openmp is switched off
             makefile.filter(r"^\s*FCFLAGS_OPENMP\s*=.*", "FCFLAGS_OPENMP=")
