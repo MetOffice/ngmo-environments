@@ -49,6 +49,17 @@ ln -sf "envrun" "$INSTALL_ENVDIR/bin/imagerun"
 # Make rose commands run inside the container
 ln -sf "envrun-external" "$INSTALL_ENVDIR/bin/rose"
 
+# Environment specific commands
+# commands.sh defines array ENV_COMMANDS with names to link
+COMMANDFILE="$NGMOENVS_DEFS/environments/$ENVIRONMENT/commands.sh"
+if [[ -f "$COMMANDFILE" ]]; then
+    source "$COMMANDFILE"
+
+    for cmd in "${ENV_COMMANDS[@]}"; do
+        ln -sf "envrun-wrapped" "$INSTALL_ENVDIR/bin/$cmd"
+    done
+fi
+
 cat <<EOF
 
 Environment build complete
