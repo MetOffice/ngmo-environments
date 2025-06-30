@@ -29,6 +29,11 @@ class Shumlib(MakefilePackage):
     parallel = False
 
     version(
+        "apps2.1",
+        svn=os.environ.get("NGMOENVS_MOSRS_MIRROR", "https://code.metoffice.gov.uk/svn") +"/utils/shumlib/trunk",
+        revision=7655,
+    )
+    version(
         "13.0",
         sha256="50f43a2f8980e8fbeafd053376612503bcb17c34948297f19b2c95ce0642b340",
     )

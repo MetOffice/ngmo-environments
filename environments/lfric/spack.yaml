@@ -11,5 +11,5 @@ spack:
     - py-psyclone
     - py-jinja2
     - rose-picker
-    - shumlib
+    - shumlib@apps2.1
     - vernier
