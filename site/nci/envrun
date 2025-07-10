@@ -13,10 +13,10 @@ fi
 # Local FCM keyword file
 export FCM_KEYWORDS=/g/data/hr22/apps/etc/fcm/mosrs/keyword.cfg
 
-# Add central OpenMPI to cflags
-export FFLAGS="-I /apps/openmpi/4.1.5/include/Intel ${FFLAGS:-}"
-
 # Pass through LD_LIBRARY_PATH
-export SINGULARITYENV_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
+export SINGULARITYENV_LD_LIBRARY_PATH="/.singularity.d/libs:${LD_LIBRARY_PATH:-}:/system/lib64"
+
+# Keep MPI temp data off of shared filesystems
+export OMPI_MCA_orte_tmpdir_base=/tmp
 
 /opt/singularity/bin/singularity run "${MOUNT_ARGS[@]}" "$ENV_DIR/etc/apptainer.sif" "$@"

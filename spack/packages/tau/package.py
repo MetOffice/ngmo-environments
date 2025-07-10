@@ -183,7 +183,7 @@ class Tau(Package):
         if "+mpi" in spec:
             if spec["mpi"].name == "nci-openmpi" or os.path.exists("/opt/nci"):
             # Accomodate multiple paths for mpi directories on nci
-                if self.spec.satisfies('%intel'):
+                if self.spec.satisfies('%intel') or self.spec.satisfies('%oneapi'):
                     useropt.append("-I%s" % join_path(spec["mpi"].prefix.include, "Intel"))
                     useropt.append("-L%s" % join_path(spec["mpi"].prefix.lib, "Intel"))
                     useropt.append("-Wl,-rpath,%s" % join_path(spec["mpi"].prefix.lib, "Intel"))
