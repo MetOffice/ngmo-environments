@@ -1,0 +1,4 @@
+spack:
+  specs:
+    - gcom@8.3
+    - eccodes
