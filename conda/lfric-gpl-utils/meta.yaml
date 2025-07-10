@@ -15,8 +15,8 @@ build:
     noarch: python
 
 requirements:
-    build:
-        - subversion
+  #    build:
+  #        - subversion
     host:
         - python
         - setuptools

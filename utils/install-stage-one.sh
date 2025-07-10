@@ -146,6 +146,10 @@ export NGMOENVS_MPI="$NGMOENVS_MPI"
 if [[ -d "\$NGMOENVS_ENVDIR/spack" ]]; then
     spack env activate "\$NGMOENVS_ENVDIR/spack"
     export CPATH="\$SPACK_ENV/.spack-env/view/include:\$CPATH"
+    export LD_LIBRARY_PATH="\$SPACK_ENV/.spack-env/view/lib:\$LD_LIBRARY_PATH"
+
+    # For crayftn
+    export FORTRAN_MODULE_PATH="\$SPACK_ENV/.spack-env/view/include:\$FORTRAN_MODULE_PATH"
 fi
 
 # If this env has a conda environment, activate it

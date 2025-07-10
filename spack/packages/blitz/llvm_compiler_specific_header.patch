@@ -1,0 +1,19 @@
+diff -u a/m4/ac_compiler_specific_header.m4 b/m4/ac_compiler_specific_header.m4
+--- a/m4/ac_compiler_specific_header.m4	2025-01-10 04:29:05.491158932 +0000
++++ b/m4/ac_compiler_specific_header.m4	2025-01-10 04:30:29.291979932 +0000
+@@ -12,6 +12,7 @@
+ AS_CASE([$CXX],
+   [*xlc++*],      [COMPILER_VENDOR="apple"],
+   [*icpc*|*icc*], [COMPILER_VENDOR="intel"],
++  [*icpx*|*icx*], [COMPILER_VENDOR="llvm"],
+   [*xlC*],        [COMPILER_VENDOR="ibm"],
+   [*clang++],     [COMPILER_VENDOR="llvm"],
+   [*cxx*],        [COMPILER_VENDOR="compaq"],
+@@ -23,6 +24,7 @@
+   [*pgCC*],       [COMPILER_VENDOR="pgi"],
+ dnl  [*FCC*],        [COMPILER_VENDOR="fujitsu"],
+   [*pathCC*],     [COMPILER_VENDOR="pathscale"],
++  [*crayCC*],     [COMPILER_VENDOR="llvm"],
+   [*CC*],         [AS_CASE([$target],
+                       [*sgi*],      [COMPILER_VENDOR="sgi"],
+                       [*solaris*],  [COMPILER_VENDOR="sun"],

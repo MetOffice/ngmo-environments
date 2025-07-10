@@ -3,7 +3,7 @@
 {% set revision = "119685" %}
 
 # Need to fix these versions for compatibility with ANTS
-{% set py_version = "3.10" %}
+{% set py_version = "3.11" %}
 {% set numpy_version = "1.26.0" %}
 
 package:
@@ -101,7 +101,7 @@ outputs:
         - python={{ py_version }}
         - numpy={{ numpy_version }}
         - six
-        - pillow
+        #- pillow
         - shumlib
         - {{ pin_subpackage('mule-base', exact=True) }}
         - {{ pin_subpackage('mule-um-ppibm', exact=True) }}
@@ -115,7 +115,7 @@ outputs:
         - mule-convpp -h
         - mule-cumf -h
         - mule-cutout -h
-        - mule-editmask -h
+        #- mule-editmask -h
         - mule-fixframe -h
         - mule-pumf -h
         - mule-select -h
@@ -131,7 +131,7 @@ outputs:
         - python={{ py_version }}
         - numpy={{ numpy_version }}
         - six
-        - pillow
+        #- pillow
         - shumlib
         - {{ pin_subpackage('mule-um-spiral-search', exact=True) }}
         - {{ pin_subpackage('mule-um-packing', exact=True) }}

@@ -195,7 +195,7 @@ OASIS_LIB=""
 %LINKER         {MPIFC}
 
 %BASE_CFLAGS    -DMPICH_SKIP_MPICXX -h msglevel_4 -h zero -h gnu \
-                -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR}
+                -I{BOOST_INC_DIR} -I{BLITZ_INC_DIR} -std=gnu++11
 %PROD_CFLAGS    {CC_OPT_PROD} -DBOOST_DISABLE_ASSERTS
 %DEV_CFLAGS     {CC_OPT_DEV}
 %DEBUG_CFLAGS   -g
@@ -206,10 +206,10 @@ OASIS_LIB=""
 %DEBUG_FFLAGS   -g
 
 %BASE_INC       -D__NONE__
-%BASE_LD        -D__NONE__ -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz
+%BASE_LD        -D__NONE__ -L{BOOST_LIB_DIR} -L{BLITZ_LIB_DIR} -lblitz -lstdc++ -L/opt/cray/libfabric/1.20.1/lib64/ -lfabric
 
 %CPP            cpp
-%FPP            cpp -P -CC
+%FPP            cpp -E -P -x c
 %MAKE           gmake
 """.format(
                 **param
@@ -236,7 +236,7 @@ OASIS_LIB=""
             "--use_extern_boost",
             "--use_extern_blitz",
             "--job",
-            str(2),
+            str(1),
         ]
 
         self.xios_env()

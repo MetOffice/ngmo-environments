@@ -14,28 +14,28 @@ packages:
           environment:
             append_path:
               # Add libfabric
-              LD_LIBRARY_PATH: "/opt/cray/lib64"
+              LD_LIBRARY_PATH: "/opt/cray/libfabric/1.20.1/lib64"
       - spec: "mpich@8.1.29%intel"
         prefix: "/opt/cray/pe/mpich/8.1.29/ofi/intel/2022.1"
         extra_attributes:
           environment:
             append_path:
               # Add libfabric
-              LD_LIBRARY_PATH: "/opt/cray/lib64"
+              LD_LIBRARY_PATH: "/opt/cray/libfabric/1.20.1/lib64"
       - spec: "mpich@8.1.29%oneapi"
         prefix: "/opt/cray/pe/mpich/8.1.29/ofi/intel/2022.1"
         extra_attributes:
           environment:
             append_path:
               # Add libfabric
-              LD_LIBRARY_PATH: "/opt/cray/lib64"
+              LD_LIBRARY_PATH: "/opt/cray/libfabric/1.20.1/lib64"
       - spec: "mpich@8.1.29%cce"
         prefix: "/opt/cray/pe/mpich/8.1.29/ofi/crayclang/17.0"
         extra_attributes:
           environment:
             append_path:
               # Add libfabric
-              LD_LIBRARY_PATH: "/opt/cray/lib64"
+              LD_LIBRARY_PATH: "/opt/cray/libfabric/1.20.1/lib64"
   netcdf-c:
     buildable: False
     externals:
@@ -95,4 +95,15 @@ packages:
     externals:
       - spec: "papi@7.1.0"
         prefix: "/opt/cray/pe/papi/7.1.0.1"
-
+  ncurses:
+    require: "%gcc"
+  berkeley-db:
+    require: "%gcc"
+  gdbm:
+    require: "%gcc"
+  readline:
+    require: "%gcc"
+  zlib-ng:
+    require: "%gcc"
+  perl:
+    require: "%gcc"

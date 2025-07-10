@@ -24,6 +24,8 @@ class Blitz(AutotoolsPackage):
 
     # Fix makefile and include to build with Fujitsu compiler
     patch("fujitsu_compiler_specfic_header.patch", when="%fj")
+    patch("llvm_compiler_specific_header.patch", when="%cce")
+    patch("llvm_compiler_specific_header.patch", when="%oneapi")
 
     build_targets = ["lib"]
 
@@ -43,6 +45,10 @@ class Blitz(AutotoolsPackage):
             rm("m4/ltsugar.m4")
             rm("m4/ltversion.m4")
             rm("m4/lt~obsolete.m4")
+
+    def setup_build_environment(self, env):
+        if self.spec.satisfies("%cce") or self.spec.satisfies("%oneapi"):
+            env.set("COMPILER_SPECIFIC_HEADER", "llvm/bzconfig.h")
 
     def check(self):
         make("check-testsuite")
