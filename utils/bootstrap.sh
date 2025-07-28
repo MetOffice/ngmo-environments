@@ -14,7 +14,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 # shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
-SPACK_VERSION=0.22.2
+SPACK_VERSION=1.0.0
 export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
