@@ -27,7 +27,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
     # Run the apptainer build in the queue
     # First stage is everything requiring networking - only download spack sources
     e qsub \
-        -N "ngmoenvs1-$ENVIRONMENT" \
+        -N "ngmoenvs1-${ENVIRONMENT/\//_}" \
         -q copyq \
         -l ncpus=1 \
         -l walltime=1:30:00 \
@@ -44,7 +44,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
 
     # Second stage does the spack builds
     e qsub \
-        -N "ngmoenvs2-$ENVIRONMENT" \
+        -N "ngmoenvs2-${ENVIRONMENT/\//_}" \
         -q normal \
         -l ncpus=8 \
         -l walltime=2:00:00 \
@@ -66,7 +66,7 @@ else
     echo Run: "$SITE_DIR/install-stage-two.sh" "$ENVIRONMENT"
 
     qsub \
-        -N "ngmoenvs2-$ENVIRONMENT" \
+        -N "ngmoenvs2-${ENVIRONMENT/\//_}" \
         -q normal \
         -l ncpus=8 \
         -l walltime=2:00:00 \

@@ -27,7 +27,7 @@ proc ModulesHelp {} {
     puts stderr "    by:   \$installed_by"
 }
 
-set name_upcase [string toupper [string map {- _} \$name]]
+set name_upcase [string toupper [string map {- _ / _} \$name]]
 
 setenv \${name_upcase}_NGMOENV_ROOT "\$prefix"
 setenv \${name_upcase}_NGMOENV_VERSION "\$version"

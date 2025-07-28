@@ -14,7 +14,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f "${BASH_SOURCE[0]}")" )" &> /d
 # shellcheck source=utils/common.sh
 source "$SCRIPT_DIR/common.sh"
 
-SPACK_VERSION=1.0.0
+SPACK_VERSION=0.22.2
 export SPACK_DISABLE_LOCAL_CONFIG=1
 
 mkdir -p "$NGMOENVS_BASEDIR/bin"
@@ -40,8 +40,8 @@ export SPACK_PYTHON="$NGMOENVS_BASEDIR/conda/bin/python"
 source "$NGMOENVS_BASEDIR/spack/share/spack/setup-env.sh"
 
 # Configure Spack
-e spack compiler find --scope site /usr/bin
-e spack external find --scope site --path /usr/bin gcc
+# e spack compiler find --scope site /usr/bin
+# e spack external find --scope site --path /usr/bin gcc
 e spack config add --file "$SCRIPT_DIR/spack-packages.yaml"
 
 echo "Default Compiler and MPI:"
