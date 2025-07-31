@@ -2,8 +2,14 @@ spack:
   specs:
     - xios@2701
     - yaxt@0.11.3 idxtype=long
-    - pfunit@3 max_array_rank=6 +mpi +openmp
+    - pfunit +mpi +openmp
     - tau +mpi +openmp +opari ~pthreads +lfric
     - fcm
     - rsync
-    - python@3.10
+    - python
+    - sci-fab
+    - py-psyclone
+    - py-jinja2
+    - rose-picker
+    - shumlib@apps2.1
+    - vernier
