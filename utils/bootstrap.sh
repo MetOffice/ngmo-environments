@@ -31,6 +31,7 @@ e "$NGMOENVS_BASEDIR/bin/micromamba" install -y -c conda-forge -n base conda con
 source "$NGMOENVS_BASEDIR/conda/etc/profile.d/conda.sh"
 
 if [[ ! -d "spack" ]]; then
+        info "Installing spack"
 	mkdir spack
 	curl -Ls "https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/spack-${SPACK_VERSION}.tar.gz" | tar -xz -C spack  --strip-components=1
 fi

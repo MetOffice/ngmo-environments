@@ -3,4 +3,20 @@ spack:
         - ecbuild
         - eckit@1.24.4
         - fckit@0.11.0
-        - atlas@0.35.0
+        - ecmwf-atlas@0.35.0 +tesselation
+        - jedi-cmake
+        - blas
+        - netcdf-c
+        - netcdf-fortran
+        - netcdf-cxx4
+        - git-lfs
+        - gsl-lite
+        - udunits
+        - fms +deprecated_io precision=32,64
+        - parallel-netcdf
+        - parallelio
+        - nlohmann-json-schema-validator
+        - py-pybind11
+        - py-pycodestyle
+        - nccmp
+
