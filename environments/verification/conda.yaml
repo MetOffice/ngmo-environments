@@ -1,4 +1,4 @@
-name: cset
+name: verification
 channels:
     - conda-forge
     - nodefaults
