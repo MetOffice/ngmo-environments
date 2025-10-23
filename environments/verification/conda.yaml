@@ -1,0 +1,12 @@
+name: cset
+channels:
+    - conda-forge
+    - nodefaults
+dependencies:
+    - jupyterlab
+    - jupyterlab-lsp
+    - jedi-language-server
+
+    - cset
+    - metplus
+    - scores
