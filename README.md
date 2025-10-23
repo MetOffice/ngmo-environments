@@ -66,6 +66,12 @@ Environment for running the Momentum LFRic model
 
 See [environments/lfric/README.md](environments/lfric/README.md)
 
+### Verification
+
+Environment for model verification
+
+See [environments/verification/README.md](environments/verification/README.md)
+
 ## Testing
 
 Once an enviornment has been built it can be tested by building and running a

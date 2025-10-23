@@ -37,12 +37,14 @@ if [[ -v NGMOENVS_DEBUG ]]; then
     exit 0
 fi
 
-if ! e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-two.sh"; then
-    # Copy failed build logs to scratch
-    mkdir -p "/scratch/$PROJECT/$USER/tmp/spack-stage"
-    cp -r "$TMPDIR/$USER/spack-stage/"* "/scratch/$PROJECT/$USER/tmp/spack-stage"
-    echo "Logs available under /scrach/$PROJECT/$USER/tmp/spack-stage"
-    exit 1
+if [[ -f "$NGMOENVS_DEFS/enviornments/$ENVIRONMENT/spack.yaml" ]]; then
+    if ! e "${APPTAINER[@]}" run "${MOUNT_ARGS[@]}" "$NGMOENVS_BASEIMAGE" /bin/bash "${SITE_DIR}/../../utils/install-stage-two.sh"; then
+        # Copy failed build logs to scratch
+        mkdir -p "/scratch/$PROJECT/$USER/tmp/spack-stage"
+        cp -r "$TMPDIR/$USER/spack-stage/"* "/scratch/$PROJECT/$USER/tmp/spack-stage"
+        echo "Logs available under /scrach/$PROJECT/$USER/tmp/spack-stage"
+        exit 1
+    fi
 fi
 
 # Convert to squashfs
