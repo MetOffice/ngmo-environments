@@ -10,6 +10,7 @@ spack:
     - sci-fab
     - py-psyclone
     - py-jinja2
+    - py-pyyaml
     - rose-picker
     - shumlib@apps2.1
     - vernier
