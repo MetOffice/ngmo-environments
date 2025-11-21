@@ -14,7 +14,7 @@ source "$SITE_DIR/env.sh"
 QSUB_FLAGS=(
     -P "$PROJECT" \
     -l jobfs=50gb \
-    -l storage=gdata/access+gdata/ki32 \
+    -l storage=gdata/access+gdata/ki32+gdata/"$PROJECT"+scratch/"$PROJECT" \
     -l wd \
     -j oe \
     -W umask=0022 \
@@ -31,6 +31,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -q copyq \
         -l ncpus=1 \
         -l walltime=1:30:00 \
+        -l storage=gdata/access+gdata/ki32+gdata/"$PROJECT"+scratch/"$PROJECT" \
         -l mem=32gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \
@@ -48,6 +49,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -q normal \
         -l ncpus=8 \
         -l walltime=2:00:00 \
+        -l storage=gdata/access+gdata/ki32+gdata/"$PROJECT"+scratch/"$PROJECT" \
         -l mem=32gb \
         -l jobfs=50gb \
         "${QSUB_FLAGS[@]}" \
