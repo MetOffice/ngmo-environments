@@ -31,7 +31,7 @@ build:$[[ inputs.environment ]]:
 test:$[[ inputs.environment ]]:
     stage: test
     script:
-        - ./tests/site/nci.sh lfric
+        - ./tests/site/nci.sh "$ENV"
     environment: 
         name: development/$[[ inputs.environment ]]/$CI_COMMIT_BRANCH
         action: access
