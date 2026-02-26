@@ -7,4 +7,4 @@ export LDMPI=mpifort
 export FPP="cpp -traditional"
 export FFLAGS="${OMPI_FCFLAGS:-} -I$SPACK_ENV_VIEW/include -I$SPACK_ENV_VIEW/lib"
 export LIBRARY_PATH=$SPACK_ENV_VIEW/lib:$LIBRARY_PATH
-
+export PSYCLONE_TRANSMUTE_EXTRAS="-l all --backend disable-indentation"
