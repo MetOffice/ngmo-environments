@@ -1,0 +1,16 @@
+spack:
+  specs:
+    - xios@2701 +oasis
+    - yaxt@0.11.3 idxtype=long
+    - oasis@3-mct5.0
+    - pfunit +mpi +openmp
+    - fcm
+    - rsync
+    - python
+    - sci-fab
+    - py-psyclone
+    - py-jinja2
+    - py-pyyaml
+    - rose-picker
+    - shumlib@apps2.1
+    - vernier

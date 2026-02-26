@@ -14,7 +14,7 @@ source "$SITE_DIR/env.sh"
 QSUB_FLAGS=(
     -P "$PROJECT" \
     -l jobfs=50gb \
-    -l storage=gdata/access+gdata/ki32 \
+    -l storage=gdata/access+gdata/ki32+gdata/"$PROJECT"+scratch/"$PROJECT" \
     -l wd \
     -j oe \
     -W umask=0022 \

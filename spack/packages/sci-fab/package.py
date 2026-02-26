@@ -33,6 +33,13 @@ class SciFab(PythonPackage):
         expand=False,
     )
 
+    version(
+        "2.0",
+        sha256="078566f16bb559e84f5148072931f91c4686049893cb149f3b46f8d66e00e81a",
+        expand=False,
+    )
+
     depends_on("python@3.7:")
     depends_on("py-fparser")
     depends_on("py-libclang")
+    depends_on("py-matplotlib")

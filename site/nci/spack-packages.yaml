@@ -28,6 +28,8 @@ packages:
               # Fix up the combined intel/gcc install
               OMPI_FCFLAGS: -I/apps/openmpi/5.0.5/include/Intel
               OMPI_LDFLAGS: -L/apps/openmpi/5.0.5/lib -L/apps/openmpi/5.0.5/lib/Intel -L/system/lib64 -Wl,-rpath=/apps/openmpi/5.0.5/lib
+            append_path:
+              LD_LIBRARY_PATH: /system/lib64
       - spec: "openmpi@5.0.5%gcc"
         prefix: "/apps/openmpi/5.0.5"
         extra_attributes:
@@ -57,3 +59,6 @@ packages:
       - spec: "llvm@16.0.4 +clang"
         prefix: "/apps/llvm/16.0.4"
     buildable: False
+  apr:
+    # Configure script not using valid c99, don't compile with ifx
+    require: '%gcc'

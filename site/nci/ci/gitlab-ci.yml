@@ -3,6 +3,9 @@ include:
     - local: site/nci/ci/gitlab-ci-env.yml
       inputs:
           environment: lfric
+    - local: site/nci/ci/gitlab-ci-env.yml
+      inputs:
+          environment: lfric-coupled
   # - local: site/nci/ci/gitlab-ci-env.yml
   #   inputs:
   #       environment: jopa
