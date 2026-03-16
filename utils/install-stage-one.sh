@@ -164,7 +164,9 @@ fi
 EOF
 
 # Set compiler variables
-cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
+if [[ -f "$ENVDIR/etc/compiler.sh" ]]; then
+    cat "$ENVDIR/etc/compiler.sh" >> "$ENVDIR/bin/activate"
+fi
 
 # Run script
 cat > "$ENVDIR/bin/envrun" <<EOF
